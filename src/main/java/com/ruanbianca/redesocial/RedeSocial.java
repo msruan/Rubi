@@ -1,10 +1,23 @@
 package com.ruanbianca.redesocial;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class RedeSocial {
     private RepositorioDePerfis _perfis;
     private RepositorioDePostagens _postagens;
+
+    public RedeSocial() {
+        this._perfis = new RepositorioDePerfis();
+        this._postagens = new RepositorioDePostagens();
+    }
+
+    public RedeSocial(RepositorioDePerfis perfis, RepositorioDePostagens postagens) {
+
+        this._perfis = (Optional.of(perfis).isEmpty()) ? new RepositorioDePerfis() : perfis;
+        this._postagens = (Optional.of(postagens).isEmpty()) ? new RepositorioDePostagens() : postagens;
+
+    }
 
     public RepositorioDePerfis getRepositorioDePerfis() {
         return _perfis;
@@ -14,72 +27,84 @@ public class RedeSocial {
         return _postagens;
     }
 
-    public RedeSocial(RepositorioDePerfis perfis, RepositorioDePostagens postagens) {
-        this._perfis = perfis;
-        this._postagens = postagens;
-    }
-
     public void incluirPerfil(Perfil perfil){
 
-        boolean atributosPreenchidos = perfil.getId() != null && !perfil.getNome().isBlank() && !perfil.getEmail().isBlank();
-        boolean taDuplicado = getRepositorioDePerfis().consultar(perfil.getId(), perfil.getNome(), perfil.getEmail()) == null ? false : true;
-    
-        if(atributosPreenchidos && !taDuplicado)
+        if(Optional.ofNullable(perfil).isEmpty())
+            throw new NullObjectAsArgumentException();
+
+        if(perfil.temAtributosNulos())
+            throw new NullAtributesException();
+
+        boolean taDuplicado = getRepositorioDePerfis().consultar(perfil.getId(), perfil.getUsername(), perfil.getEmail()).isEmpty() ? false : true;
+
+        if(!taDuplicado)
             getRepositorioDePerfis().incluir(perfil);
+        else 
+            throw new UserAlreadyExistsException();
+        //aqui a gente precisa retornar o que q ta duplicado, se é o username, email ou id;
 
     }
 
-    public Perfil consultarPerfil(Integer id, String nome, String email){  
+    public Optional<Perfil> consultarPerfil(Integer id, String nome, String email){  
         return getRepositorioDePerfis().consultar(id,nome,email);
             
     }
 
-    public void incluirPostagem(Postagem postagem){
+    public void incluirPostagem(Postagem postagem) throws NullAtributesException{
+
+        if(Optional.ofNullable(postagem).isEmpty())
+            throw new NullObjectAsArgumentException();
         
-        boolean atributosPreenchidos = postagem.getId() != null && !postagem.getTexto().isBlank() && postagem.getData() != null && postagem.getPerfil() != null && postagem.getCurtidas() >= 0 && postagem.getDescurtidas() >= 0;
-        
-        if(!atributosPreenchidos)
+        if(postagem.temAtributosNulos())
             throw new NullAtributesException();
             
-        boolean taRepetido = false;
-        for(Postagem post : getRepositorioDePostagens().getPostagens()){
-            if(postagem.getId() == post.getId()){
-                taRepetido = true;
-                break;
-            }                
-        }
-        
+        boolean taRepetido = _postagens.consultar(postagem.getId()).isEmpty() ? false : true;
+
         if(taRepetido){
            throw new UserAlreadyExistsException(); 
-        }        
+        }
         getRepositorioDePostagens().incluir(postagem);
+        //aqui a gente precisa retornar que o id tá duplicado;
     }
 
-    public ArrayList<Postagem> consultarPostagens(Integer id,String texto, String hashtag,Perfil perfil){
-        return getRepositorioDePostagens().consultar(id,texto,hashtag,perfil);
+    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
+
+        return getRepositorioDePostagens().consultar(texto,perfil,hashtag);
     }
 
-    public void curtir(Integer id){
-        Postagem post = getRepositorioDePostagens().consultar(id);
-        if(post != null)
-            post.curtir();
-      
-    }
+    public void curtir(int id) throws PostNotFoundException{
 
-    public void descurtir(Integer id){
-        Postagem post = getRepositorioDePostagens().consultar(id);
-        if(post != null)
-            post.descurtir();
-                
+        Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
+
+        if(post.isEmpty())
+            throw new PostNotFoundException();
+        else 
+            post.get().curtir();
     
     }
-    public void decrementarVisualizacoes(PostagemAvancada postagem){
-        postagem.decrementarVisualizacoes();
-    }
-    
 
-    public ArrayList<Postagem> exibirPostagensPorPerfil(Integer idPerfil) { 
+    public void descurtir(int id) throws PostNotFoundException{
         
+        Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
+
+        if(post.isEmpty())
+            throw new PostNotFoundException();
+        else 
+            post.get().descurtir();
+    
+    }
+
+    public void decrementarVisualizacoes(PostagemAvancada postagem) throws NullObjectAsArgumentException{
+
+        if(Optional.ofNullable(postagem).isEmpty())
+
+            throw new NullObjectAsArgumentException();
+
+        else 
+            postagem.decrementarVisualizacoes();
+    }
+    
+    public ArrayList<Postagem> exibirPostagensPorPerfil(Integer idPerfil) { 
         return null;
     }
 }

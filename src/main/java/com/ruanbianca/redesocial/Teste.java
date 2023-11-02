@@ -1,30 +1,36 @@
 package com.ruanbianca.redesocial;
-import java.util.ArrayList;
-import ij.IJ;
-import ij.ImagePlus;
+//import ij.IJ;
+//import ij.ImagePlus;
 public class Teste {
     public static void main(String[] args) {
-        ImagePlus foto = IJ.openImage("/home/ruan/Pictures/Wallpapers/lago.jpg");
-        foto.show();
-      
-        ArrayList<Perfil> perfisArray = new ArrayList<>();
-        Perfil bianca = new Perfil(1,"c","@");
-        perfisArray.add(bianca);
-        RepositorioDePerfis repoPerfis = new RepositorioDePerfis(perfisArray);
+        //ImagePlus foto = IJ.openImage("/home/ruan/Pictures/Wallpapers/lago.jpg");
+        //foto.show();
+        Perfil ruan = new Perfil("msruan", "Ruan Macedo Santos","santosruan2021@gmail.com");
+        Perfil ruanDuplicado = new Perfil("msruan", "Ruan Macedo Santos","santosruan2021@gmail.com");
+        Perfil bianca = new Perfil("bbia", "Bianca Bezerra","bianca-bezerra@gmail.com");
+        Perfil patro = new Perfil("patro", "LF Patrocinio","patro-rajada@gmail.com");
 
-        repoPerfis.incluir(new Perfil(1,"Bianca","binca-bezerra"));
-        repoPerfis.incluir(new Perfil(2,"Ruan","ruan-macs"));
-        
-        //RepositorioDePostagens posts = new RepositorioDePostagens(new Postagem(12346789,"só bebo coca",5,7,LocalDateTime.now(),null));
-        //PostagemAvancada post2 = new PostagemAvancada(3389, "ouviram do ipiranga as margens placiadas", 0, 20,null,null,1000,"euqfiz","omg");
-        //posts.incluir(post2);
-        RedeSocial instagram = new RedeSocial(repoPerfis,null);
-        instagram.incluirPerfil(new Perfil(564, "Patrocinio", "patro-rajada@gmail.com"));
-        instagram.getRepositorioDePerfis().incluir(new Perfil(123, "Bia", "biabezerra@gmail.com"));
-        //System.out.println(instagram.getRepositorioDePerfis().consultar(123, "Bia", null).getNome());
-        System.out.println(instagram.getRepositorioDePerfis().consultar(564, "Patrocinio", "patro-rajada@gmail.com").getNome());
+        RepositorioDePerfis meusPerfis = new RepositorioDePerfis();
+        meusPerfis.incluir(bianca);
+        meusPerfis.incluir(ruan);
+        meusPerfis.incluir(ruanDuplicado);
+
+        Postagem post1 = new Postagem("i just love rock!",ruan);
+        Postagem post2 = new Postagem("alguem quer dancar forro?",bianca);
+        Postagem post3 = new Postagem("mds eh a dua lipa!!",ruan);
+        RepositorioDePostagens meusPosts = new RepositorioDePostagens();
+        meusPosts.incluir(post1);
+        meusPosts.incluir(post2);
+        meusPosts.incluir(post3);
+
+        RedeSocial instagram = new RedeSocial(meusPerfis,meusPosts);
+        instagram.incluirPerfil(patro);
+        System.out.println(instagram.getRepositorioDePerfis().consultar(null,"msruan",null).get().getNome()+" eu achei ela !!!\n");
         for(Perfil p : instagram.getRepositorioDePerfis().getPerfis()){
             System.out.println(p.getNome());
+        }
+        for(Postagem p : instagram.getRepositorioDePostagens().getPostagens()){
+            System.out.println(p.getTexto() + " posted by " + p.getPerfil().getUsername());
         }
 
     }

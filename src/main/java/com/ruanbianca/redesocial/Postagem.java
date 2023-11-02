@@ -1,24 +1,47 @@
 package com.ruanbianca.redesocial;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Postagem {
 
-    private Integer _id;
+    private static int contadorDePostagens = 0;
+
     private String _texto;
+    private Perfil _perfil;   
+    private LocalDateTime _data;
     private int _curtidas;
     private int _descurtidas;
-    private LocalDateTime _data;
-    private Perfil _perfil;//guardar só o id do usuario?
+    private Integer _id;
 
+    
+    public Postagem(String texto, Perfil perfil) throws NullAtributesException{
 
-    public Postagem(Integer id, String texto, int curtidas, int descurtidas, LocalDateTime data, Perfil perfil) {
-        this._id = id;
+        if(Optional.ofNullable(texto).isEmpty() || Optional.ofNullable(perfil).isEmpty())
+            throw new NullAtributesException();
+
         this._texto = texto;
-        this._curtidas = curtidas;
-        this._descurtidas = descurtidas;
-        this._data = data;
         this._perfil = perfil;
+        this._curtidas = 0;
+        this._descurtidas = 0;
+        this._data = LocalDateTime.now();
+        this._id = contadorDePostagens;
+
+        contadorDePostagens++;
+        this._perfil.getPostagens().add(this);
+    }
+
+
+    public boolean ehPopular(){
+        return (_curtidas - _descurtidas) >= 0.5 * _descurtidas;
+    }
+
+    public void curtir(){
+        _curtidas++;
+    }
+
+    public void descurtir(){
+        _descurtidas++;
     }
 
     public Integer getId() {
@@ -45,16 +68,13 @@ public class Postagem {
         return this._perfil;
     }
 
-    public void curtir(){
-        _curtidas++;
+    public boolean temAtributosNulos () {
+        return(Optional.ofNullable(_id).isEmpty() || Optional.ofNullable(_texto).isEmpty() || 
+            Optional.ofNullable(_data).isEmpty() || Optional.ofNullable(_perfil).isEmpty() || 
+            Optional.ofNullable(_curtidas).isEmpty() || Optional.ofNullable(_descurtidas).isEmpty());
     }
 
-    public void descurtir(){
-        _descurtidas++;
-    }
 
-    public boolean ehPopular(){
-        return (_curtidas - _descurtidas) >= 0.5 * _descurtidas;
-    }
+    
 
 }
