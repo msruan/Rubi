@@ -2,6 +2,8 @@ package com.ruanbianca.redesocial;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class RedeSocial {
     private RepositorioDePerfis _perfis;
@@ -65,9 +67,13 @@ public class RedeSocial {
         //aqui a gente precisa retornar que o id tá duplicado;
     }
 
-    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
+    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, Hashtag hashtag){//a gente deveria poder passar várias hashtags
 
         return getRepositorioDePostagens().consultar(texto,perfil,hashtag);
+    }
+
+    public Optional<Perfil> consultarPerfil(Integer id){//a gente deveria poder passar várias hashtags
+        return getRepositorioDePerfis().consultarPorId(id);
     }
 
     public void curtir(int id) throws PostNotFoundException{
@@ -75,7 +81,6 @@ public class RedeSocial {
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
         post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
         post.get().curtir();
-    
     }
 
     public void descurtir(int id) throws PostNotFoundException{
@@ -83,7 +88,6 @@ public class RedeSocial {
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
-    
     }
 
     public void decrementarVisualizacoes(PostagemAvancada postagem) throws NullObjectAsArgumentException{
@@ -93,13 +97,55 @@ public class RedeSocial {
     }
     
     public ArrayList<Postagem> exibirPostagensPorPerfil(Integer idPerfil) { 
+
+        Optional <Perfil> perfil = consultarPerfil(idPerfil);
+        if(perfil.isEmpty())
+            return null;
+        Stream <Postagem> filtrados = perfil.get().getPostagens().stream();
+        filtrados = filtrados.filter(post -> {
+            if(!(post instanceof PostagemAvancada))
+                return true;
+            else if(((PostagemAvancada)post).ehExibivel()){
+                ((PostagemAvancada)post).decrementarVisualizacoes();
+                return true;
+            }return false;
+        });
+        List<Postagem> saida = (filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).toList());
+        return new ArrayList<>(saida);
+    }
+
+    public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(Hashtag hashtag){
+        
+        Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
+        filtrados = filtrados.filter(post -> {
+            if(((PostagemAvancada)post).ehExibivel() && ((PostagemAvancada)post).existeHashtag(hashtag)){
+                ((PostagemAvancada)post).decrementarVisualizacoes();
+                return true;
+            }return false;
+        }); 
+        List <PostagemAvancada> saida = new ArrayList<>();
+        filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
+        return new ArrayList<>(saida);
+    }
+    
+    //a. Exibir as postagens populares que ainda podem ser exibidas; 
+    //b. Exibir as hashtags mais populares, ou seja, as que estão presentes em mais postagens;
+    
+    public ArrayList<Postagem> exibirPostagensPopulares(){
+        Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
+        filtrados = filtrados.filter(post ->  {
+            if( !(post instanceof PostagemAvancada) || ((PostagemAvancada)post).ehExibivel()){
+                return post.ehPopular();
+            }return false;
+        });
+        List <Postagem> saida = filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).toList();
+        return new ArrayList<>(saida);
+    }
+
+    public ArrayList<Hashtag> exibirHashtagsPopulares(){
         return null;
     }
 }
-
-
-
-
 
 
 

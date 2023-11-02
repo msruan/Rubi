@@ -1,4 +1,5 @@
 package com.ruanbianca.redesocial;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -11,7 +12,6 @@ public class Perfil{
     private ArrayList<Postagem> _postagens;
     private Integer _id;
     
-
     public Perfil(String username, String nome, String email) throws NullAtributesException{
 
         if(Optional.ofNullable(username).isEmpty() || Optional.ofNullable(nome).isEmpty() || Optional.ofNullable(email).isEmpty())
@@ -23,6 +23,13 @@ public class Perfil{
         this._postagens = new ArrayList<>();
         this._id = numeroDePerfis;
         numeroDePerfis++;
+    }
+
+    public boolean temAtributosNulos(){
+    
+        return (Optional.ofNullable(getId()).isEmpty() || Optional.ofNullable(getUsername()).isEmpty() || 
+            Optional.ofNullable(getNome()).isEmpty() || Optional.ofNullable(getEmail()).isEmpty()
+        );
     }
 
     public void setUsername(String username) {
@@ -59,14 +66,5 @@ public class Perfil{
     public Integer getId() {
         return this._id;
     }
-
-    public boolean temAtributosNulos(){
-    
-        return (Optional.ofNullable(getId()).isEmpty() || Optional.ofNullable(getUsername()).isEmpty() || 
-            Optional.ofNullable(getNome()).isEmpty() || Optional.ofNullable(getEmail()).isEmpty()
-        );
-    }
-
-  
 
 }

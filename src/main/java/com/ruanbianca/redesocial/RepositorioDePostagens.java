@@ -9,10 +9,6 @@ public class RepositorioDePostagens {
 
     private ArrayList<Postagem> _postagens;
 
-    public ArrayList<Postagem> getPostagens() {
-        return _postagens;
-    }
-
     public RepositorioDePostagens() {
         this._postagens = new ArrayList<>();
     }
@@ -34,7 +30,7 @@ public class RepositorioDePostagens {
             _postagens.add(postagem);
     }
 
-    public ArrayList<Postagem> consultar(String texto, Perfil perfil, String hashtag){
+    public ArrayList<Postagem> consultar(String texto, Perfil perfil, Hashtag hashtag){
 
         Stream <Postagem> filtrados = _postagens.stream();
 
@@ -46,7 +42,7 @@ public class RepositorioDePostagens {
         if(Optional.ofNullable(hashtag).isPresent()) {
             filtrados = filtrados.filter(
                 post -> post instanceof PostagemAvancada && (
-                    (PostagemAvancada)post).getHashtags().contains(hashtag) );
+                    (PostagemAvancada)post).existeHashtag(hashtag));
         }
 
         if(Optional.ofNullable(texto).isPresent()) {
@@ -66,6 +62,9 @@ public class RepositorioDePostagens {
                 break;
             }
         }return saida;
-
+    }
+    
+    public ArrayList<Postagem> getPostagens() {
+        return _postagens;
     }
 }

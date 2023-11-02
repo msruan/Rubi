@@ -14,7 +14,6 @@ public class Postagem {
     private int _descurtidas;
     private Integer _id;
 
-    
     public Postagem(String texto, Perfil perfil) throws NullAtributesException{
 
         if(Optional.ofNullable(texto).isEmpty() || Optional.ofNullable(perfil).isEmpty())
@@ -31,7 +30,6 @@ public class Postagem {
         this._perfil.getPostagens().add(this);
     }
 
-
     public boolean ehPopular(){
         return (_curtidas - _descurtidas) >= 0.5 * _descurtidas;
     }
@@ -42,6 +40,12 @@ public class Postagem {
 
     public void descurtir(){
         _descurtidas++;
+    }
+
+    public boolean temAtributosNulos () {
+        return(Optional.ofNullable(_id).isEmpty() || Optional.ofNullable(_texto).isEmpty() || 
+            Optional.ofNullable(_data).isEmpty() || Optional.ofNullable(_perfil).isEmpty() || 
+            Optional.ofNullable(_curtidas).isEmpty() || Optional.ofNullable(_descurtidas).isEmpty());
     }
 
     public Integer getId() {
@@ -67,14 +71,5 @@ public class Postagem {
     public Perfil getPerfil() {
         return this._perfil;
     }
-
-    public boolean temAtributosNulos () {
-        return(Optional.ofNullable(_id).isEmpty() || Optional.ofNullable(_texto).isEmpty() || 
-            Optional.ofNullable(_data).isEmpty() || Optional.ofNullable(_perfil).isEmpty() || 
-            Optional.ofNullable(_curtidas).isEmpty() || Optional.ofNullable(_descurtidas).isEmpty());
-    }
-
-
-    
 
 }
