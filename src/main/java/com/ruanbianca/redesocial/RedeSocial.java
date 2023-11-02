@@ -29,13 +29,12 @@ public class RedeSocial {
 
     public void incluirPerfil(Perfil perfil){
 
-        if(Optional.ofNullable(perfil).isEmpty())
-            throw new NullObjectAsArgumentException();
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se postagem for nunla
 
         if(perfil.temAtributosNulos())
             throw new NullAtributesException();
 
-        boolean taDuplicado = getRepositorioDePerfis().consultar(perfil.getId(), perfil.getUsername(), perfil.getEmail()).isEmpty() ? false : true;
+        boolean taDuplicado = getRepositorioDePerfis().usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail());
 
         if(!taDuplicado)
             getRepositorioDePerfis().incluir(perfil);
@@ -45,15 +44,14 @@ public class RedeSocial {
 
     }
 
-    public Optional<Perfil> consultarPerfil(Integer id, String nome, String email){  
-        return getRepositorioDePerfis().consultar(id,nome,email);
+    public boolean usuarioJaExite(Integer id, String nome, String email){  
+        return getRepositorioDePerfis().usuarioJaExiste(id,nome,email);
             
     }
 
     public void incluirPostagem(Postagem postagem) throws NullAtributesException{
 
-        if(Optional.ofNullable(postagem).isEmpty())
-            throw new NullObjectAsArgumentException();
+        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se postagem for nunla
         
         if(postagem.temAtributosNulos())
             throw new NullAtributesException();
@@ -75,33 +73,23 @@ public class RedeSocial {
     public void curtir(int id) throws PostNotFoundException{
 
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
-
-        if(post.isEmpty())
-            throw new PostNotFoundException();
-        else 
-            post.get().curtir();
+        post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
+        post.get().curtir();
     
     }
 
     public void descurtir(int id) throws PostNotFoundException{
         
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
-
-        if(post.isEmpty())
-            throw new PostNotFoundException();
-        else 
-            post.get().descurtir();
+        post.orElseThrow(PostNotFoundException::new);
+        post.get().descurtir();
     
     }
 
     public void decrementarVisualizacoes(PostagemAvancada postagem) throws NullObjectAsArgumentException{
-
-        if(Optional.ofNullable(postagem).isEmpty())
-
-            throw new NullObjectAsArgumentException();
-
-        else 
-            postagem.decrementarVisualizacoes();
+        
+        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
+        postagem.decrementarVisualizacoes();
     }
     
     public ArrayList<Postagem> exibirPostagensPorPerfil(Integer idPerfil) { 

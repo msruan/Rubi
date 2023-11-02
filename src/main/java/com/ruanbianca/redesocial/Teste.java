@@ -25,13 +25,13 @@ public class Teste {
 
         RedeSocial instagram = new RedeSocial(meusPerfis,meusPosts);
         instagram.incluirPerfil(patro);
-        System.out.println(instagram.getRepositorioDePerfis().consultar(null,"msruan",null).get().getNome()+" eu achei ela !!!\n");
-        for(Perfil p : instagram.getRepositorioDePerfis().getPerfis()){
-            System.out.println(p.getNome());
-        }
-        for(Postagem p : instagram.getRepositorioDePostagens().getPostagens()){
-            System.out.println(p.getTexto() + " posted by " + p.getPerfil().getUsername());
-        }
+        // for(Perfil p : instagram.getRepositorioDePerfis().getPerfis()){
+        //     System.out.println(p.getNome());
+        // }
+        // for(Postagem p : instagram.getRepositorioDePostagens().getPostagens()){
+        //     System.out.println(p.getTexto() + " posted by " + p.getPerfil().getUsername());
+        // }
+        //obs: consultar tá funcionado?
 
     }
     

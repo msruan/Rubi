@@ -27,13 +27,12 @@ public class RepositorioDePerfis {
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
 
-        if(Optional.ofNullable(perfil).isEmpty())
-            throw new NullObjectAsArgumentException();
-        else if(perfil.temAtributosNulos()){
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se perfil for nulo
+        
+        if(perfil.temAtributosNulos()){
             throw new NullAtributesException();
         }
-        Optional<Perfil> perfilBuscado = consultar(perfil.getId(), perfil.getUsername(), perfil.getEmail());
-        if(perfilBuscado.isPresent())
+        if(usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
             throw new UserAlreadyExistsException();
         else
             _perfis.add(perfil);
@@ -41,23 +40,39 @@ public class RepositorioDePerfis {
     }
 
 
+    public boolean usuarioJaExiste(Integer id, String username, String email){
 
-    public Optional<Perfil> consultar(Integer id, String username, String email){
+        return (consultarPorId(id).isPresent() || consultarPorUsername(username).isPresent() || consultarPorEmail(email).isPresent());
+    }
+
+    public Optional<Perfil> consultarPorId(Integer id){
+
+        if(Optional.ofNullable(id).isEmpty())
+            return Optional.empty();
 
         Stream<Perfil> filtrados = getPerfis().stream();
-
-        if(Optional.ofNullable(username).isPresent())
-            filtrados = filtrados.filter(perfil -> perfil.getUsername().equals(username));
-        if(Optional.ofNullable(email).isPresent()) 
-            filtrados = filtrados.filter(perfil -> perfil.getEmail().equals(email));
-        if(Optional.ofNullable(id).isPresent())
-            filtrados = filtrados.filter(perfil -> perfil.getId().equals(id));
-
+        filtrados = filtrados.filter(perfil -> perfil.getId().equals(id));
         return filtrados.findFirst();
-            
-        /*if(Optional.ofNullable(perfisFiltrados.findFirst()).isEmpty())
-            return null;
-        return perfisFiltrados.findFirst().get();*/
+    }
+
+    public Optional<Perfil> consultarPorUsername(String username){
+
+        if(Optional.ofNullable(username).isEmpty())
+            return Optional.empty();
+
+        Stream<Perfil> filtrados = getPerfis().stream();
+        filtrados = filtrados.filter(perfil -> perfil.getUsername().equals(username));
+        return filtrados.findFirst();
+    }
+
+    public Optional<Perfil> consultarPorEmail(String email){
+
+        if(Optional.ofNullable(email).isEmpty())
+            return Optional.empty();
+
+        Stream<Perfil> filtrados = getPerfis().stream();
+        filtrados = filtrados.filter(perfil -> perfil.getEmail().equals(email));       
+        return filtrados.findFirst();
     }
 
     public ArrayList<Perfil> getPerfis(){

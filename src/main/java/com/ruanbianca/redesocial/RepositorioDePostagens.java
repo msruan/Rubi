@@ -54,7 +54,6 @@ public class RepositorioDePostagens {
         }
 
         return new ArrayList<Postagem>(filtrados.toList());
-    
     }
 
     public Optional<Postagem> consultar(Integer id) {
