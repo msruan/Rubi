@@ -1,6 +1,5 @@
 package com.ruanbianca.redesocial;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class Hashtag {
@@ -12,32 +11,25 @@ public class Hashtag {
         return false;
     }
     
-    private int _contadorDeUsos;
     private String _hashtag;
+    private Integer _contadorDeUsos;
 
-    public Hashtag(String hashtag) throws NullAtributesException{
+
+    public Hashtag(String hashtag, int contadorDeUsos) throws NullAtributesException{
         Optional<String> temHash = Optional.ofNullable(hashtag);
         temHash.orElseThrow(NullAtributesException::new); 
         this._hashtag = hashtag;
-        usarHashtag();
+        this._contadorDeUsos = contadorDeUsos;
     }
 
     public String getHashtag() {
         return this._hashtag;
     }
 
-    public int getContadorDeUsos() {
+    public Integer getContadorDeUsos() {
         return _contadorDeUsos;
     }
     public void usarHashtag() {
         _contadorDeUsos++;
-    }
-
-    public static ArrayList<Hashtag> gerarHashtags(String[] hashtags) {
-        ArrayList<Hashtag> arrHashs = new ArrayList<>();
-        for(String hash : hashtags){
-            if(Optional.ofNullable(hash).isPresent())
-                arrHashs.add(new Hashtag(hash));
-        }return arrHashs;
     }
 }

@@ -1,6 +1,7 @@
 package com.ruanbianca.redesocial;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -9,9 +10,9 @@ public class PostagemAvancada extends Postagem {
     private final Integer numeroPadraoVisualizacoesRestantes = 10;
 
     private Integer _visualizacoesRestantes;
-    private ArrayList<Hashtag> _hashtags;
+    private ArrayList<String> _hashtags;
     
-    public PostagemAvancada(String texto, Perfil perfil, ArrayList<Hashtag> hashtags) {
+    public PostagemAvancada(String texto, Perfil perfil, ArrayList<String> hashtags) {
         
         super(texto, perfil);
         this._visualizacoesRestantes = numeroPadraoVisualizacoesRestantes;
@@ -20,25 +21,21 @@ public class PostagemAvancada extends Postagem {
 
     public PostagemAvancada(String texto, Perfil perfil, String ... hashtags) {
 
-        this(texto, perfil, Hashtag.gerarHashtags(hashtags));
+        this(texto, perfil, new ArrayList<>(Arrays.asList(hashtags)));
     }
 
     public void adicionarHashtag(String hashtag) {
         if(Optional.ofNullable(hashtag).isPresent())
-            _hashtags.add(new Hashtag(hashtag));
+            _hashtags.add(hashtag);
     }
-
-     // public boolean existeHashtag(Hashtag hashtag) {
-    //     return _hashtags.contains(hashtag);
-    // }
 
     public boolean ehExibivel(){
         return _visualizacoesRestantes > 0;
     }
 
-    public boolean existeHashtag(Hashtag hashtag) {
+    public boolean existeHashtag(String hashtag) {
         
-        Stream <Hashtag> hashs = _hashtags.stream();
+        Stream <String> hashs = _hashtags.stream();
 
         return hashs.anyMatch(h -> h.equals(hashtag));
     }
@@ -48,7 +45,7 @@ public class PostagemAvancada extends Postagem {
             _visualizacoesRestantes--;
     }
 
-    public ArrayList<Hashtag> getHashtags (){
+    public ArrayList<String> getHashtags (){
         return _hashtags;
     }
 

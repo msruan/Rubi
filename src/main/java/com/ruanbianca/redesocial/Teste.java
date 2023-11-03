@@ -15,13 +15,12 @@ public class Teste {
         meusPerfis.incluir(bianca);
         meusPerfis.incluir(ruan);
 
-        String[] hashs = {"#rock"};
-        PostagemAvancada post1 = new PostagemAvancada("i just love rock!",ruan,hashs);
-        Postagem post2 = new Postagem("alguem quer dancar forro?",ruan);
-        Postagem post3 = new Postagem("mds eh a dua lipa!!",ruan);
-        Postagem post4 = new Postagem("mds eh a juju do pix!!",ruan);
-        Postagem post5 = new Postagem("Deus é maior <3", ruan);
-        Postagem post6 = new Postagem("Deus é mais", ruan);
+        PostagemAvancada post1 = new PostagemAvancada("i just love rock!",ruan,"rock","roll","drogs","thinking");
+        PostagemAvancada post2 = new PostagemAvancada("alguem quer dancar forro?",ruan,"forro","danca","felicidade");
+        PostagemAvancada post3 = new PostagemAvancada("mds eh a dua lipa!!",ruan,"onekiss","diva","pop");
+        PostagemAvancada post4 = new PostagemAvancada("mds eh a juju do pix!!",ruan,"humor","pix","nubank");
+        PostagemAvancada post5 = new PostagemAvancada("Deus é maior <3", ruan,"deus","gospel","louvor");
+        PostagemAvancada post6 = new PostagemAvancada("Deus é mais", ruan,"deus","gospel","louvor");
 
         RepositorioDePostagens meusPosts = new RepositorioDePostagens();
         meusPosts.incluir(post1);
@@ -33,9 +32,8 @@ public class Teste {
 
         RedeSocial instagram = new RedeSocial(meusPerfis,meusPosts);
         instagram.incluirPerfil(patro);
-        
-        for(Postagem p : instagram.exibirPostagensPorPerfil(ruan.getId())){
-            System.out.println(p.getTexto() + " posted on " + p.getData());
+        for(Hashtag hash : instagram.exibirHashtagsPopulares()){
+            System.out.println(hash.getHashtag());
         }
     }   
 }

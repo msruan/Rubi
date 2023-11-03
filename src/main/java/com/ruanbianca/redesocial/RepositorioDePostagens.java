@@ -30,7 +30,7 @@ public class RepositorioDePostagens {
             _postagens.add(postagem);
     }
 
-    public ArrayList<Postagem> consultar(String texto, Perfil perfil, Hashtag hashtag){
+    public ArrayList<Postagem> consultar(String texto, Perfil perfil, String hashtag){
 
         Stream <Postagem> filtrados = _postagens.stream();
 
@@ -67,4 +67,15 @@ public class RepositorioDePostagens {
     public ArrayList<Postagem> getPostagens() {
         return _postagens;
     }
+    
+    public ArrayList<PostagemAvancada> getPostagensAvancadas() {
+
+        ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
+        Stream <Postagem> postagens = getPostagens().stream();
+        postagens = postagens.filter(post -> post instanceof PostagemAvancada);
+        postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
+        return avancadas;
+    }
+
+
 }

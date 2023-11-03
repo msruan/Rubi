@@ -1,8 +1,10 @@
 package com.ruanbianca.redesocial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class RedeSocial {
@@ -67,7 +69,7 @@ public class RedeSocial {
         //aqui a gente precisa retornar que o id tá duplicado;
     }
 
-    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, Hashtag hashtag){//a gente deveria poder passar várias hashtags
+    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
 
         return getRepositorioDePostagens().consultar(texto,perfil,hashtag);
     }
@@ -114,7 +116,7 @@ public class RedeSocial {
         return new ArrayList<>(saida);
     }
 
-    public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(Hashtag hashtag){
+    public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(String hashtag){
         
         Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
         filtrados = filtrados.filter(post -> {
@@ -127,10 +129,7 @@ public class RedeSocial {
         filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
         return new ArrayList<>(saida);
     }
-    
-    //a. Exibir as postagens populares que ainda podem ser exibidas; 
-    //b. Exibir as hashtags mais populares, ou seja, as que estão presentes em mais postagens;
-    
+
     public ArrayList<Postagem> exibirPostagensPopulares(){
         Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
         filtrados = filtrados.filter(post ->  {
@@ -143,10 +142,33 @@ public class RedeSocial {
     }
 
     public ArrayList<Hashtag> exibirHashtagsPopulares(){
-        return null;
+
+        Map<String,Integer> mapaHashtags = new HashMap<>();
+        Stream <PostagemAvancada> postagens = getRepositorioDePostagens().getPostagensAvancadas().stream();
+        postagens.forEach(post -> {
+            for(String hashtag : post.getHashtags()){
+
+                if(Optional.ofNullable(hashtag).isEmpty())
+                    continue;//acho q isso aqui basta
+                    
+                if(mapaHashtags.containsKey(hashtag)){
+                    int numeroDeUsos = mapaHashtags.get(hashtag);
+                    numeroDeUsos++;
+                    mapaHashtags.put(hashtag,numeroDeUsos);
+                
+                }else 
+                    mapaHashtags.put(hashtag,1);
+            }
+        });
+      
+        ArrayList<Hashtag> asMaisHypadas = new ArrayList<>();
+        for(Map.Entry<String,Integer> par : mapaHashtags.entrySet()){
+            asMaisHypadas.add(new Hashtag(par.getKey(), par.getValue()));
+        }
+        Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
+        return new ArrayList<>(streamHashs.toList());
     }
 }
-
 
 
 
