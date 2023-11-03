@@ -6,4 +6,36 @@ class Perfil {
     -_postagens: ArrayList<Postagem>
     -_id: UUID;
 }
+
+class Postagem {
+    -_texto: String;
+    -_perfil: Perfil;   
+    -_data: LocalDateTime;
+    -_curtidas: int;
+    -_descurtidas: int;
+    -_id: UUID;
+}
+
+class PostagemAvancada {
+    -_visualizacoesRestantes: Integer;
+    -_hashtags: ArrayList<String>;
+}
+
+class RepositorioDePostagens {
+    -_postagens: ArrayList<Postagem>;
+}
+
+class RepositorioDePerfil {
+    -_perfis : ArrayList<Perfil>;
+}
+
+class RedeSocial {
+    -_perfis: RepositorioDePerfis;
+    -_postagens: RepositorioDePostagens;
+}
+
+class Hashtag {
+    -_hashtag: String;
+    -_contadorDeUsos: Integer;
+}
 @enduml
