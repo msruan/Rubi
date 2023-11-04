@@ -9,17 +9,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
+// Exception in thread "main" java.lang.IllegalArgumentException: Invalid UUID string: Bianca Bezerra
+//         at java.base/java.util.UUID.fromString1(UUID.java:280)
+//         at java.base/java.util.UUID.fromString(UUID.java:258)
+//         at com.ruanbianca.redesocial.RedeSocial.resgatarPostagens0(RedeSocial.java:289)
+//         at com.ruanbianca.redesocial.Teste.main(Teste.java:36)
+//interessante
+//vamo la
 public class ManipuladorDeArquivos {
-    public static void main(String[] args) {
-        gravarArquivo("teste.txt","só alegria haha");
-        System.out.println(lerArquivo("teste.txt"));
-    }
     public static boolean arquivoExiste(String path){
         return Files.exists(Paths.get(path));
     }
     public static String lerArquivo(String caminho){
         StringBuilder conteudo = new StringBuilder();
-        BufferedReader leitor;
+        //nao o q rolou?
+        BufferedReader leitor;//amg ce viu o terminal?
         try {
             leitor = new BufferedReader(new FileReader(caminho));
             try{

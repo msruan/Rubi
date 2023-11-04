@@ -3,12 +3,22 @@ package com.ruanbianca.redesocial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 public class RedeSocial {
     private RepositorioDePerfis _perfis;
@@ -47,8 +57,6 @@ public class RedeSocial {
             getRepositorioDePerfis().incluir(perfil);
         else 
             throw new UserAlreadyExistsException();
-        //aqui a gente precisa retornar o que q ta duplicado, se é o username, email ou id;
-
     }
 
     public boolean usuarioJaExite(UUID id, String nome, String email){  
@@ -175,17 +183,140 @@ public class RedeSocial {
         return new ArrayList<>(streamHashs.toList());
 
     } 
-    public void criarDB(){
-        String diretorio_atual = System.getProperty("user.dir");
-        
-    }
-    public void salvarRegistros(String nomeArquivo) {
+
+    public void salvarPerfis(String nomeArquivo) {
         try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(nomeArquivo))){
-            for(Perfil perfil : _perfis){
+            for(Perfil perfil : _perfis.getPerfis()){
                 buffwriter.write(perfil.toString());
-                buffwriter.newLine();
             }
-        } ca
+        } catch (IOException e){
+            e.printStackTrace();
+        }catch(RuntimeException e){
+                System.out.println("O erro tá na funcao salvarPerfis");
+            }
+        }    
+    public void salvarPostagens(String nomeArquivo) {
+        try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(nomeArquivo))){
+            for(Postagem post : _postagens.getPostagens()){
+                String postagem = (post instanceof PostagemAvancada) ? ((PostagemAvancada)post).toString() : post.toString();
+                buffwriter.write(postagem);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }catch(RuntimeException e){
+                System.out.println("O erro tá na funcao salvarPostagens");
+            }
+    }
+
+    public void resgatarPerfis(String nomeArquivo){
+            System.out.println("entrou em resgatar perfis");
+
+            try {
+                List<String> linhas = Files.readAllLines(Paths.get(nomeArquivo));
+                for(String linha : linhas){
+                    System.out.println("pegou");
+                    Perfil perfil = new Perfil(linha);
+                    incluirPerfil(perfil);
+                }
+                    
+            System.out.println("saiu de resgata perfis");
+
+            }catch(IOException e){
+                System.out.println("Erro durante o resgate dos arquivos!");
+            }catch(RuntimeException e){
+                System.out.println("O erro tá na funcao resgatarPerfis");
+            }
+    }
+    public void resgatarPerfis2(String nomeArquivo){
+        try(Scanner input = new Scanner(new File(nomeArquivo))) {
+            while (input.hasNextLine()) {
+                incluirPerfil(new Perfil(input.nextLine()));
+            }
+        }catch(IOException e){
+            System.out.println("errei fui mlk nas resgPerf2");
+        }
+    }
+    public void resgatarPostagens0(String nomeArquivo){
+        String conteudo = lerArquivo(nomeArquivo);
+        for(String linha : conteudo.split("\n")){
+            String[] atributos = linha.split(";");
+            Postagem post;//vaelu
+            if(atributos[0] == "0"){
+                post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+            }else {
+                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+                }incluirPostagem(post);
+            }
+    }
+    public void resgatarPerfis0(String nomeArquivo){
+        String conteudo = lerArquivo(nomeArquivo);
+        for(String linha : conteudo.split("\n")){
+            incluirPerfil(new Perfil(linha));
+        }
+    }
+    public static String lerArquivo(String caminho){
+        StringBuilder conteudo = new StringBuilder();
+        BufferedReader leitor;
+        try {
+            leitor = new BufferedReader(new FileReader(caminho));
+            try{
+                String linha = leitor.readLine();
+                for(; linha != null; linha = leitor.readLine())
+                    conteudo.append(linha);
+                leitor.close();
+            }catch(IOException e){
+                System.out.println("Problema durante leitura do arquivo!");
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("Arquivo não encontrado!");
+        } 
+    
+        return conteudo.toString();
+    }
+
+    public void resgatarPostagens2(String nomeArquivo){
+        try(Scanner input = new Scanner(new File(nomeArquivo))) {
+            while (input.hasNextLine()) {
+                String linha =  input.nextLine();
+                String[] atributos = linha.split(";");
+                Postagem post;//vaelu
+                if(atributos[0] == "0"){
+                    post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+                }else {
+                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+                }incluirPostagem(post);
+            }
+        }catch(IOException e){
+            System.out.println("errei, fui mlk na resgPosts2");
+        }
+    }
+    
+
+    public void resgatarPostagens3(String nomeArquivo){
+       
+        try {
+            List<String> linhas = Files.readAllLines(Paths.get(nomeArquivo));
+            System.out.println("entrou em resgatar postagens");
+            for(String linha : linhas){
+                String[] atributos = linha.split(";");
+                Postagem post;
+                if(atributos[0].equals("0")){
+                    post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+                }else {
+                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
+
+                }incluirPostagem(post);
+            }
+            System.out.println("saiu resgatar postagens");
+
+
+        } catch (IOException e){
+            System.out.println("Erro durante o resgate dos arquivos!");
+        } catch(java.util.NoSuchElementException e) {
+            System.out.println("consultarPorId não funcionou!");
+        }catch(RuntimeException e){
+                System.out.println("O erro tá na funcao resgatarPostagens");
+            }
     }
 }
 
