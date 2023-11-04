@@ -16,12 +16,17 @@ No Ubuntu e derivados, você pode obter o Maven via terminal assim:
 
 Para persistência dos dados, foram utilizados arquivos de texto, que estão no  formato abaixo, separados por ponto e vírgula(;).
 
+
+
+
 #### _PERFIL_
 
 |    IdPerfil    |    Username   |        Nome    |        Email        |
 | :--------------: | :-------------: | :--------------: | :-------------------: |
 | 140a3dd2-2c... |   bbianca     | Bianca Bezerra | bianca-bz@gmail.com |
 | 4ffd42c0-33... |   msruan      | Ruan Macedo    | ruan.macs@gmail.com |
+
+
 
 #### _POSTAGEM_
 
@@ -31,6 +36,8 @@ Para persistência dos dados, foram utilizados arquivos de texto, que estão no 
 |   0  | b70566f9-62... | 4ffd42c0-33... | 2021-05-28T21:00:45Z | quer ler? |  12   |    2     |                 |             |
 
 _**0 = Postagem**_, _**1 = PostagemAvancada**_.
+
+
     
 ## Documentação
 
