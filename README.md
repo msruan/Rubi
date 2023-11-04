@@ -11,7 +11,11 @@ As dependências do projeto são gerenciadas pelo Maven, então caso tenha certe
 No Ubuntu e derivados, você pode obter o Maven via terminal assim:
 ```bash
   sudo apt install maven
-```
+```    
+## Documentação
+
+Inicialmente os atributos privados estavam sendo nomeados com o padrão Python (__atribute_), mas após utilizar a biblioteca Lombok para gerar os getters automaticamente, essa nomenclatura se tornou inviável, pois atributos como __id,_ tinham métodos _get_id()_, enquanto esperava-se um _getId()_.
+
 ## Banco De Dados
 
 Para persistência dos dados, foram utilizados arquivos de texto, que estão no  formato abaixo, separados por ponto e vírgula(;).
@@ -36,10 +40,3 @@ Para persistência dos dados, foram utilizados arquivos de texto, que estão no 
 |   0  | b70566f9-62... | 4ffd42c0-33... | 2021-05-28T21:00:45Z | quer ler? |  12   |    2     |                 |             |
 
 _**0 = Postagem**_, _**1 = PostagemAvancada**_.
-
-
-    
-## Documentação
-
-Inicialmente os atributos privados estavam sendo nomeados com o padrão Python (__atribute_), mas após utilizar a biblioteca Lombok para gerar os getters automaticamente, essa nomenclatura se tornou inviável, pois atributos como __id,_ tinham métodos _get_id()_, enquanto esperava-se um _getId()_.
-
