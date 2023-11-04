@@ -34,7 +34,7 @@ Para persistência dos dados, foram utilizados arquivos de texto, que estão no 
 
 #### _POSTAGEM_
 
-| Tipo |    IdPost      |    IdPerfil    |        Data          | Texto     | Likes | Deslikes | ?ViewsRestantes | ?Hashtahs<> |
+| Tipo |    IdPost      |    IdPerfil    |        Data          | Texto     | Likes | Deslikes | ViewsRestantes | Hashtags<> |
 | :----: | :--------------: | :--------------: | :--------------------: | :---------: | :-----: | :--------: | :---------------: | :-----------: |
 |   1  | 3648f487-20... | 140a3dd2-2c... | 2023-11-01T09:39:33Z | love you! |  15   |    3     |      50         | #love#feel  |     
 |   0  | b70566f9-62... | 4ffd42c0-33... | 2021-05-28T21:00:45Z | quer ler? |  12   |    2     |                 |             |
