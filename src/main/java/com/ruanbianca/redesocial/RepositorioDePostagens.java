@@ -3,6 +3,7 @@ package com.ruanbianca.redesocial;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class RepositorioDePostagens {
@@ -52,12 +53,12 @@ public class RepositorioDePostagens {
         return new ArrayList<Postagem>(filtrados.toList());
     }
 
-    public Optional<Postagem> consultar(Integer id) {
+    public Optional<Postagem> consultar(UUID id) {
 
         Optional<Postagem> saida = Optional.empty();
 
         for(Postagem post : _postagens){
-            if(post.getId().equals(id)){
+            if(post.getId() == id){
                 saida = Optional.of(post);
                 break;
             }

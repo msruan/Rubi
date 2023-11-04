@@ -3,6 +3,7 @@ package com.ruanbianca.redesocial;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class RepositorioDePerfis {
@@ -40,12 +41,12 @@ public class RepositorioDePerfis {
     }
 
 
-    public boolean usuarioJaExiste(Integer id, String username, String email){
+    public boolean usuarioJaExiste(UUID id, String username, String email){
 
         return (consultarPorId(id).isPresent() || consultarPorUsername(username).isPresent() || consultarPorEmail(email).isPresent());
     }
 
-    public Optional<Perfil> consultarPorId(Integer id){
+    public Optional<Perfil> consultarPorId(UUID id){
 
         if(Optional.ofNullable(id).isEmpty())
             return Optional.empty();

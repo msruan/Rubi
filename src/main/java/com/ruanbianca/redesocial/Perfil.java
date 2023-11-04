@@ -2,27 +2,33 @@ package com.ruanbianca.redesocial;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
+
+import lombok.Getter;
 
 public class Perfil{
 
-    private static int numeroDePerfis = 0;
-    private String _username;
-    private String _nome;
-    private String _email;
-    private ArrayList<Postagem> _postagens;
-    private Integer _id;
+    @Getter
+    private String username;
+    @Getter
+    private String nome;
+    @Getter
+    private String email;
+    @Getter
+    private ArrayList<Postagem> postagens;
+    @Getter
+    private UUID id;
     
     public Perfil(String username, String nome, String email) throws NullAtributesException{
 
         if(Optional.ofNullable(username).isEmpty() || Optional.ofNullable(nome).isEmpty() || Optional.ofNullable(email).isEmpty())
             throw new NullAtributesException();
 
-        this._username = username;
-        this._nome = nome;
-        this._email = email;
-        this._postagens = new ArrayList<>();
-        this._id = numeroDePerfis;
-        numeroDePerfis++;
+        this.username = username;
+        this.nome = nome;
+        this.email = email;
+        this.postagens = new ArrayList<>();
+        this.id = UUID.randomUUID();
     }
 
     public boolean temAtributosNulos(){
@@ -34,37 +40,16 @@ public class Perfil{
 
     public void setUsername(String username) {
         if(Optional.ofNullable(username).isPresent())
-            this._username = username;
+            this.username = username;
     }
 
     public void setNome(String nome) {
         if(Optional.ofNullable(nome).isPresent())
-            this._nome = nome;
+            this.nome = nome;
     }
 
     public void setEmail(String email) {
         if(Optional.ofNullable(email).isPresent())
-            this._email = email;
+            this.email = email;
     }
-
-    public String getUsername() {
-        return this._username;
-    }
-
-    public String getNome() {
-        return this._nome;
-    }
-
-    public String getEmail() {
-        return this._email;
-    }
-
-    public ArrayList<Postagem> getPostagens() {
-        return this._postagens;
-    }
-
-    public Integer getId() {
-        return this._id;
-    }
-
 }

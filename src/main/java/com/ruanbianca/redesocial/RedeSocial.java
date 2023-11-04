@@ -3,6 +3,7 @@ package com.ruanbianca.redesocial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -48,7 +49,7 @@ public class RedeSocial {
 
     }
 
-    public boolean usuarioJaExite(Integer id, String nome, String email){  
+    public boolean usuarioJaExite(UUID id, String nome, String email){  
         return getRepositorioDePerfis().usuarioJaExiste(id,nome,email);
             
     }
@@ -74,18 +75,18 @@ public class RedeSocial {
         return getRepositorioDePostagens().consultar(texto,perfil,hashtag);
     }
 
-    public Optional<Perfil> consultarPerfil(Integer id){//a gente deveria poder passar várias hashtags
+    public Optional<Perfil> consultarPerfil(UUID id){//a gente deveria poder passar várias hashtags
         return getRepositorioDePerfis().consultarPorId(id);
     }
 
-    public void curtir(int id) throws PostNotFoundException{
+    public void curtir(UUID id) throws PostNotFoundException{
 
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
         post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
         post.get().curtir();
     }
 
-    public void descurtir(int id) throws PostNotFoundException{
+    public void descurtir(UUID id) throws PostNotFoundException{
         
         Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
         post.orElseThrow(PostNotFoundException::new);
@@ -98,7 +99,7 @@ public class RedeSocial {
         postagem.decrementarVisualizacoes();
     }
     
-    public ArrayList<Postagem> exibirPostagensPorPerfil(Integer idPerfil) { 
+    public ArrayList<Postagem> exibirPostagensPorPerfil(UUID idPerfil) { 
 
         Optional <Perfil> perfil = consultarPerfil(idPerfil);
         if(perfil.isEmpty())
@@ -149,7 +150,7 @@ public class RedeSocial {
             for(String hashtag : post.getHashtags()){
 
                 if(Optional.ofNullable(hashtag).isEmpty())
-                    continue;//acho q isso aqui basta
+                    continue;//acho q i sso aqui basta
                     
                 if(mapaHashtags.containsKey(hashtag)){
                     int numeroDeUsos = mapaHashtags.get(hashtag);

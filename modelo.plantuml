@@ -38,4 +38,10 @@ class Hashtag {
     -_hashtag: String;
     -_contadorDeUsos: Integer;
 }
+
+RedeSocial *-- RepositorioDePostagens
+RedeSocial *-- RepositorioDePerfil
+RepositorioDePostagens *-- Postagem
+RepositorioDePerfil *-- Perfil
+Postagem <|-- PostagemAvancada
 @enduml
