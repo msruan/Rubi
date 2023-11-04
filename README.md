@@ -1,6 +1,6 @@
 # Rubi
 
-Projeto de rede social feito com carinho por Bianca Bezerra de Oliveira e Ruan Macedo Santos
+Projeto de rede social feito com carinho por Bianca Almeida de Oliveira Bezerra e Ruan Macedo Santos
 
 
 ## Uso
