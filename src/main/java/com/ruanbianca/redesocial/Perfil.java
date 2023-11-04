@@ -1,6 +1,5 @@
 package com.ruanbianca.redesocial;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,9 +14,22 @@ public class Perfil{
     @Getter
     private String email;
     @Getter
-    private ArrayList<Postagem> postagens;
-    @Getter
     private UUID id;
+
+    @Override
+    public String toString() {
+        return id.toString() + ";" + username + ";" + nome +  ";" + email + '\n';
+    }
+
+    public Perfil(String perfil) { 
+        
+        // *  IdPerfil  |    Username |  Nome  |    Email        |
+        String []atributos = perfil.split(";");
+        this.id = UUID.fromString(atributos[0]);
+        this.username = atributos[1];
+        this.nome = atributos[2];
+        this.email = atributos[3];
+    }
     
     public Perfil(String username, String nome, String email) throws NullAtributesException{
 
@@ -27,9 +39,9 @@ public class Perfil{
         this.username = username;
         this.nome = nome;
         this.email = email;
-        this.postagens = new ArrayList<>();
         this.id = UUID.randomUUID();
     }
+
 
     public boolean temAtributosNulos(){
     

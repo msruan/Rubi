@@ -1,6 +1,7 @@
 package com.ruanbianca.redesocial;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +22,25 @@ public class Postagem {
     @Getter
     private UUID id;
 
+    @Override
+    public String toString() {
+        return 0 + ";" + id.toString() + ";" + perfil.getId().toString() + ";" + 
+            data.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + texto + ";" + 
+            String.valueOf(curtidas) + ";" + String.valueOf(descurtidas) + ";" + "\n";  
+    }
+
+
+    public Postagem(Perfil perfil, String postagem) {
+        /* | Tipo |    IdPost   |    IdPerfil    |   Data  | Texto  | Likes | Deslikes | ViewsRestantes | Hashtags<> |*/
+        String []atributos = postagem.split(";");
+        this.id = UUID.fromString(atributos[1]);
+        this.perfil = perfil;
+        this.data = LocalDateTime.parse(atributos[3],DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        this.texto = atributos[4];
+        this.curtidas = Integer.parseInt(atributos[5]);
+        this.descurtidas = Integer.parseInt(atributos[6]);
+    }
+
     public Postagem(String texto, Perfil perfil) throws NullAtributesException{
 
         if(Optional.ofNullable(texto).isEmpty() || Optional.ofNullable(perfil).isEmpty())
@@ -32,7 +52,6 @@ public class Postagem {
         this.descurtidas = 0;
         this.data = LocalDateTime.now();
         this.id = UUID.randomUUID();
-        this.perfil.getPostagens().add(this);
     }
 
     public boolean ehPopular(){

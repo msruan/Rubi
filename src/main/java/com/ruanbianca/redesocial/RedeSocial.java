@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class RedeSocial {
     private RepositorioDePerfis _perfis;
@@ -104,7 +106,10 @@ public class RedeSocial {
         Optional <Perfil> perfil = consultarPerfil(idPerfil);
         if(perfil.isEmpty())
             return null;
-        Stream <Postagem> filtrados = perfil.get().getPostagens().stream();
+        
+        Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
+        filtrados = filtrados.filter(post -> post.getPerfil().getId() == perfil.get().getId());
+        //Stream <Postagem> filtrados = perfil.get().getPostagens().stream();
         filtrados = filtrados.filter(post -> {
             if(!(post instanceof PostagemAvancada))
                 return true;
@@ -168,6 +173,19 @@ public class RedeSocial {
         }
         Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
         return new ArrayList<>(streamHashs.toList());
+
+    } 
+    public void criarDB(){
+        String diretorio_atual = System.getProperty("user.dir");
+        
+    }
+    public void salvarRegistros(String nomeArquivo) {
+        try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(nomeArquivo))){
+            for(Perfil perfil : _perfis){
+                buffwriter.write(perfil.toString());
+                buffwriter.newLine();
+            }
+        } ca
     }
 }
 

@@ -20,7 +20,7 @@ public class Teste {
         PostagemAvancada post3 = new PostagemAvancada("mds eh a dua lipa!!",ruan,"onekiss","diva","pop");
         PostagemAvancada post4 = new PostagemAvancada("mds eh a juju do pix!!",ruan,"humor","pix","nubank");
         PostagemAvancada post5 = new PostagemAvancada("Deus é maior <3", ruan,"deus","gospel","louvor");
-        PostagemAvancada post6 = new PostagemAvancada("Deus é mais", ruan,"deus","gospel","louvor");
+        Postagem post6 = new Postagem("Deus é mais", ruan);
 
         RepositorioDePostagens meusPosts = new RepositorioDePostagens();
         meusPosts.incluir(post1);
@@ -31,9 +31,13 @@ public class Teste {
         meusPosts.incluir(post6);
 
         RedeSocial instagram = new RedeSocial(meusPerfis,meusPosts);
-        instagram.incluirPerfil(patro);
-        for(Hashtag hash : instagram.exibirHashtagsPopulares()){
-            System.out.println(hash.getHashtag());
-        }
+        //instagram.incluirPerfil(patro);
+        // System.out.println(post5);
+        // System.out.println(avancada);
+        // System.out.println(post6);
+        // System.out.println(normal);
+        System.out.println(System.getProperty("user.dir"));
+
+
     }   
 }
