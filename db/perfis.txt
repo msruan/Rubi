@@ -1,6 +1,4 @@
-a4a035f8-38a3-4e71-9e8d-23c280898d7b;bbia;Bianca Bezerra;bianca-bezerra@gmail.com
-223bf3ba-29f4-4539-aad3-b055aa2426c2;msruan;Ruan Macedo Santos;santosruan2021@gmail.com
-268f47bb-71b2-4499-8c53-0b6f8ce96a47;patro;LF Patrocinio;patro-rajada@gmail.com
-70ff0710-6bba-47bf-a36f-eb3bcbeed55d;bia-bzra;bianca;bia@gmail.com
-b849fc75-5053-4de5-8d31-16e7ceb59db4;bia-almeida;Bianca;biaalmeida@gmail.com
-4e84a940-7962-4a65-9e65-fbccbb9c490c;bia;bianca;bia
+8f4ba455-28e7-439a-a9c3-7ddd00dbe26d;bia;bianca;bia@gmail.com;amar amei gostar gostei agora eu nn quero nem de graca
+b6aa8904-785d-48c8-b8d0-122897f67e8f;tlivia;Livia Taina;tainalivia@hotmail.com;Adoro One Piece
+9d6165cb-5dd9-4382-80ef-73ba4f6377de;ryofav;Ryan Faustino;a@gmail.com;love programminh!
+d38229ea-e2de-4a69-8637-eb8c1dc38177;hermio;Herminio;h@gmail.com;eu gosto de motos velozes

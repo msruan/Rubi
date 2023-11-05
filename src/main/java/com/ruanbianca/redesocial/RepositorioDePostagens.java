@@ -31,7 +31,7 @@ public class RepositorioDePostagens {
             _postagens.add(postagem);
     }
 
-    public ArrayList<Postagem> consultar(String texto, Perfil perfil, String hashtag){
+    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag){
 
         Stream <Postagem> filtrados = _postagens.stream();
 
@@ -53,7 +53,7 @@ public class RepositorioDePostagens {
         return new ArrayList<Postagem>(filtrados.toList());
     }
 
-    public Optional<Postagem> consultar(UUID id) {
+    public Optional<Postagem> consultarPostagemPorId(UUID id) {
 
         Optional<Postagem> saida = Optional.empty();
 
@@ -77,4 +77,6 @@ public class RepositorioDePostagens {
         postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
         return avancadas;
     }
+
+    
 }

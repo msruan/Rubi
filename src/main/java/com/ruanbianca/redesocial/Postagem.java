@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-
+import com.ruanbianca.redesocial.SocialException;
 import lombok.Getter;
 
 public class Postagem {
@@ -23,12 +23,12 @@ public class Postagem {
     @Getter
     private UUID id;
 
-    public String exibirPostagem(){
-        return "--------------------------------------------\n"+
-         "|*"+getPerfil().getUsername()+"*"+"\n\n"+
-            getTexto()+"\n"+"\n"
-            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '</3'"+RESET
-            + "\n"+"--------------------------------------------\n";
+    public String exibirPostagem(int posicao){
+        return CYAN_BOLD_BRIGHT+String.valueOf(posicao)+RESET+PURPLE_BOLD_BRIGHT+"══════════════════════════════════════════════════════\n"
+        +RESET+PURPLE_BOLD+"║    "+RESET+PURPLE_BOLD_BRIGHT+getPerfil().getUsername()+RESET+"\n║\n║    "+
+            getTexto()+"\n║\n║    "
+            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() + " 👎"
+            + "\n╚══════════════════════════════════════════════════════\n"+RESET;
     }
 
 

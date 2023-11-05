@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.Getter;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-
+import com.ruanbianca.redesocial.SocialException;
 
 public class PostagemAvancada extends Postagem {
 
@@ -18,17 +18,17 @@ public class PostagemAvancada extends Postagem {
     private ArrayList<String> hashtags;
 
 
-    public String exibirPostagem() {
+    public String exibirPostagem(int posicao) {
 
         StringBuilder strHashtags = new StringBuilder();
         for(String hash:  hashtags){
             strHashtags.append("#"+hash+" ");
         }
-        return "--------------------------------------------\n"+
-         "|*"+getPerfil().getUsername()+"*"+"\n\n"+
-            getTexto()+"\n"+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n\n"
-            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '-'"+RESET
-            +"--------------------------------------------\n";
+        return CYAN_BOLD_BRIGHT+String.valueOf(posicao)+RESET+"══════════════════════════════════════════════════════\n"+
+         "║    "+PURPLE_BOLD_BRIGHT+getPerfil().getUsername()+RESET+"\n║\n║    "+
+            getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
+            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "+RESET+BLUE_BOLD_BRIGHT +getVisualizacoesRestantes()+ " 👀"+RESET
+            +"\n╚══════════════════════════════════════════════════════\n";
     }
     
     @Override

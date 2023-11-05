@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
-
+import com.ruanbianca.redesocial.SocialException;
 public class RepositorioDePerfis {
 
     private ArrayList<Perfil> _perfis;
@@ -33,17 +33,19 @@ public class RepositorioDePerfis {
         if(perfil.temAtributosNulos()){
             throw new NullAtributesException();
         }
-        if(usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
+        if(usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail(), perfil.getBiografia()))
             throw new UserAlreadyExistsException();
         else
             _perfis.add(perfil);
         
     }
+    
+//ei, resgatar perfis deu pau
 
 
-    public boolean usuarioJaExiste(UUID id, String username, String email){
+    public boolean usuarioJaExiste(UUID id, String username, String email, String biografia){
 
-        return (consultarPorId(id).isPresent() || consultarPorUsername(username).isPresent() || consultarPorEmail(email).isPresent());
+        return (consultarPorId(id).isPresent() || consultarPorUsername(username).isPresent() || consultarPorEmail(email).isPresent() ||  consultarPorBio(biografia).isPresent());
     }
 
     public Optional<Perfil> consultarPorId(UUID id){
@@ -76,8 +78,27 @@ public class RepositorioDePerfis {
         return filtrados.findFirst();
     }
 
+    public Optional<Perfil> consultarPorBio(String bio){
+        if(Optional.ofNullable(bio).isEmpty())
+            return Optional.empty();
+        Stream<Perfil> filtrados = getPerfis().stream();
+        filtrados = filtrados.filter(perfil -> perfil.getBiografia().equals(bio));
+        return filtrados.findFirst();
+    }
+
     public ArrayList<Perfil> getPerfis(){
         return _perfis;
+    }
+
+    public void removerPerfil(String username){
+        Optional<Perfil> perfilARemover = consultarPorUsername(username);
+        if(perfilARemover.isPresent()){
+            _perfis.remove(perfilARemover.get());
+        }else{
+            throw new UserAlreadyExistsException();
+            
+        }
+        
     }
 
 }

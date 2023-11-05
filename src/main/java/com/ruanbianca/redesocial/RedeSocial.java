@@ -2,6 +2,7 @@ package com.ruanbianca.redesocial;
 
 import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;//pera
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,15 +12,10 @@ import java.util.stream.Stream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;//
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
-
+import com.ruanbianca.redesocial.SocialException;
 public class RedeSocial {
     private RepositorioDePerfis _perfis;
     private RepositorioDePostagens _postagens;
@@ -61,7 +57,7 @@ public class RedeSocial {
         if(perfil.temAtributosNulos())
             throw new NullAtributesException();
 
-        boolean taDuplicado = getRepositorioDePerfis().usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail());
+        boolean taDuplicado = getRepositorioDePerfis().usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail(),perfil.getBiografia());
 
         if(!taDuplicado)
             getRepositorioDePerfis().incluir(perfil);
@@ -69,8 +65,8 @@ public class RedeSocial {
             throw new UserAlreadyExistsException();
     }
 
-    public boolean usuarioJaExite(UUID id, String username, String email){  
-        return getRepositorioDePerfis().usuarioJaExiste(id,username,email);
+    public boolean usuarioJaExite(UUID id, String username, String email,String biografia){  
+        return getRepositorioDePerfis().usuarioJaExiste(id,username,email,biografia);
             
     }
 
@@ -81,7 +77,7 @@ public class RedeSocial {
         if(postagem.temAtributosNulos())
             throw new NullAtributesException();
             
-        boolean taRepetido = _postagens.consultar(postagem.getId()).isEmpty() ? false : true;
+        boolean taRepetido = _postagens.consultarPostagemPorId(postagem.getId()).isEmpty() ? false : true;
 
         if(taRepetido){
            throw new UserAlreadyExistsException(); 
@@ -92,7 +88,7 @@ public class RedeSocial {
 
     public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
 
-        return getRepositorioDePostagens().consultar(texto,perfil,hashtag);
+        return getRepositorioDePostagens().consultarPostagens(texto,perfil,hashtag);
     }
 
     public Optional<Perfil> consultarPerfil(UUID id){//a gente deveria poder passar várias hashtags
@@ -105,14 +101,14 @@ public class RedeSocial {
 
     public void curtir(UUID id) throws PostNotFoundException{
 
-        Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
+        Optional <Postagem> post = getRepositorioDePostagens().consultarPostagemPorId(id);
         post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
         post.get().curtir();
     }
 
     public void descurtir(UUID id) throws PostNotFoundException{
         
-        Optional <Postagem> post = getRepositorioDePostagens().consultar(id);
+        Optional <Postagem> post = getRepositorioDePostagens().consultarPostagemPorId(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
     }
@@ -123,9 +119,10 @@ public class RedeSocial {
         postagem.decrementarVisualizacoes();
     }
     
-    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
-
-        Optional <Perfil> perfil = consultarPerfilPorUsername(username);
+    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { //æqui funciona né
+    
+        //Optional <Perfil> perfil = consultarPorUsername(username);
+        Optional <Perfil> perfil = getRepositorioDePerfis().consultarPorUsername(username);
         if(perfil.isEmpty())
             return null;
         
@@ -143,14 +140,35 @@ public class RedeSocial {
         List<Postagem> saida = (filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).toList());
         return new ArrayList<>(saida);
     }
+ 
 
     public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(String hashtag){
         
-        Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
+        Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
         filtrados = filtrados.filter(post -> {
-            if(((PostagemAvancada)post).ehExibivel() && ((PostagemAvancada)post).existeHashtag(hashtag)){
-                ((PostagemAvancada)post).decrementarVisualizacoes();
+            if(post.ehExibivel() && post.existeHashtag(hashtag)){
+                post.decrementarVisualizacoes();
                 return true;
+            }return false;
+        }); 
+        List <PostagemAvancada> saida = new ArrayList<>();
+        filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
+        return new ArrayList<>(saida);
+    }//...
+//amg salvou a postage da livia, ela so n quer exibir :D vou printar la dento pra ver pl menos ele achou
+    public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
+        
+        Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
+        ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
+        Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
+        filtrados = filtrados.filter(post -> {
+            if(post.ehExibivel()){
+                for(int i = 0; i< listaHashtags.size(); i++){
+                    if(post.existeHashtag(listaHashtags.get(i))){
+                        post.decrementarVisualizacoes();
+                        return true;
+                    }
+                }
             }return false;
         }); 
         List <PostagemAvancada> saida = new ArrayList<>();
@@ -227,27 +245,34 @@ public class RedeSocial {
             
             try {
                 ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
-                System.out.println(linhas.size());
                 for(String linha: linhas){
+                    try{
                     incluirPerfil(new Perfil(linha));
+                    }catch(RuntimeException e){
+                        System.out.println("O erro tá na linha\n"+linha+"de resgatar perfis!"+e.getMessage());
+                    }
                     
                 }
-           
+            }catch(SocialException e){
+                System.out.println("O erro está em SocialException !"+e.getMessage());
             }catch(RuntimeException e){
-                System.out.println("O erro tá na funcao resgatarPerfis");
-            }
-    }
-
+                System.out.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
+            }//posso apagr? salvo no notas fds vou apahr
+    }//fds, apaga KKKK pode apagar
     public void resgatarPostagens(String nomeArquivo){
         ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
         for(String linha : conteudo){
             String[] atributos = linha.split(";");
+            try{
                 if(atributos[0] == "0"){
                     incluirPostagem(new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
                 }else {
-                    System.out.println(atributos[2]);
                     incluirPostagem(new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
                 }
+            }catch(RuntimeException e){
+                System.out.println("O erro ocorreu em resgatar postagens, a que ia ser incluida era"
+                +linha+"\n"+e.getMessage());
+            }
         }
     }
     
@@ -269,6 +294,10 @@ public class RedeSocial {
         } 
     
         return conteudo.toString();
+    }
+
+    public void removerPerfil(String username){
+        getRepositorioDePerfis().removerPerfil(username);     
     }
 
 }

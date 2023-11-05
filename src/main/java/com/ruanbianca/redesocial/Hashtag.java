@@ -1,5 +1,5 @@
 package com.ruanbianca.redesocial;
-
+import com.ruanbianca.redesocial.SocialException;
 import java.util.Optional;
 
 public class Hashtag {

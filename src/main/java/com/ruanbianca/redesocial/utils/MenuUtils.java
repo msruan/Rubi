@@ -1,4 +1,5 @@
 package com.ruanbianca.redesocial.utils;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuUtils {
@@ -12,8 +13,7 @@ public class MenuUtils {
         menu.append(ConsoleColors.CYAN_BOLD+"0"+ConsoleColors.RESET+" - Sair\n>>> ");
         return menu.toString();
     }
-    public static int obterOpcao(String menu) {
-        Scanner input = new Scanner(System.in);
+    public static int lerOpcao(String menu, Scanner input) {
         System.out.print(menu);
         while (!input.hasNextInt()) {
             System.out.print("Entada invalida! Por favor, digite um inteiro!\n>>> ");
@@ -22,25 +22,32 @@ public class MenuUtils {
         }
         return input.nextInt();
     }
-    public static boolean ehSim(String resposta){
-        return resposta.equalsIgnoreCase("Sim") || resposta.equalsIgnoreCase("S") ||
-                resposta.equalsIgnoreCase("yes") || resposta.equalsIgnoreCase("y") ||
-                resposta.equalsIgnoreCase("true") || resposta.equalsIgnoreCase("t") ||
-                resposta.equalsIgnoreCase("1") || resposta.equalsIgnoreCase("v");
-    }public static boolean ehNao(String resposta){
-        return resposta.equalsIgnoreCase("Nao") || resposta.equalsIgnoreCase("N") ||
-                resposta.equalsIgnoreCase("no") || resposta.equalsIgnoreCase("not") ||
-                resposta.equalsIgnoreCase("false") || resposta.equalsIgnoreCase("f") ||
-                resposta.equalsIgnoreCase("0") || resposta.equalsIgnoreCase("Não");
+    public static boolean lerSimOuNao(String pergunta){
+        Scanner input = new Scanner(System.in);
+        System.out.println(pergunta);
+        System.out.println("(0 - Nao, 1 - Sim)\n>>> ");
+        boolean resposta = input.nextBoolean();
+        return resposta;
     }
-    public static boolean lerSimOuNao(String pergunta,Scanner input){
-        String resposta = lerString(pergunta,input);
-        while(!(ehSim(resposta) || ehNao(resposta))){
-            System.out.print("Resposta inválida! "+pergunta);
-            resposta = input.nextLine();
-        }
-        return ehSim(resposta);
-    }
+    // public static boolean ehSim(String resposta){
+    //     return resposta.equalsIgnoreCase("Sim") || resposta.equalsIgnoreCase("S") ||
+    //             resposta.equalsIgnoreCase("yes") || resposta.equalsIgnoreCase("y") ||
+    //             resposta.equalsIgnoreCase("true") || resposta.equalsIgnoreCase("t") ||
+    //             resposta.equalsIgnoreCase("1") || resposta.equalsIgnoreCase("v");
+    // }public static boolean ehNao(String resposta){
+    //     return resposta.equalsIgnoreCase("Nao") || resposta.equalsIgnoreCase("N") ||
+    //             resposta.equalsIgnoreCase("no") || resposta.equalsIgnoreCase("not") ||
+    //             resposta.equalsIgnoreCase("false") || resposta.equalsIgnoreCase("f") ||
+    //             resposta.equalsIgnoreCase("0") || resposta.equalsIgnoreCase("Não");
+    // }
+    // public static boolean lerSimOuNao(String pergunta,Scanner input){
+    //     String resposta = lerString(pergunta,input);
+    //     while(Optional.ofNullable(resposta).isEmpty() || !(ehSim(resposta) || !ehNao(resposta))){
+    //         System.out.print("Resposta inválida! "+pergunta);
+    //         resposta = input.nextLine();
+    //     }
+    //     return ehSim(resposta);
+    // }
     public static double lerDoublePositivo(String string, Scanner input){
         System.out.print(string);
         double numero = -1;
@@ -55,8 +62,17 @@ public class MenuUtils {
     public static String lerString(String string, Scanner input){
         System.out.print(string);
         String saida = input.nextLine();
-        while(saida.isEmpty() || saida.isBlank())
+        while(Optional.ofNullable(saida).isEmpty())
             saida = input.nextLine();
+        return saida.trim();
+    }
+    public static int lerInt(String string, Scanner input){
+        System.out.print(string);
+        Integer saida = input.nextInt();
+        while(Optional.ofNullable(saida).isEmpty()){
+            System.out.println("\nTenha certeza de digitar um inteiro!");
+            saida = input.nextInt();
+        }
         return saida;
     }
 

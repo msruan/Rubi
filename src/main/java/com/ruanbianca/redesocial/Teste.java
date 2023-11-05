@@ -1,7 +1,12 @@
 package com.ruanbianca.redesocial;
-
+import java.util.ArrayList;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Scanner;
+
+import com.ruanbianca.redesocial.SocialException;
+import static com.ruanbianca.redesocial.utils.MenuUtils.*;
+//import java.util.Optional;
+//import java.util.UUID;
 
 
 
@@ -40,23 +45,48 @@ public class Teste {
       // meusPosts.incluir(post5);
       // // meusPosts.incluir(post6);
       
-      RedeSocial instagram = new RedeSocial();
-      //instagram.incluirPerfil(patro);
-      //  for(Perfil perfil : instagram.getRepositorioDePerfis().getPerfis()){
-      //      System.out.println(perfil);
-        //}
-      // instagram.salvarPerfis(System.getProperty("user.dir")+"/db/perfis.txt");
-      // instagram.salvarPostagens(System.getProperty("user.dir")+"/db/postagens.txt");
+       RedeSocial instagram = new RedeSocial();
+//       //instagram.incluirPerfil(patro);
+        for(Perfil perfil : instagram.getRepositorioDePerfis().getPerfis())
+             System.out.println(perfil);
+// //         //} c
+//       // instagram.salvarPerfis(System.getProperty("user.dir")+"/db/perfis.txt");
+//       // instagram.salvarPostagens(System.getProperty("user.dir")+"/db/postagens.txt");
       instagram.resgatarPerfis(System.getProperty("user.dir")+"/db/perfis.txt");
       instagram.resgatarPostagens(System.getProperty("user.dir")+"/db/postagens.txt");
+      String username = "ryofav";
+      ArrayList<Postagem> posts = instagram.exibirPostagensPorPerfil(username);
+      for(Postagem post : posts){
+        System.out.println(post.getPerfil().getUsername());
+      }
+        
+    //   for(Perfil perfil : instagram.getRepositorioDePerfis().getPerfis()){//me fala o resultado depois
+    //        System.out.println(perfil);
+    //   }
+    //   for(Postagem post : instagram.getRepositorioDePostagens().getPostagens())
+    //            System.out.println(post.getPerfil().getUsername());
+   
+    //   teste(instagram);
+      
 
-      // for(Perfil perfil : instagram.getRepositorioDePerfis().getPerfis()){//me fala o resultado depois
-      //      System.out.println(perfil);
-   
-      for(Postagem post : instagram.getRepositorioDePostagens().getPostagens()){
-               System.out.println(post.getPerfil().getUsername());
-   
-}
-}
-}
+      }
+      //viu?
   
+//internet ta foda, fica travado ao volta do nada incrivwl :D
+//amg vc n escrevey nada qq apareceu
+    public static void teste(RedeSocial Rubi){
+
+        Scanner input = new Scanner(System.in);
+        ArrayList<Postagem> postagensEncontradas;
+        String username = lerString("Digite o username do perfil buscado: ", input);
+        postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
+        if(Optional.ofNullable(postagensEncontradas).isPresent() && postagensEncontradas.size()>0){//por casusa disso, a gente tá tentando acessar o size
+            for(Postagem post : postagensEncontradas)
+                System.out.println(post.exibirPostagem(0));
+        }else{
+            System.out.println("Nenhuma postagem encontrada para esse perfil!");
+        }
+    }
+}//nao printou as postagens
+//essa exibir postagens por perfil...
+            
