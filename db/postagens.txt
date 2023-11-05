@@ -1,6 +1,6 @@
-1;d4c1bbef-d310-48ab-a069-bba60440b6d9;d4c1bbef-d310-48ab-a069-bba60440b6d9;2023-11-04T17:55:58.7501488;i just love rock!;0;0;10;#rock#roll#drogs#thinking;
-1;4187b856-e0e1-4eec-a7f1-ab9f9d802179;4187b856-e0e1-4eec-a7f1-ab9f9d802179;2023-11-04T17:55:58.7511452;alguem quer dancar forro?;0;0;10;#forro#danca#felicidade;
-1;97673f7c-9fbb-4528-b4fe-01e2e286e17b;97673f7c-9fbb-4528-b4fe-01e2e286e17b;2023-11-04T17:55:58.7511452;mds eh a dua lipa!!;0;0;10;#onekiss#diva#pop;
-1;3e86ad5e-eb20-4d22-ba9d-7e3566850ce8;3e86ad5e-eb20-4d22-ba9d-7e3566850ce8;2023-11-04T17:55:58.7511452;mds eh a juju do pix!!;0;0;10;#humor#pix#nubank;
-1;2013ad9a-1b02-4c51-ac26-5344fd0da4ff;2013ad9a-1b02-4c51-ac26-5344fd0da4ff;2023-11-04T17:55:58.7511452;Deus eh maior <3;0;0;10;#deus#gospel#louvor;
-0;cc81519d-f4bb-4c08-bbc3-4224596b3f6e;2e53ba1f-75a8-4994-94e4-be4e500fb22c;2023-11-04T17:55:58.7511452;Deus eh mais;0;0;
+1;f4964db6-85d2-4448-8606-5443b2c80bec;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4638315;i just love rock!;0;0;10;#rock#roll#drogs#thinking;
+1;af0273f4-4291-45c1-b1e1-9f6cf3ee904e;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4648282;alguem quer dancar forro?;0;0;10;#forro#danca#felicidade;
+1;a3b3f372-3e64-48fb-b03d-dd259e36f85f;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4648282;mds eh a dua lipa!!;0;0;10;#onekiss#diva#pop;
+1;04d7ba3e-5add-4de8-ae1c-741658e6d64a;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4648282;mds eh a juju do pix!!;0;0;10;#humor#pix#nubank;
+1;280d818b-90fd-4d55-8318-71024e4ba461;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4658256;Deus eh maior <3;0;0;10;#deus#gospel#louvor;
+0;31a78f60-a711-451a-9f11-0f46e831a9ee;223bf3ba-29f4-4539-aad3-b055aa2426c2;2023-11-04T20:53:41.4658256;Deus eh mais;0;0;

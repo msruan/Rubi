@@ -77,6 +77,4 @@ public class RepositorioDePostagens {
         postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
         return avancadas;
     }
-
-
 }

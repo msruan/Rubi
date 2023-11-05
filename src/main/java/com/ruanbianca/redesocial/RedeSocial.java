@@ -163,7 +163,7 @@ public class RedeSocial {
             for(String hashtag : post.getHashtags()){
 
                 if(Optional.ofNullable(hashtag).isEmpty())
-                    continue;//acho q i sso aqui basta
+                    continue;
                     
                 if(mapaHashtags.containsKey(hashtag)){
                     int numeroDeUsos = mapaHashtags.get(hashtag);
@@ -183,8 +183,9 @@ public class RedeSocial {
         return new ArrayList<>(streamHashs.toList());
 
     } 
-
+   
     public void salvarPerfis(String nomeArquivo) {
+        
         try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(nomeArquivo))){
             for(Perfil perfil : _perfis.getPerfis()){
                 buffwriter.write(perfil.toString());
@@ -212,48 +213,33 @@ public class RedeSocial {
             System.out.println("entrou em resgatar perfis");
 
             try {
-                List<String> linhas = Files.readAllLines(Paths.get(nomeArquivo));
-                for(String linha : linhas){
-                    System.out.println("pegou");
-                    Perfil perfil = new Perfil(linha);
-                    incluirPerfil(perfil);
-                }
+                ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
+                System.out.println(linhas.size());
+                for(String linha: linhas){//frescura
+                    incluirPerfil(new Perfil(linha));
                     
+                }
             System.out.println("saiu de resgata perfis");
 
-            }catch(IOException e){
-                System.out.println("Erro durante o resgate dos arquivos!");
             }catch(RuntimeException e){
                 System.out.println("O erro tá na funcao resgatarPerfis");
             }
     }
-    public void resgatarPerfis2(String nomeArquivo){
-        try(Scanner input = new Scanner(new File(nomeArquivo))) {
-            while (input.hasNextLine()) {
-                incluirPerfil(new Perfil(input.nextLine()));
-            }
-        }catch(IOException e){
-            System.out.println("errei fui mlk nas resgPerf2");
-        }
-    }
-    public void resgatarPostagens0(String nomeArquivo){
-        String conteudo = lerArquivo(nomeArquivo);
-        for(String linha : conteudo.split("\n")){
+
+    public void resgatarPostagens0(String nomeArquivo){//amg, mas n tá funcionadno nao? sei q tá pegandp uma excecao
+        ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
+        for(String linha : conteudo){//vou olhar
+            
             String[] atributos = linha.split(";");
-            Postagem post;//vaelu
-            if(atributos[0] == "0"){
-                post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-            }else {
-                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-                }incluirPostagem(post);
-            }
-    }
-    public void resgatarPerfis0(String nomeArquivo){
-        String conteudo = lerArquivo(nomeArquivo);
-        for(String linha : conteudo.split("\n")){
-            incluirPerfil(new Perfil(linha));
+                if(atributos[0] == "0"){
+                    incluirPostagem(new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
+                }else {
+                    System.out.println(atributos[2]);
+                    incluirPostagem(new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
+                }
         }
     }
+    
     public static String lerArquivo(String caminho){
         StringBuilder conteudo = new StringBuilder();
         BufferedReader leitor;
@@ -274,51 +260,4 @@ public class RedeSocial {
         return conteudo.toString();
     }
 
-    public void resgatarPostagens2(String nomeArquivo){
-        try(Scanner input = new Scanner(new File(nomeArquivo))) {
-            while (input.hasNextLine()) {
-                String linha =  input.nextLine();
-                String[] atributos = linha.split(";");
-                Postagem post;//vaelu
-                if(atributos[0] == "0"){
-                    post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-                }else {
-                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-                }incluirPostagem(post);
-            }
-        }catch(IOException e){
-            System.out.println("errei, fui mlk na resgPosts2");
-        }
-    }
-    
-
-    public void resgatarPostagens3(String nomeArquivo){
-       
-        try {
-            List<String> linhas = Files.readAllLines(Paths.get(nomeArquivo));
-            System.out.println("entrou em resgatar postagens");
-            for(String linha : linhas){
-                String[] atributos = linha.split(";");
-                Postagem post;
-                if(atributos[0].equals("0")){
-                    post = new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-                }else {
-                    post = new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha);
-
-                }incluirPostagem(post);
-            }
-            System.out.println("saiu resgatar postagens");
-
-
-        } catch (IOException e){
-            System.out.println("Erro durante o resgate dos arquivos!");
-        } catch(java.util.NoSuchElementException e) {
-            System.out.println("consultarPorId não funcionou!");
-        }catch(RuntimeException e){
-                System.out.println("O erro tá na funcao resgatarPostagens");
-            }
-    }
 }
-
-
-

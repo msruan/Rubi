@@ -20,20 +20,20 @@ public class PostagemAvancada extends Postagem {
     public String toString() {
         StringBuilder strHashtags = new StringBuilder();
         hashtags.stream().forEach(hash -> strHashtags.append("#"+hash));
-        return 1 + ";" + getId().toString() + ";" + getId().toString() + ";" + 
+        return 1 + ";" + getId().toString() + ";" + getPerfil().getId().toString() + ";" + 
             getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + super.getTexto() + ";" + 
             String.valueOf(super.getCurtidas()) + ";" + String.valueOf(super.getDescurtidas()) + ";" +
             String.valueOf(getVisualizacoesRestantes()) +";" +
             (Optional.ofNullable(strHashtags.toString()).isPresent() ? strHashtags.toString() : null ) + ";" + '\n';  
-    }
-
+    }//:3
+//fofo ne n
     public PostagemAvancada(Perfil perfil, String postagem) {
         
         // | Tipo |    IdPost   |    IdPerfil    |   Data  | Texto  | Likes | Deslikes | ViewsRestantes | Hashtags<> |*/
         super(perfil,postagem);
         String []atributos = postagem.split(";");
-        visualizacoesRestantes = Integer.valueOf(atributos[6]);
-        hashtags = new ArrayList<>(Arrays.asList(atributos[7].split("#")));
+        visualizacoesRestantes = Integer.valueOf(atributos[5]);
+        hashtags = new ArrayList<>(Arrays.asList(atributos[6].split("#")));
     }
     
     public PostagemAvancada(String texto, Perfil perfil, ArrayList<String> hashtags) {
