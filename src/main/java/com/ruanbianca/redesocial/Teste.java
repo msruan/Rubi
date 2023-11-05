@@ -44,7 +44,7 @@ public class Teste {
       // instagram.salvarPerfis(System.getProperty("user.dir")+"/db/perfis.txt");
       // instagram.salvarPostagens(System.getProperty("user.dir")+"/db/postagens.txt");
       instagram.resgatarPerfis(System.getProperty("user.dir")+"/db/perfis.txt");
-      instagram.resgatarPostagens0(System.getProperty("user.dir")+"/db/postagens.txt");
+      instagram.resgatarPostagens(System.getProperty("user.dir")+"/db/postagens.txt");
 
       // for(Perfil perfil : instagram.getRepositorioDePerfis().getPerfis()){//me fala o resultado depois
       //      System.out.println(perfil);

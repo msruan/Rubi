@@ -69,8 +69,8 @@ public class RedeSocial {
             throw new UserAlreadyExistsException();
     }
 
-    public boolean usuarioJaExite(UUID id, String nome, String email){  
-        return getRepositorioDePerfis().usuarioJaExiste(id,nome,email);
+    public boolean usuarioJaExite(UUID id, String username, String email){  
+        return getRepositorioDePerfis().usuarioJaExiste(id,username,email);
             
     }
 
@@ -224,26 +224,23 @@ public class RedeSocial {
     }
 
     public void resgatarPerfis(String nomeArquivo){
-            System.out.println("entrou em resgatar perfis");
-
+            
             try {
                 ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
                 System.out.println(linhas.size());
-                for(String linha: linhas){//frescura
+                for(String linha: linhas){
                     incluirPerfil(new Perfil(linha));
                     
                 }
-            System.out.println("saiu de resgata perfis");
-
+           
             }catch(RuntimeException e){
                 System.out.println("O erro tá na funcao resgatarPerfis");
             }
     }
 
-    public void resgatarPostagens(String nomeArquivo){//amg, mas n tá funcionadno nao? sei q tá pegandp uma excecao
+    public void resgatarPostagens(String nomeArquivo){
         ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
-        for(String linha : conteudo){//vou olhar
-            
+        for(String linha : conteudo){
             String[] atributos = linha.split(";");
                 if(atributos[0] == "0"){
                     incluirPostagem(new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));

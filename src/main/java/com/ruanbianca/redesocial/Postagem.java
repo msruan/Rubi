@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
+import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 
 import lombok.Getter;
 
@@ -21,6 +22,15 @@ public class Postagem {
     private int descurtidas;
     @Getter
     private UUID id;
+
+    public String exibirPostagem(){
+        return "--------------------------------------------\n"+
+         "|*"+getPerfil().getUsername()+"*"+"\n\n"+
+            getTexto()+"\n"+"\n"
+            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '-'"+RESET
+            +"--------------------------------------------\n";
+    }
+
 
     @Override
     public String toString() {
@@ -53,6 +63,7 @@ public class Postagem {
         this.data = LocalDateTime.now();
         this.id = UUID.randomUUID();
     }
+
 
     public boolean ehPopular(){
         return (curtidas - descurtidas) >= 0.5 * descurtidas;

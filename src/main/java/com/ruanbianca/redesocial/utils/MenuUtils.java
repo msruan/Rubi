@@ -94,10 +94,9 @@ public class MenuUtils {
             System.out.println("Erro ao tentar limpar o console!"+ConsoleColors.RED_BOLD_BRIGHT+e.getMessage()+ConsoleColors.RESET);
         }
     }
-    public static void limparConsole(String string){
+    public static void limparConsole(String string,Scanner inputS){
         System.out.print(string);
-        Scanner input = new Scanner(System.in);
-        input.nextLine();
+        inputS.nextLine();
         limparConsole();
     }
 

@@ -5,13 +5,12 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import static com.ruanbianca.redesocial.utils.MenuUtils.*;
+import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 
 
 public class App 
 {
-    //RepositorioDePerfis perfis = new RepositorioDePerfis();
-    //RepositorioDePostagens postagens = new RepositorioDePostagens();
-    //eai? a gente tenta fazer o q tinha peansdo?
+  
     final String INCLUIR_PERFIL = "1";
     final String INCLUIR_POSTAGEM = "2";
     final String CONSULTAR_PERFIL = "3";
@@ -22,39 +21,100 @@ public class App
     final String EXIBIR_POST_HASHTAG = "6";
     final String EXIBIR_POST_POPULARES = "7";
     final String EXIBIR_HASHTAGS_POPULARES = "8";
-    
-    RedeSocial Rubi = new RedeSocial();//tem umc construor vazio pra redesocial
-    Rubi.resgatarPerfis(Rubi.getCaminhoBancoDeDados("Perfil"));
-    Rubi.resgatarPostagens(Rubi.getCaminhoBancoDeDados("Postagem"));
     Scanner input = new Scanner(System.in);
-    String opcao = "";
 
-    public void executar(){
-        do{
-            
+    void pausar() {
+        System.out.println("\n\nPressione <Enter> para continuar...");
+        input.nextLine();
+    }
+    
+    public void executar(RedeSocial Rubi){
+        
+        String titulo = "RUBI";
+        String opcoes = "Incluir Perfil,Incluir Postagem,Consultar Perfil,Consultar Postagem,Exibir Postagens por Perfil,Exibir Postagens por Hashtag,Exibir Postagens Popularesm,Exibir Hashtags Populares";
+        String menu = gerarMenu(titulo,opcoes);
+        String opcao = "";
+        
+        menuprincipal:do{
+
+            System.out.print(menu);
             opcao = input.nextLine();
 
             switch (opcao) {
+
                 case INCLUIR_PERFIL:
-                    Perfil novoPerfil;
-                    String username = lerString("Digite seu novo username: ",input);
+                    
                     String nome = lerString("Qual o seu nome?",input);
-                    String email = lerString("Qual o seu email?",input);
-                    break;//ei, a gente vai fazer o q a gente tinha penasndo mesmo,?
+                    String username; 
+                        do{
+                            username = lerString("Digite um username:\n>>>",input);
+                            if(Rubi.usuarioJaExite(null,username,null)){
+                                System.out.println("Username já está em uso!");
+                                if(!lerSimOuNao("Deseja tentar outro?",input)){
+                                    limparConsole();
+                                    continue menuprincipal;
+                                }else{
+                                    System.out.println();
+                                    System.out.println();
+                                    continue;
+                                }
+                            }break;
+                        }while(true);
+                    String email;
+                        do{
+                            email = lerString("Digite um endereço de email:\n>>>",input);
+                            if(Rubi.usuarioJaExite(null,null,email)){
+                                System.out.println("Email já está em uso!");
+                                if(!lerSimOuNao("Deseja tentar outro?",input)){
+                                    limparConsole();
+                                    continue menuprincipal;
+                                }else{
+                                    System.out.println();
+                                    System.out.println();
+                                    continue;
+                                }
+                            }break;
+                        }while(true);
+                        Rubi.incluirPerfil(new Perfil(username,nome,email));
+
+                    break;
 
                 case INCLUIR_POSTAGEM:
-                    
+                    Postagem novaPostagem;
+                    String usernamePost;
+                    Optional <Perfil> perfilUser;
+                    do {
+                        usernamePost= lerString("Digite seu username: ",input);
+                        perfilUser = Rubi.consultarPerfilPorUsername(usernamePost);
+                        if(perfilUser.isEmpty()){
+                            if(!(lerSimOuNao("Usuário não encontrado! Tentar novamente?",input))){
+                                limparConsole();
+                                continue menuprincipal;
+                            }
+                        }else 
+                            break;
+                    }while(true);
+                    String texto = lerString("Digite o conteúdo do texto: ",input);
+                    if(lerSimOuNao("Deseja por hashtags? ",input)){
+                        String hashtags = lerString("Digite as hashtags separadas por # : ",input);
+                        novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashtags.split("#"));
+                    }else{
+                        novaPostagem = new Postagem(texto,perfilUser.get());
+                    }Rubi.incluirPostagem(novaPostagem);
                     break;
 
                 case CONSULTAR_PERFIL:
                     username = lerString("Digite o username do perfil buscado: ", input);
                     Optional<Perfil> perfilBuscado = Rubi.consultarPerfilPorUsername(username);
                     if(perfilBuscado.isPresent()){
-                        System.out.println(perfilBuscado.get());
+                        System.out.println(perfilBuscado.get().getNome());
+                    }else{
+                        System.out.println("Perfil não encontrado!");
                     }
                     break;
 
                 case CONSULTAR_POSTAGEM:
+                    
 
                     break;
 
@@ -64,8 +124,10 @@ public class App
                     postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
                     if(postagensEncontradas != null){
                         for(Postagem postagem : postagensEncontradas){
-                            System.out.println(postagem);
+                            System.out.println(postagem.exibirPostagem());
                         }
+                    }else{
+                        System.out.println("Nenhuma postagem encontrada para esse perfil!");
                     }
                     break;
 
@@ -73,36 +135,56 @@ public class App
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
                     String hashtag = lerString("Digite a hashtag buscada: ", input);
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtag);
-                    if(postagensAvancadasEncontradas != null){
+                    if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent()){
                         for(PostagemAvancada post : postagensAvancadasEncontradas){
-                            System.out.println(post);
+                            System.out.println(post.exibirPostagem());
                         }
+                        
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada para essa hashtag!"+RESET);
                     }
                     break;
                 case EXIBIR_POST_POPULARES:
                     ArrayList<Postagem> postagensPopulares;
                     postagensPopulares = Rubi.exibirPostagensPopulares();
-                    if(postagensPopulares != null){
+                    if(Optional.ofNullable(postagensPopulares).isPresent()){
                         for(Postagem post : postagensPopulares){
-                            System.out.println(post);
+                            System.out.println(post.exibirPostagem()); 
                         }
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
                     }
                     break;
                 case EXIBIR_HASHTAGS_POPULARES:
+                    ArrayList<Hashtag> hashtagsPopulares;
+                    hashtagsPopulares = Rubi.exibirHashtagsPopulares();
+                    if(Optional.of(hashtagsPopulares).isPresent()){
+                        for(Hashtag hash : hashtagsPopulares){
+                            System.out.println(hash.getHashtag());
+                        }
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Nenhuma hashtag encontrada!"+RESET);//eu sei, to pensan
+                    }
                     break;
+                
                 default: 
                     System.out.println("Opção inválida!");
                     break;
             }
+            Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+            Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
+            pausar();
 
         }while(!opcao.equals("0"));
     }
     
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
-       
+        RedeSocial Rubi = new RedeSocial();
+        Rubi.resgatarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
+        Rubi.resgatarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+        App RubiApp = new App();
+        RubiApp.executar(Rubi);
     }
    
-
 }

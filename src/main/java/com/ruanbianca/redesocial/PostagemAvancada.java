@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import lombok.Getter;
+import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
+
 
 public class PostagemAvancada extends Postagem {
 
@@ -15,6 +16,20 @@ public class PostagemAvancada extends Postagem {
     private Integer visualizacoesRestantes;
     @Getter
     private ArrayList<String> hashtags;
+
+
+    public String exibirPostagem() {
+
+        StringBuilder strHashtags = new StringBuilder();
+        for(String hash:  hashtags){
+            strHashtags.append("#"+hash+" ");
+        }
+        return "--------------------------------------------\n"+
+         "|*"+getPerfil().getUsername()+"*"+"\n\n"+
+            getTexto()+"\n"+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n\n"
+            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '-'"+RESET
+            +"--------------------------------------------\n";
+    }
     
     @Override
     public String toString() {
