@@ -272,10 +272,7 @@ public class App
                     //switch mesmo
             }
         }else{
-            System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);// n consigo entender mas so true!
-        }//misericordia,eu sei
-        //ainda tá aí? já mudei
-    }
+              }
 
 
 
