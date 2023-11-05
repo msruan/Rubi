@@ -43,7 +43,7 @@ public class PostagemAvancada extends Postagem {
         this.hashtags = (Optional.ofNullable(hashtags).isEmpty()) ? new ArrayList<>() : hashtags;
     }
 
-    public PostagemAvancada(String texto, Perfil perfil, String ... hashtags) {
+    public PostagemAvancada(String texto, Perfil perfil, String[] hashtags) {
 
         this(texto, perfil, new ArrayList<>(Arrays.asList(hashtags)));
     }

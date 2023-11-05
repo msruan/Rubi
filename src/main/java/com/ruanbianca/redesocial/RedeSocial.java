@@ -1,9 +1,9 @@
 package com.ruanbianca.redesocial;
 
+import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;//pera
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.UUID;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileReader;//
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +27,16 @@ public class RedeSocial {
     public RedeSocial() {
         this._perfis = new RepositorioDePerfis();
         this._postagens = new RepositorioDePostagens();
+    }//:OOOOO
+    public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{
+        if(entidade.equals("Perfil"))
+            return System.getProperty("user.dir")+"/db/perfis.txt";
+        else if(entidade.equals("Postagem"))
+            return System.getProperty("user.dir")+"/db/postagens.txt";
+        else {
+            throw new BadChoiceOfEntityForDB();
+        }
+
     }
 
     public RedeSocial(RepositorioDePerfis perfis, RepositorioDePostagens postagens) {
@@ -88,6 +98,10 @@ public class RedeSocial {
     public Optional<Perfil> consultarPerfil(UUID id){//a gente deveria poder passar várias hashtags
         return getRepositorioDePerfis().consultarPorId(id);
     }
+    public Optional<Perfil> consultarPerfilPorUsername(String username){//a gente deveria poder passar várias hashtags
+        return getRepositorioDePerfis().consultarPorUsername(username);
+    }
+    
 
     public void curtir(UUID id) throws PostNotFoundException{
 
@@ -109,9 +123,9 @@ public class RedeSocial {
         postagem.decrementarVisualizacoes();
     }
     
-    public ArrayList<Postagem> exibirPostagensPorPerfil(UUID idPerfil) { 
+    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
 
-        Optional <Perfil> perfil = consultarPerfil(idPerfil);
+        Optional <Perfil> perfil = consultarPerfilPorUsername(username);
         if(perfil.isEmpty())
             return null;
         
@@ -226,7 +240,7 @@ public class RedeSocial {
             }
     }
 
-    public void resgatarPostagens0(String nomeArquivo){//amg, mas n tá funcionadno nao? sei q tá pegandp uma excecao
+    public void resgatarPostagens(String nomeArquivo){//amg, mas n tá funcionadno nao? sei q tá pegandp uma excecao
         ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
         for(String linha : conteudo){//vou olhar
             

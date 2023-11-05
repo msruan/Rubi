@@ -17,6 +17,13 @@ class NullAtributesException extends SocialException {
     }
 }
 
+class BadChoiceOfEntityForDB extends SocialException {
+    @Override
+    public String getMessage() {
+        return "Você tentou conseguir o caminho do banco de dados, mas digitou o nome da entidade errado! Tente usar <Perfil> ou <Postagem>";
+    }
+}
+
 class PostNotFoundException extends SocialException {
     @Override
     public String getMessage() {

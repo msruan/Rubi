@@ -32,4 +32,4 @@ public class Hashtag {
     public void usarHashtag() {
         _contadorDeUsos++;
     }
-}
+}//pq tu n coloca logo utils dentro de rede social? tadinho...queria fazer as coisas do jeito certo T-T
