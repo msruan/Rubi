@@ -1,3 +1,6 @@
 a4a035f8-38a3-4e71-9e8d-23c280898d7b;bbia;Bianca Bezerra;bianca-bezerra@gmail.com
 223bf3ba-29f4-4539-aad3-b055aa2426c2;msruan;Ruan Macedo Santos;santosruan2021@gmail.com
 268f47bb-71b2-4499-8c53-0b6f8ce96a47;patro;LF Patrocinio;patro-rajada@gmail.com
+70ff0710-6bba-47bf-a36f-eb3bcbeed55d;bia-bzra;bianca;bia@gmail.com
+b849fc75-5053-4de5-8d31-16e7ceb59db4;bia-almeida;Bianca;biaalmeida@gmail.com
+4e84a940-7962-4a65-9e65-fbccbb9c490c;bia;bianca;bia

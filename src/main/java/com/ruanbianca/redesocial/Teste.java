@@ -4,8 +4,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 
+
 public class Teste {
     public static void main(String[] args) {
+    
+
+
       //ImagePlus foto = IJ.openImage("/home/ruan/Pictures/Wallpapers/lago.jpg");voltei
       //foto.show();
 
@@ -34,7 +38,7 @@ public class Teste {
       // meusPosts.incluir(post3);
       // meusPosts.incluir(post4);
       // meusPosts.incluir(post5);
-      // meusPosts.incluir(post6);
+      // // meusPosts.incluir(post6);
       
       RedeSocial instagram = new RedeSocial();
       //instagram.incluirPerfil(patro);
@@ -50,8 +54,9 @@ public class Teste {
       //      System.out.println(perfil);
    
       for(Postagem post : instagram.getRepositorioDePostagens().getPostagens()){
-              System.out.println(post.getTexto());
+               System.out.println(post.getPerfil().getUsername());
    
 }
-    }
-  }
+}
+}
+  

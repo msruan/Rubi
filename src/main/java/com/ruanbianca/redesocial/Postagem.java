@@ -27,8 +27,8 @@ public class Postagem {
         return "--------------------------------------------\n"+
          "|*"+getPerfil().getUsername()+"*"+"\n\n"+
             getTexto()+"\n"+"\n"
-            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '-'"+RESET
-            +"--------------------------------------------\n";
+            +RED_BOLD_BRIGHT+getCurtidas()+RESET+BLUE_BOLD_BRIGHT+" <3    " + getDescurtidas() + " '</3'"+RESET
+            + "\n"+"--------------------------------------------\n";
     }
 
 
