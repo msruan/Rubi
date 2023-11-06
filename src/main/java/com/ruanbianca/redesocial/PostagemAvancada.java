@@ -20,6 +20,7 @@ public class PostagemAvancada extends Postagem {
 
     public String exibirPostagem(int posicao) {
 
+        this.decrementarVisualizacoes();
         StringBuilder strHashtags = new StringBuilder();
         for(String hash:  hashtags){
             strHashtags.append("#"+hash+" ");
@@ -47,8 +48,8 @@ public class PostagemAvancada extends Postagem {
         // | Tipo |    IdPost   |    IdPerfil    |   Data  | Texto  | Likes | Deslikes | ViewsRestantes | Hashtags<> |*/
         super(perfil,postagem);
         String []atributos = postagem.split(";");
-        visualizacoesRestantes = Integer.valueOf(atributos[5]);
-        hashtags = new ArrayList<>(Arrays.asList(atributos[6].split("#")));
+        visualizacoesRestantes = Integer.valueOf(atributos[7]);
+        hashtags = new ArrayList<>(Arrays.asList(atributos[8].split("#")));
     }
     
     public PostagemAvancada(String texto, Perfil perfil, ArrayList<String> hashtags) {
@@ -58,7 +59,7 @@ public class PostagemAvancada extends Postagem {
         this.hashtags = (Optional.ofNullable(hashtags).isEmpty()) ? new ArrayList<>() : hashtags;
     }
 
-    public PostagemAvancada(String texto, Perfil perfil, String[] hashtags) {
+    public PostagemAvancada(String texto, Perfil perfil, String ... hashtags) {
 
         this(texto, perfil, new ArrayList<>(Arrays.asList(hashtags)));
     }
@@ -82,5 +83,8 @@ public class PostagemAvancada extends Postagem {
     public void decrementarVisualizacoes() {
         if(ehExibivel())
             visualizacoesRestantes--;
+    }
+    public void incrementarVisualizacoes() {
+        visualizacoesRestantes++;
     }
 }

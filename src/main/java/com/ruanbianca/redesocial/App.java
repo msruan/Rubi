@@ -31,6 +31,7 @@ public class App
     void pausar() {
         System.out.println("\n\nPressione <Enter> para continuar...");
         input.nextLine();
+        limparConsole();
     }
     
     public void executar(RedeSocial Rubi){
@@ -112,7 +113,7 @@ public class App
                             break;
                     }while(true);
                     String texto = lerString("Digite o conteúdo do texto: ",input);
-                    novaPostagem = new Postagem(texto,perfilUser.get());
+                    novaPostagem = new PostagemAvancada(texto,perfilUser.get(),"deus","paz");
                     Rubi.incluirPostagem(novaPostagem);
                     // if(lerString("Deseja por hashtags? ",input).equals("sim")){
                     //     String hashtags = lerString("Digite as hashtags separadas por # : ",input);
@@ -157,18 +158,24 @@ public class App
                     break;
 
                 case EXIBIR_POST_PERFIL:
+                    // ArrayList<Postagem> postagensEncontradas;
+                    // username = lerString("Digite o username do perfil buscado: ", input);
+                    // postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
+                    // if(Optional.ofNullable(postagensEncontradas).isPresent() && postagensEncontradas.size()>0){
+                    //     for(Postagem post : postagensEncontradas)
+                    //         System.out.println(post.exibirPostagem(0));
+                        
+                        
+                    // }else{
+                    //     System.out.println("Nenhuma postagem encontrada para esse perfil!");
+                    // }
+                    // break;
                     ArrayList<Postagem> postagensEncontradas;
                     username = lerString("Digite o username do perfil buscado: ", input);
                     postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
-                    if(Optional.ofNullable(postagensEncontradas).isPresent() && postagensEncontradas.size()>0){
-                        for(Postagem post : postagensEncontradas)
-                            System.out.println(post.exibirPostagem(0));
-                        
-                        
-                    }else{
-                        System.out.println("Nenhuma postagem encontrada para esse perfil!");
-                    }
+                    exibirFeed(postagensEncontradas);
                     break;
+
 
                 case EXIBIR_POST_HASHTAG:
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
@@ -236,24 +243,33 @@ public class App
         final String CURTIR_POSTAGEM = "1";
         final String DESCURTIR_POSTAGEM = "2";
         final String SIM = "1";
-        if(Optional.ofNullable(postagens).isPresent()){
+        String feedAtualizado = "";
+        if(Optional.ofNullable(postagens).isPresent() && postagens.size()>0){
             for(int i  = 0; //tipo, se tiver 51 posts, ele vai separar em 6 partes
             //i = 0, 1 , 2 ,3 ,4 ,5
             i < ((postagens.size()-(postagens.size() % 10) )/ 10) + 1; i++) 
-            {//isso mais 1?
+            {      
+                limparConsole();
                 for(int j = i * 10; j < (i *10)+10; j++){
-                    System.out.println(postagens.get(j).exibirPostagem(j-(i*10)));
-                    System.out.println("******** INTERAGIR? *******\n(0 - Não; 1- SIM)\n>>>");
+                    if(j >= postagens.size())
+                        break;
+                    int indexPostVisual = j-(i*10);
+                    System.out.println(postagens.get(j).exibirPostagem(indexPostVisual));
+                    System.out.println("******** INTERAGIR? *******\n(Enter - Não; 1- SIM)\n>>>");
                     Scanner input = new Scanner(System.in);
                     String resposta = input.nextLine();
+                    
                     if(resposta.equals(SIM)){
                         String titulo = "INTERACAO";
                         String opcoes = "Curtir, Descurtir";
+
                         String submenu = gerarMenu(titulo,opcoes);//tira remover por eqnaunto..
                         System.out.println(submenu);// vamo fazer só o curtir/descurtir primeiro
                         resposta = input.nextLine();// :3
+
+                        System.out.print("Qual post voce deseja ");
                         if(resposta.equals(CURTIR_POSTAGEM)){
-                            System.out.println("Qual post voce deseja curtir?\n(0-9)\n>>> ");
+                            System.out.println("curtir?\n(0-9)\n>>> ");
                             resposta = input.nextLine();
                             int opcaoEscolhida = Integer.parseInt(resposta);
                             if(opcaoEscolhida >= 0 && opcaoEscolhida <= 9){
@@ -261,18 +277,27 @@ public class App
                             }
                         }
                         else if(resposta.equals(DESCURTIR_POSTAGEM)){
-                                System.out.println("Qual post voce deseja descurtir?\n(0-9)\n>>> ");
+                                System.out.println("descurtir?\n(0-9)\n>>> ");
                                 resposta = input.nextLine();
                                 int escolha = Integer.parseInt(resposta);
                                 if(escolha >= 0 && escolha <= 9)
                                     postagens.get(i * 10 + escolha).descurtir();
                         }                    }
-                    }//taok
-                    //ei, acho q vou fazer um switch pra outro branch antes de mexer no app... 
-                    //switch mesmo
+                    
+                    if(postagens.get(j) instanceof PostagemAvancada){
+                        ((PostagemAvancada)postagens.get(j)).incrementarVisualizacoes();;
+                    }boolean vaiMostrarOutroPostDessaIteracao =  j+1 < (i *10) + 10;
+                    limparConsole();
+                    if(vaiMostrarOutroPostDessaIteracao){
+                        feedAtualizado += (vaiMostrarOutroPostDessaIteracao ? (postagens.get(j).exibirPostagem(indexPostVisual))+"\n\n" : (postagens.get(j).exibirPostagem(indexPostVisual)));
+                        System.out.println(feedAtualizado);
+                    }
+                }
             }
         }else{
-              }
+            System.out.println(RED_BOLD_BRIGHT+"Não há postagens a serem exibidas!"+RESET);
+        }
+    }
 
 
 
