@@ -1,10 +1,10 @@
 # Rubi
 
-Projeto de rede social feito com carinho por Bianca Almeida de Oliveira Bezerra e Ruan Macedo Santos
+Projeto de rede social feito por Bianca Almeida de Oliveira Bezerra e Ruan Macedo Santos
 
 
 ## Uso
-
+Observe que a branch principal é maven, e não main.
 As dependências do projeto são gerenciadas pelo Maven, então caso tenha certeza de que ele está instalado antes de tentar executar o código.
 
 
