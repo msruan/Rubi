@@ -25,10 +25,10 @@ Para persistência dos dados, foram utilizados arquivos de texto, que estão no 
 
 #### _PERFIL_
 
-|    IdPerfil    |    Username   |        Nome    |        Email        |
-| :--------------: | :-------------: | :--------------: | :-------------------: |
-| 140a3dd2-2c... |   bbianca     | Bianca Bezerra | bianca-bz@gmail.com |
-| 4ffd42c0-33... |   msruan      | Ruan Macedo    | ruan.macs@gmail.com |
+|    IdPerfil    |    Username   |        Nome    |        Email        |     Biografia    |
+| :--------------: | :-------------: | :--------------: | :-------------------: | :-------------: |
+| 140a3dd2-2c... |   bbianca     | Bianca Bezerra | bianca-bz@gmail.com | I'm Bia |
+| 4ffd42c0-33... |   msruan      | Ruan Macedo    | ruan.macs@gmail.com | I'm Ruan |
 
 
 
