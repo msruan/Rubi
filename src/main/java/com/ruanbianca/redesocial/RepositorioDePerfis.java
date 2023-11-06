@@ -7,13 +7,17 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.ruanbianca.redesocial.SocialException;
+
 public class RepositorioDePerfis {
 
+
     private ArrayList<Perfil> _perfis;
+
 
     public RepositorioDePerfis() {
         this._perfis = new ArrayList<>();
     }
+
 
     public RepositorioDePerfis(ArrayList<Perfil> perfis) {
 
@@ -23,9 +27,11 @@ public class RepositorioDePerfis {
             this._perfis = perfis;
     }
 
+
     public RepositorioDePerfis(Perfil[] perfis) {
         this(new ArrayList<>(Arrays.asList(perfis)));
     }
+
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
 
@@ -42,6 +48,7 @@ public class RepositorioDePerfis {
         
     }
     
+
     public Optional<Perfil> consultarPerfilPorTodosOsAtributos(UUID id, String username, String email){
 
         Optional<Perfil> consultaPorId = consultarPerfilPorId(id)
@@ -58,6 +65,7 @@ public class RepositorioDePerfis {
         return Optional.empty();
     }
 
+
     public Optional<Perfil> consultarPerfilPorId(UUID id){
 
         if(Optional.ofNullable(id).isEmpty())
@@ -67,6 +75,7 @@ public class RepositorioDePerfis {
         filtrados = filtrados.filter(perfil -> perfil.getId().equals(id));
         return filtrados.findFirst();
     }
+
 
     public Optional<Perfil> consultarPerfilPorUsername(String username){
 
@@ -78,6 +87,7 @@ public class RepositorioDePerfis {
         return filtrados.findFirst();
     }
 
+
     public Optional<Perfil> consultarPerfilPorEmail(String email){
 
         if(Optional.ofNullable(email).isEmpty())
@@ -88,9 +98,11 @@ public class RepositorioDePerfis {
         return filtrados.findFirst();
     }
 
+
     public ArrayList<Perfil> getPerfis(){
         return _perfis;
     }
+    
 
     public void removerPerfil(String username){
         Optional<Perfil> perfilARemover = consultarPerfilPorUsername(username);

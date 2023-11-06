@@ -1,8 +1,14 @@
 package com.ruanbianca.redesocial;
-import com.ruanbianca.redesocial.SocialException;
+
 import java.util.Optional;
+import com.ruanbianca.redesocial.SocialException;
 
 public class Hashtag {
+
+
+    private String _hashtag;
+    private Integer _contadorDeUsos;
+
 
     @Override
     public boolean equals (Object hashtag) {
@@ -11,9 +17,6 @@ public class Hashtag {
         return false;
     }
     
-    private String _hashtag;
-    private Integer _contadorDeUsos;
-
 
     public Hashtag(String hashtag, int contadorDeUsos) throws NullAtributesException{
         Optional<String> temHash = Optional.ofNullable(hashtag);
@@ -22,13 +25,17 @@ public class Hashtag {
         this._contadorDeUsos = contadorDeUsos;
     }
 
+
     public String getHashtag() {
         return this._hashtag;
     }
 
+
     public Integer getContadorDeUsos() {
         return _contadorDeUsos;
     }
+
+
     public void usarHashtag() {
         _contadorDeUsos++;
     }

@@ -2,11 +2,13 @@ package com.ruanbianca.redesocial;
 
 import java.util.Optional;
 import java.util.UUID;
-import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-import com.ruanbianca.redesocial.SocialException;
 import lombok.Getter;
 
+import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
+import com.ruanbianca.redesocial.SocialException;
+
 public class Perfil{
+
 
     private @Getter String username;
     private @Getter String nome;
@@ -14,10 +16,12 @@ public class Perfil{
     private @Getter UUID id;
     private @Getter String biografia;
 
+
     @Override
     public String toString() {
         return id.toString() + ";" + username + ";" + nome +  ";" + email + ";" + biografia +'\n';
     }
+
 
     public Perfil(String perfil) { 
         
@@ -29,6 +33,7 @@ public class Perfil{
         this.email = atributos[3];
         this.biografia = atributos[4];
     }
+
     
     public Perfil(String username, String nome, String email, String biografia) throws NullAtributesException{
 
@@ -42,6 +47,7 @@ public class Perfil{
         this.biografia = biografia;
     }
 
+
     public String limitarBio(String bio){
 
         if(bio.length() > 22){
@@ -50,19 +56,22 @@ public class Perfil{
         return bio;
     }
 
-   public static String exibirPerfil(Perfil perfil) {
-  
-    StringBuilder result = new StringBuilder();
-    result.append("╭───────────────────────────────────╮\n");
-    result.append("│" + CYAN_BOLD + "           Perfil Info" + RESET + "             │\n");
-    result.append("├───────────────────────────────────┤\n");
-    result.append("  " + YELLOW + "Username:" + RESET + " " + perfil.getUsername() + "\n");
-    result.append("  " + YELLOW + "Nome:" + RESET + " " + perfil.getNome() + "\n");
-    result.append("  " + YELLOW + "Biografia:" + RESET + " " + perfil.limitarBio(perfil.getBiografia()) + "\n");
-    result.append("╰───────────────────────────────────╯");
 
-    return result.toString();
-}
+    public static String exibirPerfil(Perfil perfil) {
+  
+        StringBuilder result = new StringBuilder();
+        result.append("╭───────────────────────────────────╮\n");
+        result.append("│" + CYAN_BOLD + "           Perfil Info" + RESET + "             │\n");
+        result.append("├───────────────────────────────────┤\n");
+        result.append("  " + YELLOW + "Username:" + RESET + " " + perfil.getUsername() + "\n");
+        result.append("  " + YELLOW + "Nome:" + RESET + " " + perfil.getNome() + "\n");
+        result.append("  " + YELLOW + "Biografia:" + RESET + " " + perfil.limitarBio(perfil.getBiografia()) + "\n");
+        result.append("╰───────────────────────────────────╯");
+
+        return result.toString();
+    }
+
+
     public boolean temAtributosNulos(){
    
         return (Optional.ofNullable(getId()).isEmpty() || Optional.ofNullable(getUsername()).isEmpty() || 
@@ -70,20 +79,24 @@ public class Perfil{
         );
     }
 
+
     public void setUsername(String username) {
         if(Optional.ofNullable(username).isPresent())
             this.username = username;
     }
+
 
     public void setNome(String nome) {
         if(Optional.ofNullable(nome).isPresent())
             this.nome = nome;
     }
 
+
     public void setEmail(String email) {
         if(Optional.ofNullable(email).isPresent())
             this.email = email;
     }
+    
 
     public void setBiografia(String biografia){
         if(Optional.ofNullable(biografia).isPresent())

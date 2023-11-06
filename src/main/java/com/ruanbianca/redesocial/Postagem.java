@@ -1,27 +1,25 @@
 package com.ruanbianca.redesocial;
-//grata
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.Getter;
+
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 import com.ruanbianca.redesocial.SocialException;
-import lombok.Getter;
+
 
 public class Postagem {
 
-    @Getter
-    private String texto;
-    @Getter
-    private Perfil perfil; 
-    @Getter  
-    private LocalDateTime data;
-    @Getter
-    private int curtidas;
-    @Getter
-    private int descurtidas;
-    @Getter
-    private UUID id;
+    
+    private @Getter String texto;
+    private @Getter Perfil perfil; 
+    private @Getter LocalDateTime data;
+    private @Getter int curtidas;
+    private @Getter int descurtidas;
+    private @Getter UUID id;
+
 
     public String exibirPostagem(){
         return PURPLE_BOLD_BRIGHT+"╔══════════════════════════════════════════════════════\n"+
@@ -51,6 +49,7 @@ public class Postagem {
         this.descurtidas = Integer.parseInt(atributos[6]);
     }
 
+
     public Postagem(String texto, Perfil perfil) throws NullAtributesException{
 
         if(Optional.ofNullable(texto).isEmpty() || Optional.ofNullable(perfil).isEmpty())
@@ -69,20 +68,27 @@ public class Postagem {
         return (curtidas - descurtidas) >= 0.5 * descurtidas;
     }
 
+
     public void curtir(){
         curtidas++; 
     }
+
 
     public void descurtir(){
         descurtidas++;
     }
 
+
     public boolean temAtributosNulos () {
+        
         return(Optional.ofNullable(id).isEmpty() || Optional.ofNullable(texto).isEmpty() || 
             Optional.ofNullable(data).isEmpty() || Optional.ofNullable(perfil).isEmpty() || 
             Optional.ofNullable(curtidas).isEmpty() || Optional.ofNullable(descurtidas).isEmpty());
     }
+
+
     public String mostrarData() {
+
         LocalDateTime data = this.data;
         DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -8,11 +8,14 @@ import java.util.stream.Stream;
 
 public class RepositorioDePostagens {
 
+
     private ArrayList<Postagem> _postagens;
+
 
     public RepositorioDePostagens() {
         this._postagens = new ArrayList<>();
     }
+
 
     public RepositorioDePostagens(ArrayList<Postagem> postagens) {
 
@@ -22,14 +25,17 @@ public class RepositorioDePostagens {
             this._postagens = postagens;
     }
 
+
     public RepositorioDePostagens(Postagem[] postagens) {
         this(new ArrayList<>(Arrays.asList(postagens)));
     }
+
 
     public void incluir(Postagem postagem){
         if(Optional.ofNullable(postagem).isPresent())
             _postagens.add(postagem);
     }
+
 
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag){
 
@@ -53,6 +59,7 @@ public class RepositorioDePostagens {
         return new ArrayList<Postagem>(filtrados.toList());
     }
 
+
     public Optional<Postagem> consultarPostagemPorId(UUID id) {
 
         Optional<Postagem> saida = Optional.empty();
@@ -64,10 +71,12 @@ public class RepositorioDePostagens {
             }
         }return saida;
     }
+
     
     public ArrayList<Postagem> getPostagens() {
         return _postagens;
     }
+
     
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
 
@@ -77,6 +86,7 @@ public class RepositorioDePostagens {
         postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
         return avancadas;
     }
+    
 
     public void removerPostagem(String texto, Perfil perfil,String hashtag){
         ArrayList<Postagem> postagensARemover = consultarPostagens(texto, perfil, hashtag);

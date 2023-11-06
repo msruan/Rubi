@@ -1,29 +1,32 @@
 package com.ruanbianca.redesocial;
 
-import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;//pera
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;//
 import java.io.IOException;
+
+import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 import com.ruanbianca.redesocial.SocialException;
+
 public class RedeSocial {
+
+
     private RepositorioDePerfis _perfis;
     private RepositorioDePostagens _postagens;
+
 
     public RedeSocial() {
         this._perfis = new RepositorioDePerfis();
         this._postagens = new RepositorioDePostagens();
-    }//:OOOOO
+    }
+    
+
     public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{
         if(entidade.equals("Perfil"))
             return System.getProperty("user.dir")+"/db/perfis.txt";
@@ -35,6 +38,7 @@ public class RedeSocial {
 
     }
 
+
     public RedeSocial(RepositorioDePerfis perfis, RepositorioDePostagens postagens) {
 
         this._perfis = (Optional.of(perfis).isEmpty()) ? new RepositorioDePerfis() : perfis;
@@ -42,13 +46,16 @@ public class RedeSocial {
 
     }
 
+
     public RepositorioDePerfis getRepositorioDePerfis() {
         return _perfis;
     }
 
+
     public RepositorioDePostagens getRepositorioDePostagens() {
         return _postagens;
     }
+
 
     public void incluirPerfil(Perfil perfil){
 
@@ -65,10 +72,12 @@ public class RedeSocial {
             getRepositorioDePerfis().incluir(perfil);
     }
 
+
     public boolean usuarioJaExite(UUID id, String username, String email){  
         return getRepositorioDePerfis().consultarPerfilPorTodosOsAtributos(id,username,email).isPresent();
             
     }
+
 
     public void incluirPostagem(Postagem postagem) throws NullAtributesException{
 
@@ -86,17 +95,22 @@ public class RedeSocial {
         //aqui a gente precisa retornar que o id tá duplicado;
     }
 
+
     public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
 
         return getRepositorioDePostagens().consultarPostagens(texto,perfil,hashtag);
     }
 
+
     public Optional<Perfil> consultarPerfil(UUID id){
         return getRepositorioDePerfis().consultarPerfilPorId(id);
     }
+
+
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         return getRepositorioDePerfis().consultarPerfilPorUsername(username);
     }
+
 
     public void curtir(UUID id) throws PostNotFoundException{
 
@@ -105,6 +119,7 @@ public class RedeSocial {
         post.get().curtir();
     }
 
+
     public void descurtir(UUID id) throws PostNotFoundException{
         
         Optional <Postagem> post = getRepositorioDePostagens().consultarPostagemPorId(id);
@@ -112,12 +127,14 @@ public class RedeSocial {
         post.get().descurtir();
     }
 
+
     public void decrementarVisualizacoes(PostagemAvancada postagem) throws NullObjectAsArgumentException{
         
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
         postagem.decrementarVisualizacoes();
     }
     
+
     public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
     
         //Optional <Perfil> perfil = consultarPorUsername(username);
@@ -154,25 +171,6 @@ public class RedeSocial {
         return new ArrayList<>(saida);
     }
 
-    // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
-        
-    //     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
-    //     ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
-    //     Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
-    //     filtrados = filtrados.filter(post -> {
-    //         if(post.ehExibivel()){
-    //             for(int i = 0; i< listaHashtags.size(); i++){
-    //                 if(post.existeHashtag(listaHashtags.get(i))){
-    //                     post.decrementarVisualizacoes();
-    //                     return true;
-    //                 }
-    //             }
-    //         }return false;
-    //     }); 
-    //     List <PostagemAvancada> saida = new ArrayList<>();
-    //     filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
-    //     return new ArrayList<>(saida);
-    // }
 
     public ArrayList<Postagem> exibirPostagensPopulares(){
         Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();
@@ -184,6 +182,7 @@ public class RedeSocial {
         List <Postagem> saida = filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).toList();
         return new ArrayList<>(saida);
     }
+
 
     public ArrayList<Hashtag> exibirHashtagsPopulares(){
 
@@ -211,8 +210,8 @@ public class RedeSocial {
         }
         Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
         return new ArrayList<>(streamHashs.toList());
-
     } 
+
    
     public void salvarPerfis(String nomeArquivo) {
         
@@ -224,8 +223,10 @@ public class RedeSocial {
             e.printStackTrace();
         }catch(RuntimeException e){
                 System.out.println("O erro tá na funcao salvarPerfis");
-            }
-        }    
+        }
+    }    
+
+
     public void salvarPostagens(String nomeArquivo) {
         try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(nomeArquivo))){
             for(Postagem post : _postagens.getPostagens()){
@@ -238,6 +239,7 @@ public class RedeSocial {
                 System.out.println("O erro tá na funcao salvarPostagens");
             }
     }
+
 
     public void resgatarPerfis(String nomeArquivo){
             
@@ -256,8 +258,9 @@ public class RedeSocial {
             }catch(RuntimeException e){
                 System.out.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
             }
-
     }
+
+
     public void resgatarPostagens(String nomeArquivo){
         ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
         for(String linha : conteudo){
@@ -275,11 +278,33 @@ public class RedeSocial {
         }
     }
 
+
     public void removerPerfil(String username){
         getRepositorioDePerfis().removerPerfil(username);     
     }
 
+
     public void removerPostagem(String texto,Perfil perfil,String hashtag){
         getRepositorioDePostagens().removerPostagem(texto, perfil, hashtag);
     }
+
+    // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
+        
+    //     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
+    //     ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
+    //     Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
+    //     filtrados = filtrados.filter(post -> {
+    //         if(post.ehExibivel()){
+    //             for(int i = 0; i< listaHashtags.size(); i++){
+    //                 if(post.existeHashtag(listaHashtags.get(i))){
+    //                     post.decrementarVisualizacoes();
+    //                     return true;
+    //                 }
+    //             }
+    //         }return false;
+    //     }); 
+    //     List <PostagemAvancada> saida = new ArrayList<>();
+    //     filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
+    //     return new ArrayList<>(saida);
+    // }
 }

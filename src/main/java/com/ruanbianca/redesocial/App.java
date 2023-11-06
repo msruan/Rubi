@@ -8,8 +8,7 @@ import static com.ruanbianca.redesocial.utils.MenuUtils.*;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 import com.ruanbianca.redesocial.SocialException;
 
-public class App 
-{
+public class App {
 
   
     final String INCLUIR_PERFIL = "1";
@@ -21,6 +20,7 @@ public class App
     final String EXIBIR_POST_HASHTAG = "6";
     final String EXIBIR_POST_POPULARES = "7";
     final String EXIBIR_HASHTAGS_POPULARES = "8";
+
     final String ATUALIZAR_PERFIL = "9";
     final String REMOVER_PERFIL = "10";
     final String REMOVER_POSTAGEM = "11";
@@ -29,13 +29,26 @@ public class App
 
     Scanner input = new Scanner(System.in);
 
-    void pausar() {
+
+    public static void main( String[] args ){
+
+        RedeSocial Rubi = new RedeSocial();
+        Rubi.resgatarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
+        Rubi.resgatarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+        App RubiApp = new App();
+        RubiApp.executar(Rubi); 
+    }
+
+
+    public void pausar() {
+        
         String enter = GREEN_BOLD_BRIGHT +"<Enter>"+RESET;
         System.out.println(YELLOW_BOLD_BRIGHT+ "\n\nPressione " + enter + YELLOW_BOLD_BRIGHT + " para continuar..."+ RESET);
         input.nextLine();
         limparConsole();
     }
     
+
     public void executar(RedeSocial Rubi){
         
         String titulo = "RUBI";
@@ -337,15 +350,7 @@ public class App
         }while(!opcao.equals(SAIR));
         
     }
-    public static void main( String[] args )
-    {
-        RedeSocial Rubi = new RedeSocial();
-        Rubi.resgatarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
-        Rubi.resgatarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
-        App RubiApp = new App();
-        RubiApp.executar(Rubi);
-        
-    }
+    
 
     public static void exibirFeed(ArrayList<Postagem> postagens){
         final String CURTIR_POSTAGEM = "1";
