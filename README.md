@@ -4,7 +4,7 @@ Projeto de rede social feito por Bianca Almeida de Oliveira Bezerra e Ruan Maced
 
 
 ## Uso
-Observe que a branch principal é maven, e não main.
+Observe que a branch principal é _maven_, e não _main_.
 As dependências do projeto são gerenciadas pelo Maven, então caso tenha certeza de que ele está instalado antes de tentar executar o código.
 
 
