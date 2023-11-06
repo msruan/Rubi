@@ -13,6 +13,8 @@ public class MenuUtils {
         menu.append(ConsoleColors.CYAN_BOLD+"0"+ConsoleColors.RESET+" - Sair\n>>> ");
         return menu.toString();
     }
+    
+    
     public static int lerOpcao(String menu, Scanner input) {
         System.out.print(menu);
         while (!input.hasNextInt()) {

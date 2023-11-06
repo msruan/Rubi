@@ -82,7 +82,7 @@ public class Teste {
         postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
         if(Optional.ofNullable(postagensEncontradas).isPresent() && postagensEncontradas.size()>0){//por casusa disso, a gente tá tentando acessar o size
             for(Postagem post : postagensEncontradas)
-                System.out.println(post.exibirPostagem(0));
+                System.out.println(post.exibirPostagem());
         }else{
             System.out.println("Nenhuma postagem encontrada para esse perfil!");
         }

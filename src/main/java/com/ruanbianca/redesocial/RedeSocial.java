@@ -300,4 +300,8 @@ public class RedeSocial {
         getRepositorioDePerfis().removerPerfil(username);     
     }
 
+    public void removerPostagem(String texto,Perfil perfil,String hashtag){
+        getRepositorioDePostagens().removerPostagem(texto, perfil, hashtag);
+    }
+
 }

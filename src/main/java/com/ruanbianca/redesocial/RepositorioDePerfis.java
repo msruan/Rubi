@@ -40,7 +40,6 @@ public class RepositorioDePerfis {
         
     }
     
-//ei, resgatar perfis deu pau
 
 
     public boolean usuarioJaExiste(UUID id, String username, String email, String biografia){
@@ -94,8 +93,6 @@ public class RepositorioDePerfis {
         Optional<Perfil> perfilARemover = consultarPorUsername(username);
         if(perfilARemover.isPresent()){
             _perfis.remove(perfilARemover.get());
-        }else{
-            throw new UserAlreadyExistsException();
             
         }
         

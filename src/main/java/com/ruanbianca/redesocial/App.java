@@ -29,7 +29,8 @@ public class App
     Scanner input = new Scanner(System.in);
 
     void pausar() {
-        System.out.println("\n\nPressione <Enter> para continuar...");
+        String enter = GREEN_BOLD_BRIGHT +"<Enter>"+RESET;
+        System.out.println(YELLOW_BOLD_BRIGHT+ "\n\nPressione " + enter + YELLOW_BOLD_BRIGHT + " para continuar..."+ RESET);
         input.nextLine();
         limparConsole();
     }
@@ -37,7 +38,7 @@ public class App
     public void executar(RedeSocial Rubi){
         
         String titulo = "RUBI";
-        String opcoes = "Incluir Perfil,Incluir Postagem,Consultar Perfil,Consultar Postagem,Exibir Postagens por Perfil,Exibir Postagens por Hashtag,Exibir Postagens Populares,Exibir Hashtags Populares";
+        String opcoes = "Incluir Perfil,Incluir Postagem,Consultar Perfil,Consultar Postagem,Exibir Postagens por Perfil,Exibir Postagens por Hashtag,Exibir Postagens Populares,Exibir Hashtags Populares,Atualizar Perfil,Remover Perfil,Remover Postagem";
         String menu = gerarMenu(titulo,opcoes);
         String opcao = "";
         
@@ -105,8 +106,8 @@ public class App
                         usernamePost= lerString("Digite seu username: ",input);
                         perfilUser = Rubi.consultarPerfilPorUsername(usernamePost);
                         if(perfilUser.isEmpty()){
-                            if(lerString("Usuário não encontrado! Tentar novamente? ",input).equals("sim")){
-                                limparConsole();
+                            if(lerString("Usuário não encontrado! Tentar novamente? ",input).equals("não")){
+                                limparConsole();//quer vim fazer uma pegar index no array pelo consultar entao?
                                 continue menuprincipal;
                             }
                         }else 
@@ -136,7 +137,7 @@ public class App
                         
                         
                     }else{//ta
-                        System.out.println("Perfil não encontrado!");
+                        System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
                     }
                     break;
                     
@@ -150,10 +151,10 @@ public class App
                     ArrayList<Postagem> postagemBuscada = Rubi.consultarPostagens(texto, perfilBuscado.get(), hashtag);
                     if(Optional.ofNullable(postagemBuscada).isPresent()){
                         for(int i = 0; i < postagemBuscada.size(); i++){
-                            System.out.println(postagemBuscada.get(i).exibirPostagem(i));
+                            System.out.println(postagemBuscada.get(i).exibirPostagem());
                         }
                     }else{
-                        System.out.println("Postagem não encontrada!");
+                        System.out.println(RED_BOLD_BRIGHT+"Postagem não encontrada!"+RESET);
                     }
                     break;
 
@@ -195,7 +196,7 @@ public class App
                     postagensPopulares = Rubi.exibirPostagensPopulares();
                     if(Optional.ofNullable(postagensPopulares).isPresent()){
                         for(int i  = 0; i < postagensPopulares.size(); i++){
-                            System.out.println(postagensPopulares.get(i).exibirPostagem(i)); 
+                            System.out.println(postagensPopulares.get(i).exibirPostagem()); 
                         }
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
@@ -216,6 +217,63 @@ public class App
                     username = lerString("Digite o username do perfil buscado: ",input);
                     Rubi.removerPerfil(username);
                     System.out.println("Perfil removido com sucesso!");
+                    break;
+                case ATUALIZAR_PERFIL:
+                    username = lerString("Digite o username do perfil buscado: ",input);
+                    perfilBuscado = Rubi.consultarPerfilPorUsername(username);
+                    if(perfilBuscado.isPresent()){
+                        do{//:O
+                            String atributo = lerString("Digite o atributo que deseja atualizar: ",input);
+                            switch(atributo){
+                                case "nome":
+                                    String nomeAtualizado = lerString("Digite o novo nome: ",input);
+                                    perfilBuscado.get().setNome(nomeAtualizado);
+                                    break;
+                                case "email":
+                                    String emailAtualizado = lerString("Digite o novo email: ",input);
+                                    perfilBuscado.get().setEmail(emailAtualizado);
+                                    break;
+                                case "biografia":
+                                    String biografiaAtualizada = lerString("Digite a nova biografia: ",input);
+                                    perfilBuscado.get().setBiografia(biografiaAtualizada);
+                                    break;
+                                    case "username":
+                                    String usernameAtualizado;
+                                    while (true) {
+                                        usernameAtualizado = lerString("Digite o novo username: ", input);
+                                        if (Rubi.usuarioJaExite(null, usernameAtualizado, null, null)) {
+                                            System.out.println("Username já está em uso!");
+                                            if (lerString("Deseja tentar outro? ", input).equals("sim")) {
+                                                continue;
+                                            } else {
+                                                break; 
+                                            }
+                                        } else {
+                                            break; 
+                                        }
+                                    }
+                                    perfilBuscado.get().setUsername(usernameAtualizado);
+                                    break;
+                                
+                                default:
+                                    System.out.println(RED_BOLD_BRIGHT+"Atributo inválido"+RESET);
+                                    break;
+                            }
+
+                        }while(lerString("Deseja atualizar outro atributo? ",input).equals("sim"));
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
+                    }
+                    break;
+                case REMOVER_POSTAGEM:
+                    username = lerString("Digite o username do perfil buscado: ", input);
+                    perfilBuscado = Rubi.consultarPerfilPorUsername(username);
+                    if(perfilBuscado.isPresent()){
+                        texto = lerString("Digite o texto da postagem buscada: ", input);
+                        hashtag = lerString("Digite a hashtag da postagem procurada: ", input);
+                        Rubi.removerPostagem(texto,perfilBuscado.get(), hashtag);
+                        System.out.println("Postagem removida com sucesso!");
+                    }
                     break;
                 case SAIR:
                     break;
@@ -244,17 +302,18 @@ public class App
         final String DESCURTIR_POSTAGEM = "2";
         final String SIM = "1";
         String feedAtualizado = "";
+        String feedTemporario = "";
         if(Optional.ofNullable(postagens).isPresent() && postagens.size()>0){
             for(int i  = 0; //tipo, se tiver 51 posts, ele vai separar em 6 partes
             //i = 0, 1 , 2 ,3 ,4 ,5
             i < ((postagens.size()-(postagens.size() % 10) )/ 10) + 1; i++) 
             {      
-                limparConsole();
+                
                 for(int j = i * 10; j < (i *10)+10; j++){
                     if(j >= postagens.size())
                         break;
-                    int indexPostVisual = j-(i*10);
-                    System.out.println(postagens.get(j).exibirPostagem(indexPostVisual));
+                    feedTemporario += postagens.get(j).exibirPostagem();
+                    System.out.println(feedTemporario);
                     System.out.println("******** INTERAGIR? *******\n(Enter - Não; 1- SIM)\n>>>");
                     Scanner input = new Scanner(System.in);
                     String resposta = input.nextLine();
@@ -267,31 +326,30 @@ public class App
                         System.out.println(submenu);// vamo fazer só o curtir/descurtir primeiro
                         resposta = input.nextLine();// :3
 
-                        System.out.print("Qual post voce deseja ");
                         if(resposta.equals(CURTIR_POSTAGEM)){
-                            System.out.println("curtir?\n(0-9)\n>>> ");
                             resposta = input.nextLine();
-                            int opcaoEscolhida = Integer.parseInt(resposta);
-                            if(opcaoEscolhida >= 0 && opcaoEscolhida <= 9){
-                                postagens.get(i * 10 + opcaoEscolhida).curtir();
+                                postagens.get(j).curtir();
+                            if(postagens.get(j) instanceof PostagemAvancada){
+                                ((PostagemAvancada)postagens.get(j)).incrementarVisualizacoes();
+                                feed
                             }
+                            
                         }
                         else if(resposta.equals(DESCURTIR_POSTAGEM)){
-                                System.out.println("descurtir?\n(0-9)\n>>> ");
-                                resposta = input.nextLine();
-                                int escolha = Integer.parseInt(resposta);
-                                if(escolha >= 0 && escolha <= 9)
-                                    postagens.get(i * 10 + escolha).descurtir();
-                        }                    }
-                    
-                    if(postagens.get(j) instanceof PostagemAvancada){
-                        ((PostagemAvancada)postagens.get(j)).incrementarVisualizacoes();;
-                    }boolean vaiMostrarOutroPostDessaIteracao =  j+1 < (i *10) + 10;
-                    limparConsole();
-                    if(vaiMostrarOutroPostDessaIteracao){
-                        feedAtualizado += (vaiMostrarOutroPostDessaIteracao ? (postagens.get(j).exibirPostagem(indexPostVisual))+"\n\n" : (postagens.get(j).exibirPostagem(indexPostVisual)));
-                        System.out.println(feedAtualizado);
+                                    postagens.get(j).descurtir();
+                        }  
+                        limparConsole();                  
                     }
+                    //dah ta ok honey
+                    
+                    boolean vaiMostrarOutroPostDessaIteracao =  j+1 < (i *10) + 10;
+                    
+                    if(vaiMostrarOutroPostDessaIteracao){
+                        feedAtualizado += (vaiMostrarOutroPostDessaIteracao ? (postagens.get(j).exibirPostagem())+"\n\n" : (postagens.get(j).exibirPostagem()));
+                    }else{
+                        feedAtualizado = "";
+                    }
+                    System.out.println(feedAtualizado);
                 }
             }
         }else{
@@ -314,12 +372,6 @@ public class App
             }
         }
         return null;
-        //retornar uma matriz com ArrayList<Postagem>  com vetores de 10 elementos
-        //oque e pra ela fazer
-    }//okay ! beleza,ou terminando ad ec urtir...tava bom? muito bom...
-    //tá, mas eu to fazendo essa de partir em 10, pra nao ficar 70 postagem na tela duma vez...
-    //oiii, amg aquilo de postagem ter o numero dele da posicao, ta funcionando? entendi
-    //acho bom...
-    //ah, mas o index tá só visual por enquanto.
-    //me ajuda aqui na dividir, que eu te ajudo na remover
-}// na
+    
+    }
+}

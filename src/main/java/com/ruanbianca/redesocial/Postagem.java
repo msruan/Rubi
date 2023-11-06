@@ -1,5 +1,5 @@
 package com.ruanbianca.redesocial;
-
+//grata
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -23,8 +23,8 @@ public class Postagem {
     @Getter
     private UUID id;
 
-    public String exibirPostagem(int posicao){
-        return CYAN_BOLD_BRIGHT+String.valueOf(posicao)+RESET+PURPLE_BOLD_BRIGHT+"══════════════════════════════════════════════════════\n"
+    public String exibirPostagem(){
+        return PURPLE_BOLD_BRIGHT+"╔═══════════════════════════════════════════════════════\n"
         +RESET+PURPLE_BOLD+"║    "+RESET+PURPLE_BOLD_BRIGHT+getPerfil().getUsername()+RESET+"\n║\n║    "+
             getTexto()+"\n║\n║    "
             +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() + " 👎"

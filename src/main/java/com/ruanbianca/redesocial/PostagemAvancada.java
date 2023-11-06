@@ -25,8 +25,8 @@ public class PostagemAvancada extends Postagem {
         for(String hash:  hashtags){
             strHashtags.append("#"+hash+" ");
         }
-        return CYAN_BOLD_BRIGHT+String.valueOf(posicao)+RESET+"══════════════════════════════════════════════════════\n"+
-         "║    "+PURPLE_BOLD_BRIGHT+getPerfil().getUsername()+RESET+"\n║\n║    "+
+        return PURPLE_BOLD_BRIGHT+"╔═══════════════════════════════════════════════════════\n"+
+         "║    "+getPerfil().getUsername()+RESET+"\n║\n║    "+
             getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
             +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "+RESET+BLUE_BOLD_BRIGHT +getVisualizacoesRestantes()+ " 👀"+RESET
             +"\n╚══════════════════════════════════════════════════════\n";
