@@ -63,11 +63,8 @@ public class Perfil{
 
     return result.toString();
 }
-
-//o push quando tava lindo era necessarj
-//im sad, ta quebrando... ah, ignora isso, compila normal, mas é esquisito mesmo
     public boolean temAtributosNulos(){
-    //ta bugado que isso...apareceu assim no terminal
+   
         return (Optional.ofNullable(getId()).isEmpty() || Optional.ofNullable(getUsername()).isEmpty() || 
             Optional.ofNullable(getNome()).isEmpty() || Optional.ofNullable(getEmail()).isEmpty() || Optional.ofNullable(getBiografia()).isEmpty()
         );

@@ -154,8 +154,8 @@ public class RedeSocial {
         List <PostagemAvancada> saida = new ArrayList<>();
         filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
         return new ArrayList<>(saida);
-    }//...
-//amg salvou a postage da livia, ela so n quer exibir :D vou printar la dento pra ver pl menos ele achou
+    }
+
     public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
         
         Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
@@ -257,8 +257,9 @@ public class RedeSocial {
                 System.out.println("O erro está em SocialException !"+e.getMessage());
             }catch(RuntimeException e){
                 System.out.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
-            }//posso apagr? salvo no notas fds vou apahr
-    }//fds, apaga KKKK pode apagar
+            }
+
+    }
     public void resgatarPostagens(String nomeArquivo){
         ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(nomeArquivo);
         for(String linha : conteudo){
@@ -275,26 +276,6 @@ public class RedeSocial {
             }
         }
     }
-    
-    public static String lerArquivo(String caminho){
-        StringBuilder conteudo = new StringBuilder();
-        BufferedReader leitor;
-        try {
-            leitor = new BufferedReader(new FileReader(caminho));
-            try{
-                String linha = leitor.readLine();
-                for(; linha != null; linha = leitor.readLine())
-                    conteudo.append(linha);
-                leitor.close();
-            }catch(IOException e){
-                System.out.println("Problema durante leitura do arquivo!");
-            }
-        }catch (FileNotFoundException e){
-            System.out.println("Arquivo não encontrado!");
-        } 
-    
-        return conteudo.toString();
-    }
 
     public void removerPerfil(String username){
         getRepositorioDePerfis().removerPerfil(username);     
@@ -303,5 +284,4 @@ public class RedeSocial {
     public void removerPostagem(String texto,Perfil perfil,String hashtag){
         getRepositorioDePostagens().removerPostagem(texto, perfil, hashtag);
     }
-
 }

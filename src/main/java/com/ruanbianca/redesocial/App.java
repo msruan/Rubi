@@ -114,8 +114,8 @@ public class App
                             break;
                     }while(true);
                     String texto = lerString("Digite o conteúdo do texto: ",input);
-                    novaPostagem = new PostagemAvancada(texto,perfilUser.get(),"deus","paz");
-                    Rubi.incluirPostagem(novaPostagem);
+                    novaPostagem = new Postagem(texto,perfilUser.get());//ok
+                    Rubi.incluirPostagem(novaPostagem);//roda, tenta incluir uma postagem,para, reabre e ve se ela some
                     // if(lerString("Deseja por hashtags? ",input).equals("sim")){
                     //     String hashtags = lerString("Digite as hashtags separadas por # : ",input);
                     //     novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashtags.split("#"));
@@ -135,7 +135,7 @@ public class App
                     if(perfilBuscado.isPresent()){
                         System.out.println(Perfil.exibirPerfil(perfilBuscado.get()));
                         
-                        
+                        //ve
                     }else{//ta
                         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
                     }
@@ -155,7 +155,7 @@ public class App
                         }
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Postagem não encontrada!"+RESET);
-                    }
+                    }//
                     break;
 
                 case EXIBIR_POST_PERFIL:
@@ -281,12 +281,13 @@ public class App
                     System.out.println("Opção inválida!");
                     break;
             }
-            Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
-            Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+            
     
             pausar();
-
+            Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
+             Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
         }while(!opcao.equals("0"));
+        
     }
     public static void main( String[] args )
     {
@@ -295,6 +296,7 @@ public class App
         Rubi.resgatarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
         App RubiApp = new App();
         RubiApp.executar(Rubi);
+        
     }
 
     public static void exibirFeed(ArrayList<Postagem> postagens){
@@ -331,7 +333,6 @@ public class App
                                 postagens.get(j).curtir();
                             if(postagens.get(j) instanceof PostagemAvancada){
                                 ((PostagemAvancada)postagens.get(j)).incrementarVisualizacoes();
-                                feed
                             }
                             
                         }
@@ -355,23 +356,19 @@ public class App
         }else{
             System.out.println(RED_BOLD_BRIGHT+"Não há postagens a serem exibidas!"+RESET);
         }
-    }
-
-
-
-    public static String dividArrEm10Partes(ArrayList<Postagem> postagems){
-        ArrayList<ArrayList<Postagem>> saida = new ArrayList<>();
-        int contadorTotal = 0, contadorParcial = 0, contadorDeArrays = 0;
-        for(;contadorTotal < postagems.size(); contadorTotal++){//ta contando
-            if(contadorParcial < 10){//será se dá pra fazwer sem isso?
-                //acho q dá...
-                saida.get(contadorDeArrays).add(postagems.get(contadorParcial));
-            }else{
-               //ignora. vem aqui pra cima 
-                
-            }
-        }
-        return null;
+    }//oi, ta me vendo?
+    // public static String dividArrEm10Partes(ArrayList<Postagem> postagems){
+    //     ArrayList<ArrayList<Postagem>> saida = new ArrayList<>();
+    //     int contadorTotal = 0, contadorParcial = 0, contadorDeArrays = 0;
+    //     for(;contadorTotal < postagems.size(); contadorTotal++){//ta contando
+    //         if(contadorParcial < 10){//será se dá pra fazwer sem isso?
+    //             //acho q dá...
+    //             saida.get(contadorDeArrays).add(postagems.get(contadorParcial));
+    //         }else{
+            
+    //         }
+    //     }
+    //     return null;
     
-    }
+    // }
 }

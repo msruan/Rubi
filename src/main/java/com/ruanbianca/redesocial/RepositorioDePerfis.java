@@ -93,9 +93,7 @@ public class RepositorioDePerfis {
         Optional<Perfil> perfilARemover = consultarPorUsername(username);
         if(perfilARemover.isPresent()){
             _perfis.remove(perfilARemover.get());
-            
         }
-        
+    
     }
-
 }
