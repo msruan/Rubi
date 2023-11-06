@@ -41,7 +41,7 @@ public class App {
 
 
     public void pausar() {
-        
+
         String enter = GREEN_BOLD_BRIGHT +"<Enter>"+RESET;
         System.out.println(YELLOW_BOLD_BRIGHT+ "\n\nPressione " + enter + YELLOW_BOLD_BRIGHT + " para continuar..."+ RESET);
         input.nextLine();
@@ -244,13 +244,6 @@ public class App {
                     break;
 
 
-                case REMOVER_PERFIL:
-                    username = lerString("Digite o username do perfil buscado: ",input);
-                    Rubi.removerPerfil(username);
-                    System.out.println("Perfil removido com sucesso!");
-                    break;
-
-
                 case ATUALIZAR_PERFIL:
                     username = lerString("Digite o username do perfil buscado: ",input);
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
@@ -312,6 +305,13 @@ public class App {
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
                     }
+                    break;
+
+
+                case REMOVER_PERFIL:
+                    username = lerString("Digite o username do perfil buscado: ",input);
+                    Rubi.removerPerfil(username);
+                    System.out.println("Perfil removido com sucesso!");
                     break;
 
 
