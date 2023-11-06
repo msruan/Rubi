@@ -33,13 +33,12 @@ public class ManipuladorDeArquivos {
         }
         return conteudo.toString();
     }
-    public static boolean gravarArquivo(String caminho, String texto){
+    public static boolean gravarArquivo(String caminho, String texto, boolean append){
         try {
-            BufferedWriter gravador = new BufferedWriter(new FileWriter(caminho,false));
-            gravador.write(texto+'\n');
+            BufferedWriter gravador = new BufferedWriter(new FileWriter(caminho,append));
+            gravador.write(texto);
             if(texto.charAt(texto.length()-1) == '\n')
                 gravador.newLine();
-
             gravador.close();
         }
         catch (IOException e){

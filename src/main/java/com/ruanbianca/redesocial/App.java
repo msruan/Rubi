@@ -6,6 +6,7 @@ import java.util.Scanner;
 import static com.ruanbianca.redesocial.utils.MenuUtils.*;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 import com.ruanbianca.redesocial.SocialException;
+import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 
 public class App 
 {
@@ -98,7 +99,6 @@ public class App
                     break;
 
                 case INCLUIR_POSTAGEM:
-                
                     Postagem novaPostagem;
                     String usernamePost;
                     Optional <Perfil> perfilUser;
@@ -115,18 +115,18 @@ public class App
                     }while(true);
                     String texto = lerString("Digite o conteúdo do texto: ",input);
                     novaPostagem = new Postagem(texto,perfilUser.get());//ok
-                    Rubi.incluirPostagem(novaPostagem);//roda, tenta incluir uma postagem,para, reabre e ve se ela some
-                    // if(lerString("Deseja por hashtags? ",input).equals("sim")){
-                    //     String hashtags = lerString("Digite as hashtags separadas por # : ",input);
-                    //     novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashtags.split("#"));
-                    // }else{
-                    //     try{
-                    //     novaPostagem = new Postagem(texto,perfilUser.get());
-                    //         Rubi.incluirPostagem(novaPostagem);
-                    //     }catch(com.ruanbianca.redesocial.NullAtributesException e){
-                    //         System.out.println("Você deixou algum atributo nulo!!!");
-                    //     }
-                    // }
+             
+                    if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
+                        //String hashtags = lerString("Digite as hashtags separadas por # : ",input);
+                        novaPostagem = new PostagemAvancada(texto,perfilUser.get(),"diego","paulo");
+                    }else{
+                        try{
+                        novaPostagem = new Postagem(texto,perfilUser.get());
+                        }catch(com.ruanbianca.redesocial.NullAtributesException e){
+                            System.out.println("Você deixou algum atributo nulo!!!");
+                        }
+                    }Rubi.incluirPostagem(novaPostagem);
+
                     break;
                 case CONSULTAR_PERFIL:
                     
@@ -284,8 +284,13 @@ public class App
             
     
             pausar();
+            // Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
+            // if(!incluiuPostagem && opcao!=SAIR){
             Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
-             Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+            Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+            // }else{
+            //     incluiuPostagem = false;
+            // }
         }while(!opcao.equals("0"));
         
     }

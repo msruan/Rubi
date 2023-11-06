@@ -122,7 +122,7 @@ public class RedeSocial {
     public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { //æqui funciona né
     
         //Optional <Perfil> perfil = consultarPorUsername(username);
-        Optional <Perfil> perfil = getRepositorioDePerfis().consultarPorUsername(username);
+        Optional <Perfil> perfil = consultarPerfilPorUsername(username);
         if(perfil.isEmpty())
             return null;
         
@@ -265,7 +265,7 @@ public class RedeSocial {
         for(String linha : conteudo){
             String[] atributos = linha.split(";");
             try{
-                if(atributos[0] == "0"){
+                if(atributos[0].equals("0")){
                     incluirPostagem(new Postagem(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
                 }else {
                     incluirPostagem(new PostagemAvancada(consultarPerfil(UUID.fromString(atributos[2])).get(),linha));
