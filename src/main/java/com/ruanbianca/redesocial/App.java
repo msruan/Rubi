@@ -59,7 +59,7 @@ public class App
 
                     while (true) {
                         username = lerString("Digite um username: ", input);
-                        if (Rubi.usuarioJaExite(null, username, null, null)) {
+                        if (Rubi.usuarioJaExite(null, username, null)) {
                             System.out.println("Username já está em uso!");
                             if (lerString("Deseja tentar outro? ",input).equals("sim")) {
                                 limparConsole();
@@ -71,7 +71,7 @@ public class App
                     }
                     while (true) {
                         email = lerString("Digite um endereço de email: ", input);
-                        if (Rubi.usuarioJaExite(null, null, email, null)) {
+                        if (Rubi.usuarioJaExite(null, null, email)) {
                             System.out.println("Email já está em uso!");
                             if (lerString("Deseja tentar outro? ",input).equals("sim")) {
                                 limparConsole();
@@ -83,9 +83,9 @@ public class App
                     }
                     while (true) {
                         biografia = lerString("Digite a sua bio: ", input);
-                        if (Rubi.usuarioJaExite(null, null, null, biografia)) {
-                            System.out.println("Bio já está em uso!");
-                            if (lerString("Deseja tentar outro? ",input).equals("sim")) {
+                        if (Optional.ofNullable(biografia).isEmpty()) {
+                            System.out.println("Por favor, digite uma bio, deixe nos conhece-lo!");
+                            if (lerString("Deseja tentar novamente? ",input).equals("sim")) {
                                 limparConsole();
                                 continue menuprincipal;
                             }
@@ -93,6 +93,7 @@ public class App
                             break;
                         }
                     }
+                    
                     
                     Rubi.incluirPerfil(new Perfil(username, nome, email,biografia));
 
@@ -115,10 +116,27 @@ public class App
                     }while(true);
                     String texto = lerString("Digite o conteúdo do texto: ",input);
                     novaPostagem = new Postagem(texto,perfilUser.get());
-             
+                    
                     if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
-                        String hashtags = lerString("Digite as hashtags separadas por # : ",input);
-                        novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashtags);
+
+                        ArrayList<String> hashsProConstrutor = new ArrayList<>();
+                        String hashtag = lerString("Digite uma hashtag: ",input);
+                        hashsProConstrutor.add(hashtag);
+
+                        boolean querBotarMaisUmaHashtag;
+
+                        do{
+                            if(lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
+                                String hashDoLoop = lerString("Digite outra hashtag: ",input);
+                                hashsProConstrutor.add(hashDoLoop);
+                                querBotarMaisUmaHashtag = true;
+                            }else{
+                                querBotarMaisUmaHashtag = false;
+                            }
+                        }while(querBotarMaisUmaHashtag);
+
+                        novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashsProConstrutor);
+                   
                     }else{
                         try{
                         novaPostagem = new Postagem(texto,perfilUser.get());
@@ -128,6 +146,7 @@ public class App
                     }Rubi.incluirPostagem(novaPostagem);
 
                     break;
+
                 case CONSULTAR_PERFIL:
                     
                     username = lerString("Digite o username do perfil buscado: ", input);
@@ -145,9 +164,12 @@ public class App
                 
                     texto = lerString("Digite o texto da postagem buscada: ", input);
                     username = lerString("Digite o username do perfil buscado: ", input);
+                    String hashtagParaOConsultarPostagem = null;
+                    if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
+                        hashtagParaOConsultarPostagem = lerString("Digite uma hashtag: ",input);
+                    }
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
-                    String hashtag = lerString("Digite a hashtag buscada: ", input);
-                    ArrayList<Postagem> postagemBuscada = Rubi.consultarPostagens(texto, perfilBuscado.get(), hashtag);
+                    ArrayList<Postagem> postagemBuscada = Rubi.consultarPostagens(texto, perfilBuscado.get(), hashtagParaOConsultarPostagem);
                     if(Optional.ofNullable(postagemBuscada).isPresent()){
                         for(int i = 0; i < postagemBuscada.size(); i++){
                             System.out.println(postagemBuscada.get(i).exibirPostagem());
@@ -168,8 +190,8 @@ public class App
 
                 case EXIBIR_POST_HASHTAG:
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
-                    String hashtagBuscada = lerString("Digite as hashtags buscada: ", input).split("#")[0];
-                    postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtags(hashtagBuscada);
+                    String hashtagBuscada = lerString("Digite a hashtag buscada: ", input).split("#")[0];
+                    postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtagBuscada);
                     if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent() && postagensAvancadasEncontradas.size()>0){
                         for(int i  = 0; i < postagensAvancadasEncontradas.size(); i++){
                             System.out.println(postagensAvancadasEncontradas.get(i).exibirPostagem());
@@ -221,7 +243,7 @@ public class App
                                     String emailAtualizado;
                                     while (true) {
                                         emailAtualizado = lerString("Digite o novo email: ", input);
-                                        if (Rubi.usuarioJaExite(null, null, emailAtualizado, null)) {
+                                        if (Rubi.usuarioJaExite(null, null, emailAtualizado)) {
                                             System.out.println("Email já está em uso!");
                                             if (lerString("Deseja tentar outro? ", input).equals("sim")) {
                                                 continue;
@@ -243,7 +265,7 @@ public class App
                                     String usernameAtualizado;
                                     while (true) {
                                         usernameAtualizado = lerString("Digite o novo username: ", input);
-                                        if (Rubi.usuarioJaExite(null, usernameAtualizado, null, null)) {
+                                        if (Rubi.usuarioJaExite(null, usernameAtualizado, null)) {
                                             System.out.println("Username já está em uso!");
                                             if (lerString("Deseja tentar outro? ", input).equals("sim")) {
                                                 continue;
@@ -273,8 +295,7 @@ public class App
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
                     if(perfilBuscado.isPresent()){
                         texto = lerString("Digite o texto da postagem buscada: ", input);
-                        hashtag = lerString("Digite a hashtag da postagem procurada: ", input);
-                        Rubi.removerPostagem(texto,perfilBuscado.get(), hashtag);
+                        Rubi.removerPostagem(texto,perfilBuscado.get(), null);
                         System.out.println("Postagem removida com sucesso!");
                     }
                     break;

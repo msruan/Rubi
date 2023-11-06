@@ -57,16 +57,16 @@ public class RedeSocial {
         if(perfil.temAtributosNulos())
             throw new NullAtributesException();
 
-        boolean taDuplicado = getRepositorioDePerfis().usuarioJaExiste(perfil.getId(), perfil.getUsername(), perfil.getEmail(),perfil.getBiografia());
+        boolean taDuplicado = usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail());
 
-        if(!taDuplicado)
-            getRepositorioDePerfis().incluir(perfil);
-        else 
+        if(taDuplicado)
             throw new UserAlreadyExistsException();
+        else
+            getRepositorioDePerfis().incluir(perfil);
     }
 
-    public boolean usuarioJaExite(UUID id, String username, String email,String biografia){  
-        return getRepositorioDePerfis().usuarioJaExiste(id,username,email,biografia);
+    public boolean usuarioJaExite(UUID id, String username, String email){  
+        return getRepositorioDePerfis().consultarPerfilPorTodosOsAtributos(id,username,email).isPresent();
             
     }
 
@@ -91,13 +91,12 @@ public class RedeSocial {
         return getRepositorioDePostagens().consultarPostagens(texto,perfil,hashtag);
     }
 
-    public Optional<Perfil> consultarPerfil(UUID id){//a gente deveria poder passar várias hashtags
-        return getRepositorioDePerfis().consultarPorId(id);
+    public Optional<Perfil> consultarPerfil(UUID id){
+        return getRepositorioDePerfis().consultarPerfilPorId(id);
     }
-    public Optional<Perfil> consultarPerfilPorUsername(String username){//a gente deveria poder passar várias hashtags
-        return getRepositorioDePerfis().consultarPorUsername(username);
+    public Optional<Perfil> consultarPerfilPorUsername(String username){
+        return getRepositorioDePerfis().consultarPerfilPorUsername(username);
     }
-    
 
     public void curtir(UUID id) throws PostNotFoundException{
 
@@ -119,7 +118,7 @@ public class RedeSocial {
         postagem.decrementarVisualizacoes();
     }
     
-    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { //æqui funciona né
+    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
     
         //Optional <Perfil> perfil = consultarPorUsername(username);
         Optional <Perfil> perfil = consultarPerfilPorUsername(username);
@@ -147,7 +146,6 @@ public class RedeSocial {
         Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
         filtrados = filtrados.filter(post -> {
             if(post.ehExibivel() && post.existeHashtag(hashtag)){
-                post.decrementarVisualizacoes();
                 return true;
             }return false;
         }); 
@@ -156,25 +154,25 @@ public class RedeSocial {
         return new ArrayList<>(saida);
     }
 
-    public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
+    // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
         
-        Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
-        ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
-        Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
-        filtrados = filtrados.filter(post -> {
-            if(post.ehExibivel()){
-                for(int i = 0; i< listaHashtags.size(); i++){
-                    if(post.existeHashtag(listaHashtags.get(i))){
-                        post.decrementarVisualizacoes();
-                        return true;
-                    }
-                }
-            }return false;
-        }); 
-        List <PostagemAvancada> saida = new ArrayList<>();
-        filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
-        return new ArrayList<>(saida);
-    }
+    //     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
+    //     ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
+    //     Stream <PostagemAvancada> filtrados = getRepositorioDePostagens().getPostagensAvancadas().stream();
+    //     filtrados = filtrados.filter(post -> {
+    //         if(post.ehExibivel()){
+    //             for(int i = 0; i< listaHashtags.size(); i++){
+    //                 if(post.existeHashtag(listaHashtags.get(i))){
+    //                     post.decrementarVisualizacoes();
+    //                     return true;
+    //                 }
+    //             }
+    //         }return false;
+    //     }); 
+    //     List <PostagemAvancada> saida = new ArrayList<>();
+    //     filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
+    //     return new ArrayList<>(saida);
+    // }
 
     public ArrayList<Postagem> exibirPostagensPopulares(){
         Stream <Postagem> filtrados = getRepositorioDePostagens().getPostagens().stream();

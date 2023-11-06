@@ -25,7 +25,7 @@ public class PostagemAvancada extends Postagem {
         for(String hash:  hashtags){
             strHashtags.append("#"+hash+" ");
         }
-        return PURPLE_BOLD+"╔═══════════════════════════════════════════════════════\n"+
+        return PURPLE_BOLD+"╔══════════════════════════════════════════════════════\n"+
          "║    "+getPerfil().getNome()+RESET+PURPLE_BRIGHT+" @"+getPerfil().getUsername()+RESET+"\n║\n║    "+
             getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
             +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "
@@ -36,7 +36,11 @@ public class PostagemAvancada extends Postagem {
     @Override
     public String toString() {
         StringBuilder strHashtags = new StringBuilder();
-        hashtags.stream().forEach(hash -> strHashtags.append("#"+hash));
+        for(int i =0; i< hashtags.size(); i++){
+            if(i>0)
+                strHashtags.append("#");
+            strHashtags.append(hashtags.get(i));
+        }
         return 1 + ";" + getId().toString() + ";" + getPerfil().getId().toString() + ";" + 
             getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + super.getTexto() + ";" + 
             String.valueOf(super.getCurtidas()) + ";" + String.valueOf(super.getDescurtidas()) + ";" +
@@ -77,11 +81,11 @@ public class PostagemAvancada extends Postagem {
     public boolean existeHashtag(String hashtag) {
         
         Stream <String> hashs = hashtags.stream();
-
         return hashs.anyMatch(h -> h.equals(hashtag));
     }
 
     public void decrementarVisualizacoes() {
+
         if(ehExibivel())
             visualizacoesRestantes--;
     }
