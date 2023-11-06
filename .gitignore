@@ -3,3 +3,5 @@
 
 # Ignorar a pasta target
 target/
+src/main/java/com/ruanbianca/redesocial/Teste.java
+src/main/java/com/ruanbianca/redesocial/Teste2.java

@@ -68,7 +68,7 @@ public class MenuUtils {
             saida = input.nextLine();
         if(saida.charAt(0) == '#' && saida.length()>1)
             return saida.substring(1).trim();
-        return saida.trim();
+        return saida;
     }
     public static int lerInt(String string, Scanner input){
         System.out.print(string);

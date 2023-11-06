@@ -28,7 +28,7 @@ public class RepositorioDePerfis {
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
 
-        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se perfil for nulo
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
         
         if(perfil.temAtributosNulos()){
             throw new NullAtributesException();
@@ -40,8 +40,6 @@ public class RepositorioDePerfis {
         
     }
     
-
-
     public boolean usuarioJaExiste(UUID id, String username, String email, String biografia){
 
         return (consultarPorId(id).isPresent() || consultarPorUsername(username).isPresent() || consultarPorEmail(email).isPresent() ||  consultarPorBio(biografia).isPresent());

@@ -17,10 +17,16 @@ public class Teste {
 
       //ImagePlus foto = IJ.openImage("/home/ruan/Pictures/Wallpapers/lago.jpg");voltei
       //foto.show();
+      String[]splitada = "#sex".split("#");
+      for(int i = 0; i < splitada.length; i++){
+        
+          splitada[1] = splitada[i].trim();
+      }
+      for(int i = 0; i < splitada.length; i++){
+        if(Optional.ofNullable(splitada[i]).isPresent() && !splitada[i].isBlank())
+          System.out.println(splitada[i]);
+      }
 
-      Perfil ruan = new Perfil("msruan", "Ruan Macedo Santos","santosruan2021@gmail.com","caramba");
-      PostagemAvancada post1 = new PostagemAvancada("i just love rock!",ruan,"rock","roll","drogs","thinking");
-      System.out.println(post1.exibirPostagem());
     }
   }
       // Perfil bianca = new Perfil("bbia", "Bianca Bezerra","bianca-bezerra@gmail.com");

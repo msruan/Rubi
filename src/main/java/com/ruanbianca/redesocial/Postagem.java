@@ -24,10 +24,10 @@ public class Postagem {
     private UUID id;
 
     public String exibirPostagem(){
-        return PURPLE_BOLD_BRIGHT+"╔═══════════════════════════════════════════════════════\n"
-        +RESET+PURPLE_BOLD+"║    "+RESET+PURPLE_BOLD_BRIGHT+getPerfil().getUsername()+RESET+"\n║\n║    "+
+        return PURPLE_BOLD_BRIGHT+"╔═══════════════════════════════════════════════════════\n"+
+        "║    "+getPerfil().getNome()+RESET+PURPLE_BRIGHT+" @"+getPerfil().getUsername()+RESET+"\n║\n║    "+  
             getTexto()+"\n║\n║    "
-            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() + " 👎"
+            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() + " 👎"+RESET+"            •" +mostrarData() + YELLOW_BOLD
             + "\n╚══════════════════════════════════════════════════════\n"+RESET;
     }
 
@@ -81,5 +81,13 @@ public class Postagem {
         return(Optional.ofNullable(id).isEmpty() || Optional.ofNullable(texto).isEmpty() || 
             Optional.ofNullable(data).isEmpty() || Optional.ofNullable(perfil).isEmpty() || 
             Optional.ofNullable(curtidas).isEmpty() || Optional.ofNullable(descurtidas).isEmpty());
+    }
+    public String mostrarData() {
+        LocalDateTime data = this.data;
+        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String agoraFormatado = RESET+WHITE_BRIGHT+data.format(formatoHora) + RESET+"  " 
+        + data.format(formatoData);
+        return agoraFormatado;
     }
 }

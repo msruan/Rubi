@@ -133,7 +133,7 @@ public class RedeSocial {
             if(!(post instanceof PostagemAvancada))
                 return true;
             else if(((PostagemAvancada)post).ehExibivel()){
-                ((PostagemAvancada)post).decrementarVisualizacoes();
+                //((PostagemAvancada)post).decrementarVisualizacoes();
                 return true;
             }return false;
         });
