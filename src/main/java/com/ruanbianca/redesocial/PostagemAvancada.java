@@ -18,7 +18,7 @@ public class PostagemAvancada extends Postagem {
     private ArrayList<String> hashtags;
 
 
-    public String exibirPostagem(int posicao) {
+    public String exibirPostagem() {
 
         this.decrementarVisualizacoes();
         StringBuilder strHashtags = new StringBuilder();
@@ -28,8 +28,8 @@ public class PostagemAvancada extends Postagem {
         return PURPLE_BOLD_BRIGHT+"╔═══════════════════════════════════════════════════════\n"+
          "║    "+getPerfil().getUsername()+RESET+"\n║\n║    "+
             getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
-            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "+RESET+BLUE_BOLD_BRIGHT +getVisualizacoesRestantes()+ " 👀"+RESET
-            +"\n╚══════════════════════════════════════════════════════\n";
+            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "+RESET+BLUE_BOLD_BRIGHT +getVisualizacoesRestantes()+ " 👀"
+            +"\n╚══════════════════════════════════════════════════════\n"+RESET;
     }
     
     @Override

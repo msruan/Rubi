@@ -93,7 +93,6 @@ public class App
                         }
                     }
                     
-                    
                     Rubi.incluirPerfil(new Perfil(username, nome, email,biografia));
 
                     break;
@@ -184,7 +183,7 @@ public class App
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtags(hashtagBuscada);
                     if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent()){
                         for(int i  = 0; i < postagensAvancadasEncontradas.size(); i++){
-                            System.out.println(postagensAvancadasEncontradas.get(i).exibirPostagem(i));
+                            System.out.println(postagensAvancadasEncontradas.get(i).exibirPostagem());
                         }
                     }else{
 
