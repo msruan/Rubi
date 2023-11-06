@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.swing.text.html.Option;
-
 import com.ruanbianca.redesocial.SocialException;
 public class RepositorioDePerfis {
 

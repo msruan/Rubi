@@ -1,4 +1,5 @@
 package com.ruanbianca.redesocial;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -6,7 +7,6 @@ import java.util.Scanner;
 import static com.ruanbianca.redesocial.utils.MenuUtils.*;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 import com.ruanbianca.redesocial.SocialException;
-import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 
 public class App 
 {
@@ -66,6 +66,7 @@ public class App
                                 continue menuprincipal;
                             }
                         } else {
+                            System.out.println(GREEN_BOLD_BRIGHT+"\nSeja bem vindo "+nome+"! :)\n"+RESET);
                             break;
                     }
                     }
@@ -179,6 +180,7 @@ public class App
                     }
                     break;
 
+
                 case EXIBIR_POST_PERFIL:
 
                     ArrayList<Postagem> postagensEncontradas;
@@ -201,6 +203,8 @@ public class App
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada para essa hashtag!"+RESET);
                     }
                     break;
+
+
                 case EXIBIR_POST_POPULARES:
                     ArrayList<Postagem> postagensPopulares;
                     postagensPopulares = Rubi.exibirPostagensPopulares();
@@ -212,6 +216,8 @@ public class App
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
                     }
                     break;
+
+
                 case EXIBIR_HASHTAGS_POPULARES:
                     ArrayList<Hashtag> hashtagsPopulares;
                     hashtagsPopulares = Rubi.exibirHashtagsPopulares();
@@ -223,11 +229,15 @@ public class App
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma hashtag encontrada!"+RESET);
                     }
                     break;
+
+
                 case REMOVER_PERFIL:
                     username = lerString("Digite o username do perfil buscado: ",input);
                     Rubi.removerPerfil(username);
                     System.out.println("Perfil removido com sucesso!");
                     break;
+
+
                 case ATUALIZAR_PERFIL:
                     username = lerString("Digite o username do perfil buscado: ",input);
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
@@ -290,20 +300,34 @@ public class App
                         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
                     }
                     break;
+
+
                 case REMOVER_POSTAGEM:
+
                     username = lerString("Digite o username do perfil buscado: ", input);
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
+                    String hashtagParaORemoverPostagem =  null;
                     if(perfilBuscado.isPresent()){
                         texto = lerString("Digite o texto da postagem buscada: ", input);
-                        Rubi.removerPostagem(texto,perfilBuscado.get(), null);
+                        if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
+                            hashtagParaORemoverPostagem = lerString("Digite uma hashtag: ",input);
+                        }
+                        Rubi.removerPostagem(texto,perfilBuscado.get(), hashtagParaORemoverPostagem);
                         System.out.println("Postagem removida com sucesso!");
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
                     }
                     break;
+
+
                 case SAIR:
                     break;
-                default://tá 
+
+
+                default:
                     System.out.println("Opção inválida!");
                     break;
+
             }
             if(!opcao.equals(SAIR))
                 pausar();

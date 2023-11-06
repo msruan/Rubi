@@ -44,8 +44,8 @@ public class Perfil{
 
     public String limitarBio(String bio){
 
-        if(bio.length() > 23){
-            bio = bio.substring(0,23) + "\n" + bio.substring(23, bio.length());
+        if(bio.length() > 22){
+            bio = bio.substring(0,23) + "\n  " + bio.substring(23, bio.length());
         }
         return bio;
     }

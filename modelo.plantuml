@@ -1,10 +1,10 @@
 @startuml Rubi
 class Perfil {
-    -_username: String
-    -_nome: String
-    -_email: String
-    -_postagens: ArrayList<Postagem>
-    -_id: UUID;
+    -username: String
+    -nome: String
+    -email: String
+    -id: UUID;
+    -biografia : String
 }
 
 class Postagem {
