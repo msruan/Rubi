@@ -1,5 +1,5 @@
 Necessários:
-
+- A persistência em arquivos não funciona se o diretório 'db' não existir
 - Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
 
 Utilizar um mecanismo de persistência independente:
