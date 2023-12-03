@@ -1,0 +1,24 @@
+Utilizar um mecanismo de persistência independente:
+
+i. Ter interfaces chamadas IRepositorioPerfis e IRepositorioPostagens
+com métodos de consulta e inclusão relacionada à persistência de 
+dados;
+
+ii. Usar um mecanismo de persistência alternativo que implemente as
+interfaces. Sugestão: banco de dados SQL;
+
+iii. Na hora de inicializar o App, você deve escolher o mecanismo de 
+persistência e instanciar as implementações das interfaces (array, 
+banco de dados, arquivo);
+
+iv. A classe rede social deve ter, em vez de repositórios comuns, 
+interfaces e funcionar sem alterações independente da 
+implementação.
+
+
+Extras para as férias:
+
+- Melhorar validação de entrada de dados
+- Sistema de seguir/bloquear
+- Adicionar imagens (JFileChooser+IJ?)
+- Melhorar interface (JOptionPane ou tlvz JavaFx)
