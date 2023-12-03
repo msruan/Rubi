@@ -1,3 +1,7 @@
+Necessários:
+
+- Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
+
 Utilizar um mecanismo de persistência independente:
 
 i. Ter interfaces chamadas IRepositorioPerfis e IRepositorioPostagens
