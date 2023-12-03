@@ -15,6 +15,10 @@ iv. A classe rede social deve ter, em vez de repositórios comuns,
 interfaces e funcionar sem alterações independente da 
 implementação.
 
+Extras interessantes:
+
+- Apagar branch maven e usar a main como main
+- Atualizar o .plantuml
 
 Extras para as férias:
 
