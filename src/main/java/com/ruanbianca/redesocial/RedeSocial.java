@@ -17,17 +17,13 @@ public class RedeSocial {
     private IRepositorioDePostagens _postagens;
 
 
-    public RedeSocial() {
-        
-        //Todo: alterar isso
-        this._perfis = new RepositorioDePerfisFile();
-        this._postagens = new RepositorioDePostagensFile();
-    }
+    public RedeSocial(IRepositorioDePerfis perfis, IRepositorioDePostagens postagens) throws NullObjectAsArgumentException{
 
-    public RedeSocial(RepositorioDePerfisFile perfis, RepositorioDePostagensFile postagens) {
+        Optional.ofNullable(perfis).orElseThrow(NullObjectAsArgumentException::new);
+        Optional.ofNullable(postagens).orElseThrow(NullObjectAsArgumentException::new);
 
-        this._perfis = (Optional.of(perfis).isEmpty()) ? new RepositorioDePerfisFile() : perfis;
-        this._postagens = (Optional.of(postagens).isEmpty()) ? new RepositorioDePostagensFile() : postagens;
+        this._perfis = perfis;
+        this._postagens = postagens;
     }
 
 

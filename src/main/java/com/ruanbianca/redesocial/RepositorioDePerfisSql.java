@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-public class RepositorioDePerfisMySQL implements IRepositorioDePerfis {
+public class RepositorioDePerfisSql implements IRepositorioDePerfis {
     
     private Connection conexao;
 
-    public RepositorioDePerfisMySQL() {
+    public RepositorioDePerfisSql() {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

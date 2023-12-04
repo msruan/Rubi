@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import static com.ruanbianca.redesocial.utils.MenuUtils.*;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 
@@ -30,8 +32,32 @@ public class App {
 
     public static void main( String[] args ){
 
-        RedeSocial Rubi = new RedeSocial();
-        //Rubi.resgatarPostagens();
+        RedeSocial Rubi;
+        IRepositorioDePerfis perfis;
+        IRepositorioDePostagens postagens;
+
+        final int ARRAY = 0;
+        final int FILE = 1;
+
+        String[] persistencias = { "Array", "Arquivos", "Sql" };
+        int persistencia = JOptionPane.showOptionDialog(null, "Escolha o tipo de persistência desejado", "Bem vindo!", 0, JOptionPane.QUESTION_MESSAGE, null, persistencias, persistencias[0]);
+
+        if(persistencia == ARRAY){
+            perfis = new RepositorioDePerfisArray();
+            postagens = new RepositorioDePostagensArray();
+        }
+
+        else if (persistencia == FILE){ 
+            perfis = new RepositorioDePerfisFile();
+            postagens = new RepositorioDePostagensFile();
+        }
+
+        else {
+            perfis = new RepositorioDePerfisSql();
+            postagens = new RepositorioDePostagensSql();
+        }
+
+        Rubi = new RedeSocial(perfis, postagens);
         App RubiApp = new App();
         RubiApp.executar(Rubi); 
     }
@@ -230,15 +256,16 @@ public class App {
 
 
                 case EXIBIR_HASHTAGS_POPULARES:
+
                     ArrayList<Hashtag> hashtagsPopulares;
                     hashtagsPopulares = Rubi.exibirHashtagsPopulares();
                     if(Optional.of(hashtagsPopulares).isPresent()){
                         for(Hashtag hash : hashtagsPopulares){
                             System.out.println(hash.getHashtag());
                         }
-                    }else{
+                    }else
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma hashtag encontrada!"+RESET);
-                    }
+                    
                     break;
 
 
@@ -291,7 +318,6 @@ public class App {
                                             break; 
                                         }
                                     }
-                                    
                                     break;
                                 
                                 default:

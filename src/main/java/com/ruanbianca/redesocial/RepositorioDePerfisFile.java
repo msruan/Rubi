@@ -66,7 +66,7 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
         
         if(usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
-                throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsException();
 
         String pathDb = getCaminhoDoBancoDeDados("DB");
         String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
@@ -76,7 +76,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             File myDir = new File(pathDb);
             if(!myDir.mkdir())
                 System.err.println("Erro durante a criação do diretório DB!");
-
         }
         
         try{
@@ -130,12 +129,9 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
 
     //Todo: por isso aqui de volta
-    // public void removerPerfil(String username){
+    public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
         
-    //     Optional<Perfil> perfilARemover = consultarPerfilPorUsername(username);
-    //     if(perfilARemover.isPresent()){
-    //         _perfis.remove(perfilARemover.get());
-    //     }
-    // }
+        Optional.ofNullable(username).orElseThrow(NullAtributesException::new);
+    }
 
 }
