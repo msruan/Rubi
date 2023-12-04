@@ -39,6 +39,28 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }
 
 
+    public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
+
+        Stream<Perfil> filtrados = getPerfis().stream();
+        filtrados = filtrados.filter(perfil -> {
+            if(Optional.ofNullable(id).isPresent() && id.equals(perfil.getId()))
+                return true;
+            else if(Optional.ofNullable(username).isPresent() && username.equals(perfil.getUsername()))
+                return true;
+            else if(Optional.ofNullable(email).isPresent() && email.equals(perfil.getEmail()))
+                return true;
+            return false;
+        });
+        return filtrados.findFirst();
+    }
+
+
+    public boolean usuarioJaExite(UUID id, String username, String email){  
+        return consultarPerfil(id,username,email).isPresent();
+            
+    }
+
+
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
@@ -66,28 +88,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             System.err.flush();
             System.exit(1);
         }
-    }
-    
-
-    public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
-
-        Stream<Perfil> filtrados = getPerfis().stream();
-        filtrados = filtrados.filter(perfil -> {
-            if(Optional.ofNullable(id).isPresent() && id.equals(perfil.getId()))
-                return true;
-            else if(Optional.ofNullable(username).isPresent() && username.equals(perfil.getUsername()))
-                return true;
-            else if(Optional.ofNullable(email).isPresent() && email.equals(perfil.getEmail()))
-                return true;
-            return false;
-        });
-        return filtrados.findFirst();
-    }
-
-
-    public boolean usuarioJaExite(UUID id, String username, String email){  
-        return consultarPerfil(id,username,email).isPresent();
-            
     }
 
 
