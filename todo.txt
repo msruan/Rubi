@@ -1,5 +1,6 @@
 Necessários:
 
+- Ajeitar os metodos Remover e Atualizar de TODOS
 - Ajeitar consultar de RPostagens
 - Terminar RepositoriosPerfisArray
 
