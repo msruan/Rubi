@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 import static com.ruanbianca.redesocial.utils.MenuUtils.*;
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-import com.ruanbianca.redesocial.SocialException;
+
 
 public class App {
 
-  
+    //Todo: substituir por um enum
     final String INCLUIR_PERFIL = "1";
     final String INCLUIR_POSTAGEM = "2";
     final String CONSULTAR_PERFIL = "3";
@@ -25,16 +25,14 @@ public class App {
     final String REMOVER_PERFIL = "10";
     final String REMOVER_POSTAGEM = "11";
     final String SAIR = "0";
-    
 
     Scanner input = new Scanner(System.in);
-
 
     public static void main( String[] args ){
 
         RedeSocial Rubi = new RedeSocial();
-        Rubi.resgatarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
-        Rubi.resgatarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+        Rubi.resgatarPerfis();
+        Rubi.resgatarPostagens();
         App RubiApp = new App();
         RubiApp.executar(Rubi); 
     }
@@ -70,7 +68,7 @@ public class App {
                     String email;
                     String biografia;
 
-                    while (true) {
+                    while (true) {//Todo: fazer validação da entrada de dados
                         username = lerString("Digite um username: ", input);
                         if (Rubi.usuarioJaExite(null, username, null)) {
                             System.out.println("Username já está em uso!");
@@ -84,6 +82,7 @@ public class App {
                     }
                     }
                     while (true) {
+                        //se der enter quebra...
                         email = lerString("Digite um endereço de email: ", input);
                         if (Rubi.usuarioJaExite(null, null, email)) {
                             System.out.println("Email já está em uso!");
@@ -129,15 +128,15 @@ public class App {
                             break;
                     }while(true);
                     String texto = lerString("Digite o conteúdo do texto: ",input);
-                    novaPostagem = new Postagem(texto,perfilUser.get());
-                    
+                    novaPostagem = new Postagem(perfilUser.get().getId(),texto);
+                    //Todo: <Wanrning> se der Enter, o programa quebra bem aqui
                     if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
 
                         ArrayList<String> hashsProConstrutor = new ArrayList<>();
                         String hashtag = lerString("Digite uma hashtag: ",input);
                         hashsProConstrutor.add(hashtag);
 
-                        boolean querBotarMaisUmaHashtag;
+                        boolean querBotarMaisUmaHashtag;//Todo: colocar um nome melhor...
 
                         do{
                             if(lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
@@ -149,11 +148,11 @@ public class App {
                             }
                         }while(querBotarMaisUmaHashtag);
 
-                        novaPostagem = new PostagemAvancada(texto,perfilUser.get(),hashsProConstrutor);
+                        novaPostagem = new PostagemAvancada(perfilUser.get().getId(),texto,hashsProConstrutor);
                    
                     }else{
                         try{
-                        novaPostagem = new Postagem(texto,perfilUser.get());
+                        novaPostagem = new Postagem(perfilUser.get().getId(),texto);
                         }catch(com.ruanbianca.redesocial.NullAtributesException e){
                             System.out.println("Você deixou algum atributo nulo!!!");
                         }
@@ -186,7 +185,7 @@ public class App {
                     ArrayList<Postagem> postagemBuscada = Rubi.consultarPostagens(texto, perfilBuscado.get(), hashtagParaOConsultarPostagem);
                     if(Optional.ofNullable(postagemBuscada).isPresent()){
                         for(int i = 0; i < postagemBuscada.size(); i++){
-                            System.out.println(postagemBuscada.get(i).exibirPostagem());
+                            System.out.println(Rubi.exibirPostagem(postagemBuscada.get(i)));
                         }
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Postagem não encontrada!"+RESET);
@@ -199,7 +198,7 @@ public class App {
                     ArrayList<Postagem> postagensEncontradas;
                     username = lerString("Digite o username do perfil buscado: ", input);
                     postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
-                    exibirFeed(postagensEncontradas);
+                    exibirFeed(postagensEncontradas, Rubi);
                     break;
 
 
@@ -209,7 +208,7 @@ public class App {
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtagBuscada);
                     if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent() && postagensAvancadasEncontradas.size()>0){
                         for(int i  = 0; i < postagensAvancadasEncontradas.size(); i++){
-                            System.out.println(postagensAvancadasEncontradas.get(i).exibirPostagem());
+                            System.out.println(Rubi.exibirPostagem(postagensAvancadasEncontradas.get(i)));
                         }
                     }else{
 
@@ -223,7 +222,7 @@ public class App {
                     postagensPopulares = Rubi.exibirPostagensPopulares();
                     if(Optional.ofNullable(postagensPopulares).isPresent() && postagensPopulares.size()>0){
                         for(int i  = 0; i < postagensPopulares.size(); i++){
-                            System.out.println(postagensPopulares.get(i).exibirPostagem()); 
+                            System.out.println(Rubi.exibirPostagem(postagensPopulares.get(i))); 
                         }
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
@@ -345,14 +344,14 @@ public class App {
             if(!opcao.equals(SAIR))
                 pausar();
            
-            Rubi.salvarPerfis(Rubi.getCaminhoDoBancoDeDados("Perfil"));
-            Rubi.salvarPostagens(Rubi.getCaminhoDoBancoDeDados("Postagem"));
+            Rubi.salvarPerfis();
+            Rubi.salvarPostagens();
         }while(!opcao.equals(SAIR));
         
     }
-    
 
-    public static void exibirFeed(ArrayList<Postagem> postagens){
+    public static void exibirFeed(ArrayList<Postagem> postagens, RedeSocial rede){
+
         final String CURTIR_POSTAGEM = "1";
         final String DESCURTIR_POSTAGEM = "2";
         String feedAtualizado = "";
@@ -363,7 +362,7 @@ public class App {
             for(int i  = 0; i < postagens.size(); i++) {   
                 limparConsole();
                 postAtual =  postagens.get(i);
-                System.out.println(feedAtualizado + postAtual.exibirPostagem());
+                System.out.println(feedAtualizado + rede.exibirPostagem(postAtual));
                 System.out.print("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
                 resposta = input.nextLine();
                 if(resposta.equals(CURTIR_POSTAGEM)){
@@ -375,7 +374,7 @@ public class App {
 
                     ((PostagemAvancada)postAtual).incrementarVisualizacoes();
                 }
-                feedAtualizado += postAtual.exibirPostagem();
+                feedAtualizado += rede.exibirPostagem(postAtual);
 
                 if(i+1==postagens.size()){
                     limparConsole();

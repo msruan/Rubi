@@ -5,35 +5,14 @@ import java.util.UUID;
 import lombok.Getter;
 
 import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-import com.ruanbianca.redesocial.SocialException;
 
 public class Perfil{
 
-
+    private @Getter UUID id;
     private @Getter String username;
     private @Getter String nome;
     private @Getter String email;
-    private @Getter UUID id;
     private @Getter String biografia;
-
-
-    @Override
-    public String toString() {
-        return id.toString() + ";" + username + ";" + nome +  ";" + email + ";" + biografia +'\n';
-    }
-
-
-    public Perfil(String perfil) { 
-        
-        // *  IdPerfil  |    Username |  Nome  |    Email        | Bio
-        String []atributos = perfil.split(";");
-        this.id = UUID.fromString(atributos[0]);
-        this.username = atributos[1];
-        this.nome = atributos[2];
-        this.email = atributos[3];
-        this.biografia = atributos[4];
-    }
-
     
     public Perfil(String username, String nome, String email, String biografia) throws NullAtributesException{
 
@@ -48,6 +27,13 @@ public class Perfil{
     }
 
 
+    public Perfil(UUID id, String username, String nome, String email, String biografia) throws NullAtributesException{
+        
+        this(username, nome, email, biografia);
+        Optional.ofNullable(id).orElseThrow(NullAtributesException::new);
+        this.id = id;
+    }
+
     public String limitarBio(String bio){
 
         if(bio.length() > 22){
@@ -57,6 +43,7 @@ public class Perfil{
     }
 
 
+    //Todo: tirar daqui e por em RedeSocial
     public static String exibirPerfil(Perfil perfil) {
   
         StringBuilder result = new StringBuilder();
@@ -69,14 +56,6 @@ public class Perfil{
         result.append("╰───────────────────────────────────╯");
 
         return result.toString();
-    }
-
-
-    public boolean temAtributosNulos(){
-   
-        return (Optional.ofNullable(getId()).isEmpty() || Optional.ofNullable(getUsername()).isEmpty() || 
-            Optional.ofNullable(getNome()).isEmpty() || Optional.ofNullable(getEmail()).isEmpty() || Optional.ofNullable(getBiografia()).isEmpty()
-        );
     }
 
 

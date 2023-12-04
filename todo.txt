@@ -1,6 +1,10 @@
 Necessários:
-- A persistência em arquivos não funciona se o diretório 'db' não existir
+- Fazer validaçao do numero de caracteres
+OK - A persistência em arquivos não funciona se o diretório 'db' não existir
+- fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
 - Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
+- tirar os construtores que so recebm uma string do perfil e de psotagens, deixar isso a cargo do repositorio
+- colocar o atributo idPerfil dentro de postagem...
 
 Utilizar um mecanismo de persistência independente:
 

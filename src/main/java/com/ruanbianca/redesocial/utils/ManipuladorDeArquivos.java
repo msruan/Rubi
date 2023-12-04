@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ManipuladorDeArquivos {
+    
     public static boolean arquivoExiste(String path){
         return Files.exists(Paths.get(path));
     }

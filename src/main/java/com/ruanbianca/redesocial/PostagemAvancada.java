@@ -1,14 +1,12 @@
 package com.ruanbianca.redesocial;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 import lombok.Getter;
-
-import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
-import com.ruanbianca.redesocial.SocialException;
 
 public class PostagemAvancada extends Postagem {
 
@@ -17,70 +15,38 @@ public class PostagemAvancada extends Postagem {
     private @Getter Integer visualizacoesRestantes;
     private @Getter ArrayList<String> hashtags;
 
-
-    public String exibirPostagem() {
-
-        this.decrementarVisualizacoes();
-        StringBuilder strHashtags = new StringBuilder();
-        for(String hash:  hashtags){
-            strHashtags.append("#"+hash+" ");
-        }
-        return PURPLE_BOLD+"╔══════════════════════════════════════════════════════\n"+
-         "║    "+getPerfil().getNome()+RESET+PURPLE_BRIGHT+" @"+getPerfil().getUsername()+RESET+"\n║\n║    "+
-            getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
-            +RED_BOLD_BRIGHT+getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + getDescurtidas() +" 👎   "
-            +RESET+BLUE_BOLD_BRIGHT +getVisualizacoesRestantes()+ " 👀      "+RESET+"•" +mostrarData() + BLUE_BOLD+
-            "\n╚══════════════════════════════════════════════════════\n"+RESET;
-    }
-
     
-    @Override
-    public String toString() {
-        StringBuilder strHashtags = new StringBuilder();
-        for(int i =0; i< hashtags.size(); i++){
-            if(i>0)
-                strHashtags.append("#");
-            strHashtags.append(hashtags.get(i));
-        }
-        return 1 + ";" + getId().toString() + ";" + getPerfil().getId().toString() + ";" + 
-            getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + super.getTexto() + ";" + 
-            String.valueOf(super.getCurtidas()) + ";" + String.valueOf(super.getDescurtidas()) + ";" +
-            String.valueOf(getVisualizacoesRestantes()) +";" +
-            (Optional.ofNullable(strHashtags.toString()).isPresent() ? strHashtags.toString() : null ) + ";" + '\n';  
-    }
-    
-
-    public PostagemAvancada(Perfil perfil, String postagem) {
+    public PostagemAvancada(UUID perfilId, String texto, ArrayList<String> hashtags) throws NullAtributesException{
         
-        // | Tipo |    IdPost   |    IdPerfil    |   Data  | Texto  | Likes | Deslikes | ViewsRestantes | Hashtags<> |*/
-        super(perfil,postagem);
-        String []atributos = postagem.split(";");
-        visualizacoesRestantes = Integer.valueOf(atributos[7]);
-        hashtags = new ArrayList<>(Arrays.asList(atributos[8].split("#")));
-    }
-
-    
-    public PostagemAvancada(String texto, Perfil perfil, ArrayList<String> hashtags) {
-        
-        super(texto, perfil);
+        super(perfilId, texto);
         this.visualizacoesRestantes = numeroPadraoVisualizacoesRestantes;
         this.hashtags = (Optional.ofNullable(hashtags).isEmpty()) ? new ArrayList<>() : hashtags;
     }
 
 
-    public PostagemAvancada(String texto, Perfil perfil, String ... hashtags) {
+    public PostagemAvancada(UUID perfilId, String texto, String ... hashtags) {
 
-        this(texto, perfil, new ArrayList<>(Arrays.asList(hashtags)));
+        this(perfilId, texto , new ArrayList<>(Arrays.asList(hashtags)));
+    }
+   
+
+    public PostagemAvancada(UUID id, UUID perfilId, LocalDateTime data, String texto, int curtidas, int descurtidas, Integer visualizacoesRestantes, ArrayList<String> hashtags) {
+        
+        super(id, perfilId, data, texto, curtidas, descurtidas);
+        this.visualizacoesRestantes = visualizacoesRestantes;
+        this.hashtags = hashtags;
     }
 
 
     public void adicionarHashtag(String hashtag) {
+
         if(Optional.ofNullable(hashtag).isPresent())
             hashtags.add(hashtag);
     }
 
 
     public boolean ehExibivel(){
+
         return visualizacoesRestantes > 0;
     }
 
