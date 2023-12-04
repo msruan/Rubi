@@ -114,6 +114,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
         if (Optional.ofNullable(postagem).isEmpty()) {
             throw new NullAtributesException();
+
         } else if (postagem instanceof PostagemAvancada) {
 
             PostagemAvancada postagemAv = (PostagemAvancada) postagem;
@@ -126,6 +127,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
                             : null)
                     + ";" + '\n';
         } else {
+
             return 0 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" +
                     postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" +
                     String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";"
