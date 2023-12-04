@@ -14,9 +14,6 @@ public interface IRepositorioDePerfis {
 
     public ArrayList<Perfil> getPerfis();
 
-    public void removerPerfil(String username);
-
-    public void resgatarPerfis();
-
-    void salvarPerfis();
+    //Todo: fazer acontecer
+    //public void removerPerfil(String username);
 } 

@@ -12,13 +12,13 @@
 
 // import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 
-// public class RepositorioDePerfisArray implements IRepositorioDePerfis {
+// public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
 
 //     private ArrayList<Perfil> _perfis;
 
 
-//     public RepositorioDePerfisArray() {
+//     public RepositorioDePerfisFile() {
 //         this._perfis = new ArrayList<>();
 //     }
 
@@ -37,7 +37,7 @@
 //     }
 
 //     public boolean usuarioJaExite(UUID id, String username, String email){  
-//         return consultarPerfilPorTodosOsAtributos(id,username,email).isPresent();
+//         return consultarPerfil(id,username,email).isPresent();
             
 //     }
 
@@ -49,12 +49,11 @@
 //         if(usuarioJaExite(perfil.getId(),perfil.getUsername(), perfil.getEmail()))
 //             throw new UserAlreadyExistsException();
 //         else
-//             _perfis.add(perfil);
-        
+//             _perfis.add(perfil);   
 //     }
     
 
-//     public Optional<Perfil> consultarPerfilPorTodosOsAtributos(UUID id, String username, String email){
+//     public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
 
 //         Optional<Perfil> consultaPorId = consultarPerfilPorId(id)
 //         ,consultaPorUsername = consultarPerfilPorUsername(username),

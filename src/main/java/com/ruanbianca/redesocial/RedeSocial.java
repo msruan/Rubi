@@ -207,16 +207,6 @@ public class RedeSocial {
         return new ArrayList<>(streamHashs.toList());
     }     
 
-
-    public void resgatarPerfis(){
-        _perfis.resgatarPerfis();
-    }
-
-
-    public void salvarPerfis() {
-        _perfis.salvarPerfis();
-    }
-
     
     public void resgatarPostagens(){
         _postagens.resgatarPostagens();
@@ -227,11 +217,11 @@ public class RedeSocial {
         _postagens.salvarPostagens();
     }
 
+    //Todo: fazer acontecer
+    // public void removerPerfil(String username){
 
-    public void removerPerfil(String username){
-
-        _perfis.removerPerfil(username);     
-    }
+    //     _perfis.removerPerfil(username);     
+    // }
 
 
     public void removerPostagem(String texto,Perfil perfil,String hashtag){

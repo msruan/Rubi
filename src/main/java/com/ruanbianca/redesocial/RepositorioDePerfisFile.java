@@ -1,11 +1,8 @@
 package com.ruanbianca.redesocial;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -15,107 +12,86 @@ import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
 
-    private ArrayList<Perfil> _perfis;
+    public ArrayList<Perfil> getPerfis(){
 
+        String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
+        ArrayList<Perfil> perfis = new ArrayList<>();
 
-    public RepositorioDePerfisFile() {
-        this._perfis = new ArrayList<>();
-    }
+        if(ManipuladorDeArquivos.arquivoExiste(pathPerfis)){    
 
+            try {
+                ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(pathPerfis);
+                for(String linha: linhas){
+                    try{
+                        perfis.add(resgatarPerfil(linha));
 
-    public RepositorioDePerfisFile(ArrayList<Perfil> perfis) {
+                    }catch(RuntimeException e){
+                        System.out.println("O erro tá na linha\n"+linha+"de resgatar perfis!"+e.getMessage());
+                    }
+                }
+            }catch(SocialException e){
+                System.err.println("O erro está em SocialException !"+e.getMessage());
 
-        if(Optional.ofNullable(perfis).isEmpty())
-            this._perfis = new ArrayList<>();
-        else
-            this._perfis = perfis;
-    }
-
-
-    public RepositorioDePerfisFile(Perfil[] perfis) {
-        this(new ArrayList<>(Arrays.asList(perfis)));
-    }
-
-    public boolean usuarioJaExite(UUID id, String username, String email){  
-        return consultarPerfil(id,username,email).isPresent();
-            
+            }catch(RuntimeException e){
+                System.err.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
+            }
+        }return perfis;
     }
 
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+        String pathDb = getCaminhoDoBancoDeDados("DB");
+        String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
+
+        if(! ManipuladorDeArquivos.arquivoExiste(pathDb)){
+
+            File myDir = new File(pathDb);
+            if(!myDir.mkdir())
+                System.err.println("Erro durante a criação do diretório DB!");
+
+        }
         
-        if(usuarioJaExite(perfil.getId(),perfil.getUsername(), perfil.getEmail()))
-            throw new UserAlreadyExistsException();
-        else
-            _perfis.add(perfil);   
+        try{
+            if(Optional.ofNullable(perfil).isEmpty())
+                throw new NullObjectAsArgumentException();
+
+            if(usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
+                throw new UserAlreadyExistsException();
+
+            ManipuladorDeArquivos.gravarArquivo(pathPerfis, salvarPerfil(perfil), true);
+
+        }catch(IOException e){
+            System.err.println("Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
     }
     
 
     public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
 
-        Optional<Perfil> consultaPorId = consultarPerfilPorId(id)
-        ,consultaPorUsername = consultarPerfilPorUsername(username),
-        consultaPorEmail = consultarPerfilPorEmail(email);
-
-        if(consultaPorId.isPresent())
-            return consultaPorId;
-
-        else if(consultaPorUsername.isPresent())
-            return consultaPorUsername;
-
-        else if(consultaPorEmail.isPresent())
-            return consultaPorEmail;
-
-        return Optional.empty();
-    }
-
-
-    public Optional<Perfil> consultarPerfilPorId(UUID id){
-
-        if(Optional.ofNullable(id).isEmpty())
-            return Optional.empty();
-
         Stream<Perfil> filtrados = getPerfis().stream();
-        filtrados = filtrados.filter(perfil -> perfil.getId().equals(id));
+        filtrados = filtrados.filter(perfil -> {
+            if(Optional.ofNullable(id).isPresent() && id.equals(perfil.getId()))
+                return true;
+            else if(Optional.ofNullable(username).isPresent() && username.equals(perfil.getUsername()))
+                return true;
+            else if(Optional.ofNullable(email).isPresent() && email.equals(perfil.getEmail()))
+                return true;
+            return false;
+        });
         return filtrados.findFirst();
     }
 
 
-    public Optional<Perfil> consultarPerfilPorUsername(String username){
-
-        if(Optional.ofNullable(username).isEmpty())
-            return Optional.empty();
-
-        Stream<Perfil> filtrados = getPerfis().stream();
-        filtrados = filtrados.filter(perfil -> perfil.getUsername().equals(username));
-        return filtrados.findFirst();
+    public boolean usuarioJaExite(UUID id, String username, String email){  
+        return consultarPerfil(id,username,email).isPresent();
+            
     }
 
-
-    public Optional<Perfil> consultarPerfilPorEmail(String email){
-
-        if(Optional.ofNullable(email).isEmpty())
-            return Optional.empty();
-
-        Stream<Perfil> filtrados = getPerfis().stream();
-        filtrados = filtrados.filter(perfil -> perfil.getEmail().equals(email));       
-        return filtrados.findFirst();
-    }
-
-
-    public ArrayList<Perfil> getPerfis(){
-        return _perfis;
-    }
-
-    public void removerPerfil(String username){
-        
-        Optional<Perfil> perfilARemover = consultarPerfilPorUsername(username);
-        if(perfilARemover.isPresent()){
-            _perfis.remove(perfilARemover.get());
-        }
-    }
 
     public Perfil resgatarPerfil(String linha){
         // *  IdPerfil  |    Username |  Nome  |    Email        | Bio
@@ -129,30 +105,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         );
     }
 
-    public void resgatarPerfis(){
-
-        String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
-
-        if(ManipuladorDeArquivos.arquivoExiste(pathPerfis)){    
-
-            try {
-                ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(pathPerfis);
-                for(String linha: linhas){
-                    try{
-                        incluir(resgatarPerfil(linha));
-
-                    }catch(RuntimeException e){
-                        System.out.println("O erro tá na linha\n"+linha+"de resgatar perfis!"+e.getMessage());
-                    }
-                }
-            }catch(SocialException e){
-                System.out.println("O erro está em SocialException !"+e.getMessage());
-
-            }catch(RuntimeException e){
-                System.out.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
-            }
-        }
-    }
 
     public String salvarPerfil(Perfil perfil) throws NullObjectAsArgumentException{
 
@@ -160,29 +112,7 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
         return perfil.getId().toString()+";"+perfil.getUsername()+";"+perfil.getNome()+";"+perfil.getEmail()+";"+perfil.getBiografia()+"\n";
     }   
-
-    
-    public void salvarPerfis() throws NullObjectAsArgumentException{
-       
-        String pathDb = getCaminhoDoBancoDeDados("DB");
-
-        if(! ManipuladorDeArquivos.arquivoExiste(pathDb)){
-
-            File myDir = new File(pathDb);
-            if(!myDir.mkdir())
-                System.err.println("Erro durante a criação do diretório DB");
-        }
-        
-        try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(getCaminhoDoBancoDeDados("Perfil")))){
-            for(Perfil perfil : _perfis){
-                buffwriter.write(salvarPerfil(perfil));
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }catch(RuntimeException e){
-                System.out.println("O erro tá na funcao salvarPerfis");
-        }
-    }
+   
 
     public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{
         
@@ -199,5 +129,15 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             throw new BadChoiceOfEntityForDB();
         }
     }
+
+
+    //Todo: por isso aqui de volta
+    // public void removerPerfil(String username){
+        
+    //     Optional<Perfil> perfilARemover = consultarPerfilPorUsername(username);
+    //     if(perfilARemover.isPresent()){
+    //         _perfis.remove(perfilARemover.get());
+    //     }
+    // }
 
 }

@@ -34,18 +34,17 @@ public class ManipuladorDeArquivos {
         }
         return conteudo.toString();
     }
-    public static boolean gravarArquivo(String caminho, String texto, boolean append){
+    public static void gravarArquivo(String caminho, String texto, boolean append) throws IOException{
         try {
             BufferedWriter gravador = new BufferedWriter(new FileWriter(caminho,append));
             gravador.write(texto);
-            if(texto.charAt(texto.length()-1) == '\n')
-                gravador.newLine();
+            // if(texto.charAt(texto.length()-1) == '\n')
+            //     gravador.newLine();
             gravador.close();
         }
         catch (IOException e){
-            System.out.println("Erro durante gravação de arquivo!");
-            return false;
-        }return true;
+            throw e;
+        }
     }
     public static ArrayList <String> lerLinhas(String caminho){
         ArrayList<String> linhas = new ArrayList<>();

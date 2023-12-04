@@ -31,7 +31,6 @@ public class App {
     public static void main( String[] args ){
 
         RedeSocial Rubi = new RedeSocial();
-        Rubi.resgatarPerfis();
         Rubi.resgatarPostagens();
         App RubiApp = new App();
         RubiApp.executar(Rubi); 
@@ -307,11 +306,11 @@ public class App {
                     break;
 
 
-                case REMOVER_PERFIL:
-                    username = lerString("Digite o username do perfil buscado: ",input);
-                    Rubi.removerPerfil(username);
-                    System.out.println("Perfil removido com sucesso!");
-                    break;
+                // case REMOVER_PERFIL:
+                //     username = lerString("Digite o username do perfil buscado: ",input);
+                //     Rubi.removerPerfil(username);
+                //     System.out.println("Perfil removido com sucesso!");
+                //     break;
 
 
                 case REMOVER_POSTAGEM:
@@ -344,7 +343,7 @@ public class App {
             if(!opcao.equals(SAIR))
                 pausar();
            
-            Rubi.salvarPerfis();
+            //Rubi.salvarPerfis();
             Rubi.salvarPostagens();
         }while(!opcao.equals(SAIR));
         

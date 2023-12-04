@@ -28,6 +28,7 @@ public class RepositorioDePerfisMySQL implements IRepositorioDePerfis {
     }
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
+        
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
 
         if(usuarioJaExite(perfil.getId(), perfil.getUsername(),perfil.getEmail())){
@@ -66,7 +67,7 @@ public class RepositorioDePerfisMySQL implements IRepositorioDePerfis {
                         username.equals(resultado.getString("username"))) ||
                     ( Optional.ofNullable(email).isPresent() && 
                         email.equals(resultado.getString("email")))
-                   )
+                  )
                 {
                         Perfil perfil = new Perfil(UUID.fromString(resultado.getString("id")), 
                                     resultado.getString("username"),
