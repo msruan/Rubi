@@ -14,47 +14,82 @@ import java.util.stream.Stream;
 
 import com.ruanbianca.redesocial.utils.ManipuladorDeArquivos;
 
-public class RepositorioDePostagensFile implements IRepositorioDePostagens{
+public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
 
-    private ArrayList<Postagem> _postagens;
+    public ArrayList<Postagem> getPostagens(){
 
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
+        ArrayList<Postagem> postagens = new ArrayList<>();
 
-    public RepositorioDePostagensFile() {
-        this._postagens = new ArrayList<>();
+        if(ManipuladorDeArquivos.arquivoExiste(pathPosts)){ 
+                
+            try{
+                ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
+
+                for(String linha : conteudo)
+                    postagens.add(resgatarPostagem(linha));
+                    
+            }
+            catch(RuntimeException e){
+                System.out.println("O erro ocorreu em resgatar postagens+"+e.getMessage());
+            }
+        }return postagens;
     }
 
 
-    public RepositorioDePostagensFile(ArrayList<Postagem> postagens) {
+    public ArrayList<PostagemAvancada> getPostagensAvancadas() {
 
-        if(Optional.ofNullable(postagens).isEmpty())
-            this._postagens = new ArrayList<>();
-        else
-            this._postagens = postagens;
+        ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
+        Stream <Postagem> postagens = getPostagens().stream();
+        postagens = postagens.filter(post -> post instanceof PostagemAvancada);
+        postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
+        return avancadas;
     }
 
 
-    public RepositorioDePostagensFile(Postagem[] postagens) {
-        this(new ArrayList<>(Arrays.asList(postagens)));
-    }
-
-
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, UserAlreadyExistsException{
+    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException {
 
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se postagem for nunla
-            
-        boolean taRepetido = consultarPostagemPorId(postagem.getId()).isEmpty() ? false : true;
+        if(postagemJaExiste(postagem.getId()))
+                throw new PostAlreadyExistsException();
 
-        if(taRepetido)
-           throw new UserAlreadyExistsException(); 
-        
-        _postagens.add(postagem);
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
+        String pathDb = getCaminhoDoBancoDeDados("DB");
+        if(! ManipuladorDeArquivos.arquivoExiste(pathDb)){
+            File myDir = new File(getCaminhoDoBancoDeDados("DB"));
+            if(!myDir.mkdir())
+                System.err.println("Erro durante a criação do diretório DB");
+        }
+
+        try{
+            ManipuladorDeArquivos.gravarArquivo(pathPosts, salvarPostagem(postagem), true);
+
+        }catch(IOException e){
+            System.err.println("Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
     }
 
 
+    public Optional<Postagem> consultarPostagem(UUID id) {
+
+        Optional<Postagem> saida = Optional.empty();
+
+        for(Postagem post : getPostagens()){
+            if(post.getId() == id){
+                saida = Optional.of(post);
+                break;
+            }
+        }return saida;
+    }
+
+    //Todo: ajeitar a lógica dessa função
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag){
 
-        Stream <Postagem> filtrados = _postagens.stream();
+        Stream <Postagem> filtrados = getPostagens().stream();
 
         if(Optional.ofNullable(perfil).isPresent()){
             filtrados = filtrados.filter(
@@ -75,42 +110,9 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
     }
 
 
-    public Optional<Postagem> consultarPostagemPorId(UUID id) {
+    public boolean postagemJaExiste(UUID id){
 
-        Optional<Postagem> saida = Optional.empty();
-
-        for(Postagem post : _postagens){
-            if(post.getId() == id){
-                saida = Optional.of(post);
-                break;
-            }
-        }return saida;
-    }
-
-    
-    public ArrayList<Postagem> getPostagens() {
-        return _postagens;
-    }
-
-    
-    public ArrayList<PostagemAvancada> getPostagensAvancadas() {
-
-        ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
-        Stream <Postagem> postagens = getPostagens().stream();
-        postagens = postagens.filter(post -> post instanceof PostagemAvancada);
-        postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
-        return avancadas;
-    }
-    
-
-    public void removerPostagem(String texto, Perfil perfil,String hashtag){
-
-        ArrayList<Postagem> postagensARemover = consultarPostagens(texto, perfil, hashtag);
-        if(Optional.ofNullable(postagensARemover).isPresent()){
-            _postagens.removeAll(postagensARemover);
-        }else{
-            System.out.println("Não há postagens para remover");
-        }
+        return consultarPostagem(id).isPresent();
     }
 
 
@@ -138,29 +140,6 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
             return 0 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" + 
                 postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" + 
                 String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";" + "\n";  
-        }
-    }
-
-
-    public void salvarPostagens() throws NullAtributesException{
-
-        String pathDb = getCaminhoDoBancoDeDados("DB");
-        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
-
-        if(! ManipuladorDeArquivos.arquivoExiste(pathDb)){
-            File myDir = new File(getCaminhoDoBancoDeDados("DB"));
-            if(!myDir.mkdir())
-                System.err.println("Erro durante a criação do diretório DB");
-        }
-        
-        try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(pathPosts))){
-            for(Postagem post : _postagens){
-                buffwriter.write(salvarPostagem(post));
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }catch(RuntimeException e){
-            System.out.println("O erro tá na funcao salvarPostagens");
         }
     }
     
@@ -194,27 +173,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
                 Integer.valueOf(atributos[7]),
                 new ArrayList<>(Arrays.asList(atributos[8].split("#")))
             ));
-    }   
-    }
-
-
-    public void resgatarPostagens(){
-
-        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
-
-        if(ManipuladorDeArquivos.arquivoExiste(pathPosts)){ 
-                
-            try{
-                ArrayList <String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
-
-                for(String linha : conteudo)
-                    incluir(resgatarPostagem(linha));
-                    
-            }
-            catch(RuntimeException e){
-                System.out.println("O erro ocorreu em resgatar postagens+"+e.getMessage());
-            }
-        }
+        }      
     }
 
 
@@ -233,4 +192,16 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
             throw new BadChoiceOfEntityForDB();
         
     }
+
+
+    //Todo: fazer acontecer
+    // public void removerPostagem(String texto, Perfil perfil,String hashtag){
+
+    //     ArrayList<Postagem> postagensARemover = consultarPostagens(texto, perfil, hashtag);
+    //     if(Optional.ofNullable(postagensARemover).isPresent()){
+    //         _postagens.removeAll(postagensARemover);
+    //     }else{
+    //         System.out.println("Não há postagens para remover");
+    //     }
+    // }
 }

@@ -1,10 +1,9 @@
 Necessários:
 
+- Ajeitar consultar de RPostagens
 - Terminar RepositoriosPerfisArray
-- Terminar RepositoriosPostagensFile
 
-- O arquivo de perfis.txt tá com duas linhas...
-- Juntar as quatros funcoes de consulta de RepoFile em só uma
+- Ajeitar o remover perfil e remover postagem
 - RedeSocial tá instanciando com File por padrão já...
 - Mudar nome usuarioJaExiste
 - Fazer validaçao do numero de caracteres
@@ -16,15 +15,19 @@ Necessários:
 - Fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
 - Implementar consulta por mais de uma hashtag
 
+OK - O arquivo de perfis.txt tá com duas linhas...
+OK - Ajeitar o consultar de RPerfis
 OK - Terminar RepositoriosPerfisFile
 OK - A persistência em arquivos não funciona se o diretório 'db' não existir
 OK - Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
 OK - tirar os construtores que so recebm uma string do perfil e de psotagens, deixar isso a cargo do repositorio
 OK - colocar o atributo idPerfil dentro de postagem...
+OK - Terminar RepositoriosPostagensFile
 
 
 Extras:
 
+- Refazer a lógica de exibirHastagsPopulares
 - Atualizar as funcoes de remover e atualizar perfil
 - Apagar branch maven e usar a main como main
 - Atualizar o .plantuml

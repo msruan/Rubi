@@ -5,24 +5,24 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IRepositorioDePostagens {
+   
 
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException;
+    public ArrayList<Postagem> getPostagens();
 
-    ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag);
 
-    Optional<Postagem> consultarPostagemPorId(UUID id);
+    public ArrayList<PostagemAvancada> getPostagensAvancadas();
 
-    ArrayList<Postagem> getPostagens();
 
-    ArrayList<PostagemAvancada> getPostagensAvancadas();
+    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException;
 
-    void removerPostagem(String texto, Perfil perfil, String hashtag);
 
-    String salvarPostagem(Postagem postagem) throws NullAtributesException;
+    public Optional<Postagem> consultarPostagem(UUID id);
 
-    void salvarPostagens() throws NullAtributesException;
+    
+    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag);
 
-    void resgatarPostagens();
+    public boolean postagemJaExiste(UUID id);
 
-    String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB;
+    //Todo: fazer acontecer
+    // public void removerPostagem(String texto, Perfil perfil,String hashtag);
 }

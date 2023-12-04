@@ -68,7 +68,7 @@ public class RedeSocial {
 
     public void curtir(UUID id) throws PostNotFoundException{
 
-        Optional <Postagem> post = _postagens.consultarPostagemPorId(id);
+        Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
         post.get().curtir();
     }
@@ -76,7 +76,7 @@ public class RedeSocial {
 
     public void descurtir(UUID id) throws PostNotFoundException{
         
-        Optional <Postagem> post = _postagens.consultarPostagemPorId(id);
+        Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
     }
@@ -206,28 +206,19 @@ public class RedeSocial {
         Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
         return new ArrayList<>(streamHashs.toList());
     }     
-
-    
-    public void resgatarPostagens(){
-        _postagens.resgatarPostagens();
-    }
-
-
-    public void salvarPostagens() {
-        _postagens.salvarPostagens();
-    }
+   
 
     //Todo: fazer acontecer
     // public void removerPerfil(String username){
 
     //     _perfis.removerPerfil(username);     
     // }
+        
+    //Todo: fazer acontecer
+    // public void removerPostagem(String texto,Perfil perfil,String hashtag){
 
-
-    public void removerPostagem(String texto,Perfil perfil,String hashtag){
-
-        _postagens.removerPostagem(texto, perfil, hashtag);
-    }
+    //     _postagens.removerPostagem(texto, perfil, hashtag);
+    // }
         
     //Todo: fazer essa função acontecer
     // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){

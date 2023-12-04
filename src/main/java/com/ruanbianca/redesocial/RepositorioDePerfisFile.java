@@ -42,6 +42,10 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+        
+        if(usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
+                throw new UserAlreadyExistsException();
+
         String pathDb = getCaminhoDoBancoDeDados("DB");
         String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
 
@@ -54,12 +58,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         }
         
         try{
-            if(Optional.ofNullable(perfil).isEmpty())
-                throw new NullObjectAsArgumentException();
-
-            if(usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail()))
-                throw new UserAlreadyExistsException();
-
             ManipuladorDeArquivos.gravarArquivo(pathPerfis, salvarPerfil(perfil), true);
 
         }catch(IOException e){
@@ -93,6 +91,14 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }
 
 
+    public String salvarPerfil(Perfil perfil) throws NullObjectAsArgumentException{
+
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+
+        return perfil.getId().toString()+";"+perfil.getUsername()+";"+perfil.getNome()+";"+perfil.getEmail()+";"+perfil.getBiografia()+"\n";
+    }  
+
+
     public Perfil resgatarPerfil(String linha){
         // *  IdPerfil  |    Username |  Nome  |    Email        | Bio
         String []atributos = linha.split(";");
@@ -103,15 +109,7 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             atributos[3],
             atributos[4]
         );
-    }
-
-
-    public String salvarPerfil(Perfil perfil) throws NullObjectAsArgumentException{
-
-        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
-
-        return perfil.getId().toString()+";"+perfil.getUsername()+";"+perfil.getNome()+";"+perfil.getEmail()+";"+perfil.getBiografia()+"\n";
-    }   
+    } 
    
 
     public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{

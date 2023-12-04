@@ -31,7 +31,7 @@ public class App {
     public static void main( String[] args ){
 
         RedeSocial Rubi = new RedeSocial();
-        Rubi.resgatarPostagens();
+        //Rubi.resgatarPostagens();
         App RubiApp = new App();
         RubiApp.executar(Rubi); 
     }
@@ -313,22 +313,22 @@ public class App {
                 //     break;
 
 
-                case REMOVER_POSTAGEM:
+                // case REMOVER_POSTAGEM:
 
-                    username = lerString("Digite o username do perfil buscado: ", input);
-                    perfilBuscado = Rubi.consultarPerfilPorUsername(username);
-                    String hashtagParaORemoverPostagem =  null;
-                    if(perfilBuscado.isPresent()){
-                        texto = lerString("Digite o texto da postagem buscada: ", input);
-                        if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
-                            hashtagParaORemoverPostagem = lerString("Digite uma hashtag: ",input);
-                        }
-                        Rubi.removerPostagem(texto,perfilBuscado.get(), hashtagParaORemoverPostagem);
-                        System.out.println("Postagem removida com sucesso!");
-                    }else{
-                        System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
-                    }
-                    break;
+                //     username = lerString("Digite o username do perfil buscado: ", input);
+                //     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
+                //     String hashtagParaORemoverPostagem =  null;
+                //     if(perfilBuscado.isPresent()){
+                //         texto = lerString("Digite o texto da postagem buscada: ", input);
+                //         if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
+                //             hashtagParaORemoverPostagem = lerString("Digite uma hashtag: ",input);
+                //         }
+                //         Rubi.removerPostagem(texto,perfilBuscado.get(), hashtagParaORemoverPostagem);
+                //         System.out.println("Postagem removida com sucesso!");
+                //     }else{
+                //         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
+                //     }
+                //     break;
 
 
                 case SAIR:
@@ -344,7 +344,7 @@ public class App {
                 pausar();
            
             //Rubi.salvarPerfis();
-            Rubi.salvarPostagens();
+            //Rubi.salvarPostagens();
         }while(!opcao.equals(SAIR));
         
     }

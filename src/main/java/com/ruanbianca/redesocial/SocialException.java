@@ -11,6 +11,13 @@ class UserAlreadyExistsException extends SocialException {
     }
 }
 
+class PostAlreadyExistsException extends SocialException {
+    @Override
+    public String getMessage() {
+        return "Postagem já está cadastrada no banco de dados!";
+    }
+}
+
 class NullAtributesException extends SocialException {
     @Override
     public String getMessage() {
