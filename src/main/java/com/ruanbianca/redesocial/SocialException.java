@@ -1,5 +1,6 @@
 package com.ruanbianca.redesocial;
 import com.ruanbianca.redesocial.SocialException;
+
 abstract public class SocialException extends RuntimeException {
 }
 
@@ -36,11 +37,11 @@ class NullObjectAsArgumentException extends SocialException {
     public String getMessage() {
         return "O argumento deveria ser um objeto (String, Integer, Perfil, Postagem...), mas você passou null!";
     }
+}
 
-class UserNotFoundExecption extends SocialException {
+class UserNotFoundException extends SocialException {
     @Override
     public String getMessage(){
         return "Usuário não encontrado!";
     }
-}
 }

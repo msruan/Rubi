@@ -1,83 +1,144 @@
-// import java.sql.Connection;
-// import java.sql.DriverManager;
-// import java.sql.PreparedStatement;
-// import java.sql.ResultSet;
-// import java.sql.SQLException;
-// import java.sql.Statement;
-// import java.util.ArrayList;
-// import java.util.Optional;
-// import java.util.UUID;
-// import java.util.stream.Stream;
+package com.ruanbianca.redesocial;
 
-// public class RepositorioDePerfisMySQL implements IRepositorioDePerfis {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
+
+public class RepositorioDePerfisMySQL implements IRepositorioDePerfis {
     
-//     private Connection conexao;
+    private Connection conexao;
 
-//     public RepositorioDePerfisMySQL() {
+    public RepositorioDePerfisMySQL() {
 
-//         try {
-//             Class.forName("com.mysql.cj.jdbc.Driver");
-//             String url = "jdbc:mysql://localhost:3306/rubi";
-//             String usuario = "root";
-//             String senha = "123456";
-//             conexao = DriverManager.getConnection(url, usuario, senha);
-//         } catch (ClassNotFoundException | SQLException e){
-//             e.printStackTrace();
-//         }
-//     }
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/rubi";
+            String usuario = "root";
+            String senha = "123456";
+            conexao = DriverManager.getConnection(url, usuario, senha);
+        } catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
+        }
+    }
 
-//     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
-//         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
-       
-//         try {
-//             String insert_sql = "INSERT INTO perfil (id, username, nome, email, biografia) VALUES (?,?,?,?,?)";
-//             PreparedStatement insert = conexao.prepareStatement(insert_sql);
-//             insert.setString(1,perfil.getId().toString());
-//             insert.setString(2,perfil.getUsername());
-//             insert.setString(3,perfil.getNome());
-//             insert.setString(4,perfil.getEmail());
-//             insert.setString(5,perfil.getBiografia());
-//             insert.executeUpdate();
-//         } catch (SQLException e){
-//             e.printStackTrace();
-//         }
-//     }
+    public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
 
-//     // boolean usuarioJaExite(UUID id, String username, String email){
-//     //     try {
-//     //         String select_sql = "SELECT *"
-//     //     }
-//     // }
+        if(usuarioJaExite(perfil.getId(), perfil.getUsername(),perfil.getEmail())){
+            throw new UserAlreadyExistsException();
+        }
+        try {
+            String insert_sql = "INSERT INTO perfil(id, username, nome, email, biografia) VALUES (?,?,?,?,?)";
+            PreparedStatement insert = conexao.prepareStatement(insert_sql);
+            insert.setString(1,perfil.getId().toString());
+            insert.setString(2,perfil.getUsername());
+            insert.setString(3,perfil.getNome());
+            insert.setString(4,perfil.getEmail());
+            insert.setString(5,perfil.getBiografia());
+            insert.executeUpdate();
+        } 
+        catch (SQLException e){
+            System.err.println("SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..." + e.getMessage());
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
+    }
 
-//     ResultSet selectFromTabela(String nomeTabela) throws SQLException{
+
+    public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
+
+        try {
+            ResultSet resultado = selectFromTabela("Perfil");
+
+            while(resultado.next()){
+               
+                if(
+                    ( Optional.ofNullable(id).isPresent() && 
+                        id.equals( UUID.fromString( resultado.getString("id") ) )) || 
+                    ( Optional.ofNullable(username).isPresent() && 
+                        username.equals(resultado.getString("username"))) ||
+                    ( Optional.ofNullable(email).isPresent() && 
+                        email.equals(resultado.getString("email")))
+                   )
+                {
+                        Perfil perfil = new Perfil(UUID.fromString(resultado.getString("id")), 
+                                    resultado.getString("username"),
+                                    resultado.getString("nome"), 
+                                    resultado.getString("email"), 
+                                    resultado.getString("biografia"));
+                        return Optional.ofNullable(perfil);
+                }             
+            }
+            return Optional.empty();
+            
+        }catch(SQLException e){
+
+            System.err.println("SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+            return Optional.empty();
+        }
+    }
+
+    
+    ResultSet selectFromTabela(String nomeTabela) throws SQLException{
         
-//         try{
-//             ResultSet resultado = null; 
-//             Statement statement = conexao.createStatement();
+        try{
+            ResultSet resultado = null; 
+            Statement statement = conexao.createStatement();
 
-//             String querySelect = String.format("SELECT * FROM %s", nomeTabela);
-//             resultado = statement.executeQuery(querySelect);
-//             return resultado;
-//         }catch(SQLException e){
+            String querySelect = String.format("SELECT * FROM %s", nomeTabela);
+            resultado = statement.executeQuery(querySelect);
+            return resultado;
+            
+        }catch(SQLException e){
+            throw e;
+        }
+    }
 
-//         }
-//     }
- 
-//     // public Optional<Perfil> consultarPerfilPorTodosOsAtributos(UUID id, String username, String email);
+    
+    public void removerPerfil(String username){
+        try {
+            String delete_sql = "DELETE FROM Perfil WHERE username = ?";
+            PreparedStatement delete = conexao.prepareStatement(delete_sql);
+            delete.setString(1,username);
+            int afetado = delete.executeUpdate();
+            if(afetado == 0){
+                throw new UserNotFoundException();
+            }
+        } catch (SQLException e){
+            System.err.println("SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+e.getMessage());
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
+    }
 
-//     // public Optional<Perfil> consultarPerfilPorId(UUID id);
 
-//     // public Optional<Perfil> consultarPerfilPorUsername(String username);
+    public boolean usuarioJaExite(UUID id, String username, String email){
 
-//     // public Optional<Perfil> consultarPerfilPorEmail(String email);
+        return consultarPerfil(id, username, email).isPresent();
+    }
+    
 
-//     // public ArrayList<Perfil> getPerfis();
+    public ArrayList<Perfil> getPerfis(){
+        return null;
+    }
 
-//     // public void removerPerfil(String username);
 
-//     // public void resgatarPerfis();
+    public void resgatarPerfis(){
 
-//     // public void salvarPerfis();
+    }
 
-//     //  public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB;
-// }
+    public void salvarPerfis(){
+
+    }
+}

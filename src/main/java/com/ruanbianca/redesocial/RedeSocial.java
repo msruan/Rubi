@@ -56,13 +56,13 @@ public class RedeSocial {
 
     public Optional<Perfil> consultarPerfil(UUID id){
         
-        return _perfis.consultarPerfilPorId(id);
+        return _perfis.consultarPerfil(id, null, null);
     }
 
 
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
-        return _perfis.consultarPerfilPorUsername(username);
+        return _perfis.consultarPerfil(null, username, null);
     }
 
 

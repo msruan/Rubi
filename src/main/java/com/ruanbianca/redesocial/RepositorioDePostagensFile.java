@@ -142,7 +142,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
     }
 
 
-    public void salvarPostagens() throws NullAtributesException{//Todo: tirar isso de dentro de rede social
+    public void salvarPostagens() throws NullAtributesException{
 
         String pathDb = getCaminhoDoBancoDeDados("DB");
         String pathPosts = getCaminhoDoBancoDeDados("Postagem");
@@ -155,7 +155,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens{
         
         try ( BufferedWriter buffwriter = new BufferedWriter(new FileWriter(pathPosts))){
             for(Postagem post : _postagens){
-                buffwriter.write(salvarPostagem(post));//Todo: trocar isso aqui pela funcao salvar
+                buffwriter.write(salvarPostagem(post));
             }
         } catch (IOException e){
             e.printStackTrace();

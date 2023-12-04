@@ -1,10 +1,36 @@
 Necessários:
+
+- RedeSocial tá instanciando com File por padrão já...
+- Mudar nome usuarioJaExiste
 - Fazer validaçao do numero de caracteres
+- Fazer validação da entrada de dados
+- Terminar respositoriosSQL
+- Terminar repositoriosArray
+- Terminar repositoriosFIle
+- Ajeitar App e permitir a escolha da instanciacao
+- Ajeitar RedeSocial
+- Fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
+- Implementar consulta por mais de uma hashtag
+
 OK - A persistência em arquivos não funciona se o diretório 'db' não existir
-- fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
-- Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
-- tirar os construtores que so recebm uma string do perfil e de psotagens, deixar isso a cargo do repositorio
-- colocar o atributo idPerfil dentro de postagem...
+OK - Remover verificacoes de nulo de RedeSocial e deixar só em Repositorios
+OK - tirar os construtores que so recebm uma string do perfil e de psotagens, deixar isso a cargo do repositorio
+OK - colocar o atributo idPerfil dentro de postagem...
+
+
+Extras:
+
+- Apagar branch maven e usar a main como main
+- Atualizar o .plantuml
+
+Férias:
+
+- Substituir constantes de app por um enum
+- Sistema de seguir/bloquear
+- Adicionar imagens (JFileChooser+IJ?)
+- Melhorar interface (Web ou tlvz JavaFx)
+
+WE NEED TO DO:
 
 Utilizar um mecanismo de persistência independente:
 
@@ -22,15 +48,3 @@ banco de dados, arquivo);
 iv. A classe rede social deve ter, em vez de repositórios comuns, 
 interfaces e funcionar sem alterações independente da 
 implementação.
-
-Extras interessantes:
-
-- Apagar branch maven e usar a main como main
-- Atualizar o .plantuml
-
-Extras para as férias:
-
-- Melhorar validação de entrada de dados
-- Sistema de seguir/bloquear
-- Adicionar imagens (JFileChooser+IJ?)
-- Melhorar interface (JOptionPane ou tlvz JavaFx)

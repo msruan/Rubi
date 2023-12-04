@@ -10,13 +10,7 @@ public interface IRepositorioDePerfis {
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException;
     
-    public Optional<Perfil> consultarPerfilPorTodosOsAtributos(UUID id, String username, String email);
-
-    public Optional<Perfil> consultarPerfilPorId(UUID id);
-
-    public Optional<Perfil> consultarPerfilPorUsername(String username);
-
-    public Optional<Perfil> consultarPerfilPorEmail(String email);
+    public Optional<Perfil> consultarPerfil(UUID id, String username, String email);
 
     public ArrayList<Perfil> getPerfis();
 
