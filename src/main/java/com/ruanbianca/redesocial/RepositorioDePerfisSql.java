@@ -70,7 +70,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             throw new UserAlreadyExistsException();
         }
         try {
-            String insert_sql = "INSERT INTO perfil(id, username, nome, email, biografia) VALUES (?,?,?,?,?)";
+            String insert_sql = "INSERT INTO Perfil(id, username, nome, email, biografia) VALUES (?,?,?,?,?)";
             PreparedStatement insert = conexao.prepareStatement(insert_sql);
             insert.setString(1, perfil.getId().toString());
             insert.setString(2, perfil.getUsername());
