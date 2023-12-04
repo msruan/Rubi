@@ -1,7 +1,7 @@
 Necessários:
 
 - Terminar respositoriosSQL
-- Fazer validaçao do numero de caracteres
+- Fazer validaçao do numero de caracteres 
 - Fazer validação da entrada de dados
 
 OK - Ajeitar RedeSocial
