@@ -128,10 +128,37 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }
 
 
-    //Todo: por isso aqui de volta
+    //Todo: apagar perfis.txt se nao houverem mais nenhum perfil
     public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
         
         Optional.ofNullable(username).orElseThrow(NullAtributesException::new);
+
+        String pathDb = getCaminhoDoBancoDeDados("DB");
+        String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
+
+        if(! ManipuladorDeArquivos.arquivoExiste(pathDb) || ! ManipuladorDeArquivos.arquivoExiste(pathPerfis))
+            throw new UserNotFoundException();
+        
+        ArrayList<String> perfis = ManipuladorDeArquivos.lerLinhas(pathPerfis);
+        StringBuilder novoConteudo = new StringBuilder();
+        boolean achou = false;
+        for(String perfil: perfis){
+            if(! perfil.split(";")[1].equals(username) ){//Lembrete: caso a ordem do banco seja alterada tem q mudar isso
+                novoConteudo.append(perfil+"\n");
+            }else
+                achou = true;
+        }
+        
+        if(! achou){
+            throw new UserNotFoundException();
+        }else{
+            try{
+            ManipuladorDeArquivos.gravarArquivo(pathPerfis, novoConteudo.toString(), false);
+            }catch(IOException e){
+                System.err.println("Erro durante a remoção de perfil!");
+            }
+        }
+        
     }
 
 }

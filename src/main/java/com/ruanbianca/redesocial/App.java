@@ -332,11 +332,14 @@ public class App {
                     break;
 
 
-                // case REMOVER_PERFIL:
-                //     username = lerString("Digite o username do perfil buscado: ",input);
-                //     Rubi.removerPerfil(username);
-                //     System.out.println("Perfil removido com sucesso!");
-                //     break;
+                case REMOVER_PERFIL:
+                    username = lerString("Digite o username do perfil buscado: ",input);
+                    try{Rubi.removerPerfil(username);}
+                    catch(UserNotFoundException e){
+                        System.out.println("Usuário não encontrado!");
+                    }
+                    System.out.println("Perfil removido com sucesso!");
+                    break;
 
 
                 // case REMOVER_POSTAGEM:

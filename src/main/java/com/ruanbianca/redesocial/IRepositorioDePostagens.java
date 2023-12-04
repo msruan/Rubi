@@ -24,5 +24,5 @@ public interface IRepositorioDePostagens {
     public boolean postagemJaExiste(UUID id);
 
     //Todo: fazer acontecer
-    // public void removerPostagem(String texto, Perfil perfil,String hashtag);
+    //public void removerPostagem(String texto, Perfil perfil,String hashtag);
 }

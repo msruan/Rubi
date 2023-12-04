@@ -27,23 +27,6 @@ public class RedeSocial {
     }
 
 
-    public void incluirPerfil(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
-        
-        _perfis.incluir(perfil);
-    }
-
-
-    public boolean usuarioJaExite(UUID id, String username, String email){  
-        
-        return _perfis.usuarioJaExite(id, username, email);     
-    }
-
-    public void incluirPostagem(Postagem postagem) throws NullAtributesException{
-        
-        _postagens.incluir(postagem);
-    }
-
-
     public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
 
         return _postagens.consultarPostagens(texto,perfil,hashtag);
@@ -59,6 +42,24 @@ public class RedeSocial {
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
         return _perfis.consultarPerfil(null, username, null);
+    }
+
+
+    public boolean usuarioJaExite(UUID id, String username, String email){  
+        
+        return _perfis.usuarioJaExite(id, username, email);     
+    }
+
+
+    public void incluirPerfil(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
+        
+        _perfis.incluir(perfil);
+    }
+    
+
+    public void incluirPostagem(Postagem postagem) throws NullAtributesException{
+        
+        _postagens.incluir(postagem);
     }
 
 
@@ -82,6 +83,11 @@ public class RedeSocial {
         
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
         postagem.decrementarVisualizacoes();
+    }
+
+
+     public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
+        _perfis.removerPerfil(username);
     }
     
 
@@ -202,21 +208,9 @@ public class RedeSocial {
         Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
         return new ArrayList<>(streamHashs.toList());
     }     
-   
-
-    //Todo: fazer acontecer
-    // public void removerPerfil(String username){
-
-    //     _perfis.removerPerfil(username);     
-    // }
+       
         
-    //Todo: fazer acontecer
-    // public void removerPostagem(String texto,Perfil perfil,String hashtag){
-
-    //     _postagens.removerPostagem(texto, perfil, hashtag);
-    // }
-        
-    //Todo: fazer essa função acontecer
+    //Extra: fazer essa função acontecer
     // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
         
     //     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();

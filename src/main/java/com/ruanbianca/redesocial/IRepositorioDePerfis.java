@@ -13,7 +13,6 @@ public interface IRepositorioDePerfis {
     boolean usuarioJaExite(UUID id, String username, String email);
 
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException;
-
-    //Todo: fazer acontecer
-    //public void removerPerfil(String username);
+    
+    public void removerPerfil(String username);
 } 

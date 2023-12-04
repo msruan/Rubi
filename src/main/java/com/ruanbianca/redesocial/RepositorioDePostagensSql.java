@@ -31,7 +31,5 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens{
     public boolean postagemJaExiste(UUID id){
         return false;
     }
-
-    //Todo: fazer acontecer
-    // public void removerPostagem(String texto, Perfil perfil,String hashtag);
+   
 }

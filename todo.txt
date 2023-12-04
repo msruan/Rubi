@@ -1,21 +1,20 @@
 Necessários:
 
-- Ajeitar os metodos Remover e Atualizar de TODOS
-- Ajeitar consultar de RPostagens
-- Terminar RepositoriosPerfisArray
-
-- Ajeitar o remover perfil e remover postagem
-- RedeSocial tá instanciando com File por padrão já...
-- Mudar nome usuarioJaExiste
+- Terminar respositoriosSQL
 - Fazer validaçao do numero de caracteres
 - Fazer validação da entrada de dados
-- Terminar respositoriosSQL
-- Terminar repositoriosArray
-- Ajeitar App e permitir a escolha da instanciacao
-- Ajeitar RedeSocial
-- Fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
-- Implementar consulta por mais de uma hashtag
 
+OK - Ajeitar RedeSocial
+OK - Ajeitar os metodos Remover de RPostagensFile
+OK - RedeSocial tá instanciando com File por padrão já...
+OK - Se não houverem mais linhas, o RPerfisFile deveria apgato arquivo de perfis.txt
+OK - Ajeitar o remover perfil
+OK - Terminar RepositoriosPerfisArray
+OK - Terminar repositoriosArray
+OK - Fazer com que os arquivos e pastas só sejam criados se existerem perfis/postagens
+OK - Ajeitar App e permitir a escolha da instanciacao
+OK - Ajeitar consultar de RPostagens
+OK - Ajeitar os metodos Remover de RPerfisFile
 OK - O arquivo de perfis.txt tá com duas linhas...
 OK - Ajeitar o consultar de RPerfis
 OK - Terminar RepositoriosPerfisFile
@@ -28,6 +27,9 @@ OK - Terminar RepositoriosPostagensFile
 
 Extras:
 
+- Mudar nome usuarioJaExiste
+- Remover postagens?
+- Implementar consulta por mais de uma hashtag
 - Refazer a lógica de exibirHastagsPopulares
 - Atualizar as funcoes de remover e atualizar perfil
 - Apagar branch maven e usar a main como main

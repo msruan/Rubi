@@ -190,16 +190,4 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             throw new BadChoiceOfEntityForDB();
         
     }
-
-
-    //Todo: fazer acontecer
-    // public void removerPostagem(String texto, Perfil perfil,String hashtag){
-
-    //     ArrayList<Postagem> postagensARemover = consultarPostagens(texto, perfil, hashtag);
-    //     if(Optional.ofNullable(postagensARemover).isPresent()){
-    //         _postagens.removeAll(postagensARemover);
-    //     }else{
-    //         System.out.println("Não há postagens para remover");
-    //     }
-    // }
 }
