@@ -46,7 +46,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
         }
     }
 
-    public ArrayList<Postagem> getPostagens() {
+    public ArrayList<Postagem> getPostagens() throws NullAtributesException{
 
         try {
             ResultSet resultado = selectFromTabela("Postagem");
@@ -83,7 +83,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
         } catch (SQLException e) {
 
             System.err.println(
-                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+e.getMessage());
             e.printStackTrace();
             System.err.flush();
             System.exit(1);

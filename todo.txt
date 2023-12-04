@@ -1,8 +1,10 @@
 Necessários:
 
-- Terminar respositoriosSQL
+- Fazer o consultarPostagem (se usar o getPostagens vai consumir muita memoria) + postagemJaExiste
+- Fazer o consultarPostagens
 - Fazer validaçao do numero de caracteres 
 - Fazer validação da entrada de dados
+- Atualizar o README (quando acabar)
 
 OK - Ajeitar RedeSocial
 OK - Ajeitar os metodos Remover de RPostagensFile
@@ -27,10 +29,13 @@ OK - Terminar RepositoriosPostagensFile
 
 Extras:
 
+- Fazer q nem o Ryan, fazer com que a excecao de UserAlreadyExist ao inves de só usar uma msg padrao,
+a gente possa personalizar com um super(message), pq aí, dá de devolver se é o username, se é o email ou etc
+que tá duplicado direto na mensagem da excecao.
 - Mudar nome usuarioJaExiste
 - Remover postagens?
 - Implementar consulta por mais de uma hashtag
-- Refazer a lógica de exibirHastagsPopulares
+- Refazer a lógica de exibirHastagsPopulares (precisamos mesmo da classe Hashtag?)
 - Atualizar as funcoes de remover e atualizar perfil
 - Apagar branch maven e usar a main como main
 - Atualizar o .plantuml
