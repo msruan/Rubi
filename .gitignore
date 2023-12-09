@@ -1,5 +1,6 @@
 # Ignorar a pasta .vscode
 .vscode/
+.history
 
 # Ignorar a pasta target
 target/
