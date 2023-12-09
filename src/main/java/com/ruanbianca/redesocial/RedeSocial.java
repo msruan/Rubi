@@ -129,6 +129,29 @@ public class RedeSocial {
         }
         throw new NullAtributesException();
     }
+
+    public static String limitarBio(String bio){
+
+        if(bio.length() > 22){
+            bio = bio.substring(0,23) + "\n  " + bio.substring(23, bio.length());
+        }
+        return bio;
+    }
+
+    //Todo: tirar daqui e por em RedeSocial
+    public static String exibirPerfil(Perfil perfil) {
+  
+        StringBuilder result = new StringBuilder();
+        result.append("╭───────────────────────────────────╮\n");
+        result.append("│" + CYAN_BOLD + "           Perfil Info" + RESET + "             │\n");
+        result.append("├───────────────────────────────────┤\n");
+        result.append("  " + YELLOW + "Username:" + RESET + " " + perfil.getUsername() + "\n");
+        result.append("  " + YELLOW + "Nome:" + RESET + " " + perfil.getNome() + "\n");
+        result.append("  " + YELLOW + "Biografia:" + RESET + " " + limitarBio(perfil.getBiografia()) + "\n");
+        result.append("╰───────────────────────────────────╯");
+
+        return result.toString();
+    }
     
 
     public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 

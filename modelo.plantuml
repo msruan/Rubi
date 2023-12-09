@@ -1,42 +1,64 @@
 @startuml Rubi
 class Perfil {
+
+    -id: UUID
     -username: String
     -nome: String
     -email: String
-    -id: UUID;
     -biografia : String
 }
 
 class Postagem {
-    -_texto: String;
-    -_perfil: Perfil;   
-    -_data: LocalDateTime;
-    -_curtidas: int;
-    -_descurtidas: int;
-    -_id: UUID;
+
+    -id: UUID
+    -perfilId: UUID
+    -data: LocalDateTime
+    -texto: String
+    -curtidas: int
+    -descurtidas: int
 }
 
-class PostagemAvancada {
-    -_visualizacoesRestantes: Integer;
-    -_hashtags: ArrayList<String>;
+class PostagemAvancada{
+
+    -visualizacoesRestantes: Integer
+    -hashtags: ArrayList<String>
+}
+
+interface IRepositorioDePostagens {
+
+    +ArrayList<Postagem> getPostagens()
+
+
+    +ArrayList<PostagemAvancada> getPostagensAvancadas()
+
+
+    +void incluir(Postagem postagem) 
+
+
+    +Optional<Postagem> consultarPostagem(UUID id)
+
+    
+    +ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag)
+
+    +boolean postagemJaExiste(UUID id)
 }
 
 class RepositorioDePostagens {
-    -_postagens: ArrayList<Postagem>;
+    -postagens: ArrayList<Postagem>
 }
 
 class RepositorioDePerfil {
-    -_perfis : ArrayList<Perfil>;
+    -perfis : ArrayList<Perfil>
 }
 
 class RedeSocial {
-    -_perfis: RepositorioDePerfis;
-    -_postagens: RepositorioDePostagens;
+    -perfis: RepositorioDePerfis
+    -postagens: RepositorioDePostagens
 }
 
 class Hashtag {
-    -_hashtag: String;
-    -_contadorDeUsos: Integer;
+    -hashtag: String
+    -contadorDeUsos: Integer
 }
 
 RedeSocial *-- RepositorioDePostagens

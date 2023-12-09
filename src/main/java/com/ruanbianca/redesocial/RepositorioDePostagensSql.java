@@ -92,6 +92,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
     }
 
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
+        
         return null;
     }
 

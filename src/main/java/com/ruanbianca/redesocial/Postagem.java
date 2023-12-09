@@ -10,14 +10,13 @@ import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 
 
 public class Postagem {
-
     
-    private @Getter String texto;
+    private @Getter UUID id;
     private @Getter UUID perfilId; 
     private @Getter LocalDateTime data;
+    private @Getter String texto;
     private @Getter int curtidas;
     private @Getter int descurtidas;
-    private @Getter UUID id;
  
     public Postagem(UUID id, UUID perfilId, LocalDateTime data, String texto, int curtidas, int descurtidas) throws NullAtributesException{
 
