@@ -190,7 +190,7 @@ public class App {
                     username = lerString("Digite o username do perfil buscado: ", input);
                     Optional<Perfil> perfilBuscado = Rubi.consultarPerfilPorUsername(username);
                     if(perfilBuscado.isPresent()){
-                        System.out.println(Perfil.exibirPerfil(perfilBuscado.get()));
+                        System.out.println(RedeSocial.exibirPerfil(perfilBuscado.get()));
                         
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);

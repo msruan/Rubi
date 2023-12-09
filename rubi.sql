@@ -13,7 +13,7 @@ create table Perfil(
 create table Postagem(
     id varchar(36) PRIMARY KEY,
     perfil_id varchar(36) NOT NULL,
-    data DATE NOT NULL,
+    data DATETIME NOT NULL,
     texto varchar(400) NOT NULL,
     curtidas INT NOT NULL,
     descurtidas INT NOT NULL,

@@ -4,6 +4,7 @@ Necessários:
 - Fazer validaçao do numero de caracteres 
 - Fazer validação da entrada de dados
 
+OK - exibirPostagensPorPerfil nao ta funcionando tanto no SQL quanto no File, mas exibirPostagensPopulares está...
 OK - Ajeitar RedeSocial
 OK - Ajeitar os metodos Remover de RPostagensFile
 OK - RedeSocial tá instanciando com File por padrão já...

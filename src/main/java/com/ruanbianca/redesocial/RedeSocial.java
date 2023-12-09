@@ -89,6 +89,31 @@ public class RedeSocial {
      public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
         _perfis.removerPerfil(username);
     }
+
+
+    public static String limitarBio(String bio){
+
+        if(bio.length() > 22){
+            bio = bio.substring(0,23) + "\n  " + bio.substring(23, bio.length());
+        }
+        return bio;
+    }
+
+
+    //Todo: tirar daqui e por em RedeSocial
+    public static String exibirPerfil(Perfil perfil) {
+  
+        StringBuilder result = new StringBuilder();
+        result.append("╭───────────────────────────────────╮\n");
+        result.append("│" + CYAN_BOLD + "           Perfil Info" + RESET + "             │\n");
+        result.append("├───────────────────────────────────┤\n");
+        result.append("  " + YELLOW + "Username:" + RESET + " " + perfil.getUsername() + "\n");
+        result.append("  " + YELLOW + "Nome:" + RESET + " " + perfil.getNome() + "\n");
+        result.append("  " + YELLOW + "Biografia:" + RESET + " " + limitarBio(perfil.getBiografia()) + "\n");
+        result.append("╰───────────────────────────────────╯");
+
+        return result.toString();
+    }
     
 
     public String exibirPostagem(Postagem postagem) throws NullObjectAsArgumentException, NullAtributesException{
@@ -135,12 +160,19 @@ public class RedeSocial {
     
         //Optional <Perfil> perfil = consultarPorUsername(username);
         Optional <Perfil> perfil = consultarPerfilPorUsername(username);
-        if(perfil.isEmpty())
+        if(perfil.isEmpty()){
+            //Todo: remover esse print
+            System.out.println("Username não encontrado!");
             return null;
+        }else{
+            System.out.println("Perfil encontrado");
+        }
         
         Stream <Postagem> filtrados = _postagens.getPostagens().stream();
-        filtrados = filtrados.filter(post -> post.getPerfilId() == perfil.get().getId());
-        //Stream <Postagem> filtrados = perfil.get().getPostagens().stream();
+        filtrados = filtrados.filter(post -> {
+            return post.getPerfilId().equals(perfil.get().getId());
+        });
+        
         filtrados = filtrados.filter(post -> {
             if(!(post instanceof PostagemAvancada))
                 return true;

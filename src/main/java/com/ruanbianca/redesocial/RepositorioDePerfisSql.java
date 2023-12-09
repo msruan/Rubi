@@ -54,7 +54,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         } catch (SQLException e) {
 
             System.err.println(
-                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+e.getMessage());
             e.printStackTrace();
             System.err.flush();
             System.exit(1);
