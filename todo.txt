@@ -1,5 +1,7 @@
 Necessários:
 
+- Aquilo de poder digitar hashtag com ou sem # e ela ir certinha tbm n funciona mais
+- ExibirPostPorPerfil parou de funcionar
 - Fazer o consultarPostagem (se usar o getPostagens vai consumir muita memoria) + postagemJaExiste
 - Fazer o consultarPostagens
 - Fazer validaçao do numero de caracteres 
@@ -29,6 +31,7 @@ OK - Terminar RepositoriosPostagensFile
 
 Extras:
 
+- Uma coisa interessante q o Ryan faz eh adicionar toda mensagem printada a uma "variável". Isso torna mais consistente as limpadas de tela;
 - Fazer q nem o Ryan, fazer com que a excecao de UserAlreadyExist ao inves de só usar uma msg padrao,
 a gente possa personalizar com um super(message), pq aí, dá de devolver se é o username, se é o email ou etc
 que tá duplicado direto na mensagem da excecao.

@@ -63,11 +63,18 @@ public class MenuUtils {
     }
     public static String lerString(String mensagem, Scanner input){
         System.out.print(mensagem);
-        String saida = input.nextLine();
-        if(saida.charAt(0) == '#' && saida.length()>1)
-            return saida.substring(1).trim();
+        String saida = input.nextLine().trim();//Todo: isso dá pau na hora de escolher apenas passar lá na exibir feed
         return saida;
     }
+
+    public static String lerHashtag(String mensagem, Scanner input){
+        System.out.print(mensagem);
+        String saida = input.nextLine().trim();//Todo: isso dá pau na hora de escolher apenas passar lá na exibir feed
+        if(saida.charAt(0)=='#')
+            return saida.substring(1);
+        return saida;
+    }
+
     public static int lerInt(String string, Scanner input){
         System.out.print(string);
         Integer saida = input.nextInt();

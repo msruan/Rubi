@@ -91,7 +91,7 @@ public class RedeSocial {
     }
     
 
-    public String exibirPostagem(Postagem postagem) throws NullObjectAsArgumentException, NullAtributesException{
+    public String exibirPostagem(Postagem postagem) throws NullObjectAsArgumentException, UserNotFoundException{
         
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
 
@@ -127,18 +127,17 @@ public class RedeSocial {
 
             }
         }
-        throw new NullAtributesException();
+        throw new UserNotFoundException();
     }
 
     public static String limitarBio(String bio){
 
-        if(bio.length() > 22){
+        if(bio.length() > 22)
             bio = bio.substring(0,23) + "\n  " + bio.substring(23, bio.length());
-        }
+        
         return bio;
     }
 
-    //Todo: tirar daqui e por em RedeSocial
     public static String exibirPerfil(Perfil perfil) {
   
         StringBuilder result = new StringBuilder();
@@ -152,7 +151,6 @@ public class RedeSocial {
 
         return result.toString();
     }
-    
 
     public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
     
@@ -168,6 +166,7 @@ public class RedeSocial {
             if(!(post instanceof PostagemAvancada))
                 return true;
             else if(((PostagemAvancada)post).ehExibivel()){
+                //Todo: tá decrementando?
                 //((PostagemAvancada)post).decrementarVisualizacoes();
                 return true;
             }return false;

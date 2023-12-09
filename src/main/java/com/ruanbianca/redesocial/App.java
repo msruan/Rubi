@@ -1,6 +1,5 @@
 package com.ruanbianca.redesocial;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -91,72 +90,23 @@ public class App {
 
                 case INCLUIR_PERFIL:
                      
-                    String nome;
-
-                    while(true){
-                        try{
-                            nome = validarString(lerString("Qual o seu nome? ", input),80);
-                            break;
-                            //NullAtributesException, SizeLimitExceededException{
-                        }catch(NullAtributesException e){
-                            System.out.println("Tenha certeza de não deixar seu nome em branco!");    
-                        }catch(SizeLimitExceededException e){
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                    String username;
-                    String email;
-                    String biografia;
-
-                    while (true) {//Todo: fazer validação da entrada de dados
-                        username = lerString("Digite um username: ", input);
-                        if (Rubi.usuarioJaExite(null, username, null)) {
-                            System.out.println("Username já está em uso!");
-                            if (lerString("Deseja tentar outro? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            System.out.println(GREEN_BOLD_BRIGHT+"\nSeja bem vindo "+nome+"! :)\n"+RESET);
-                            break;
-                    }
-                    }
-                    while (true) {
-                        //se der enter quebra...
-                        email = lerString("Digite um endereço de email: ", input);
-                        if (Rubi.usuarioJaExite(null, null, email)) {
-                            System.out.println("Email já está em uso!");
-                            if (lerString("Deseja tentar outro? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                    while (true) {
-                        biografia = lerString("Digite a sua bio: ", input);
-                        if (Optional.ofNullable(biografia).isEmpty()) {
-                            System.out.println("Por favor, digite uma bio, deixe nos conhece-lo!");
-                            if (lerString("Deseja tentar novamente? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
+                    String nome = lerEValidarAtributo("nome",input,80);
+                    String username = lerValidarEBuscarAtributo("username",input,30,Rubi,0);
+                    String email = lerValidarEBuscarAtributo("email",input,320,Rubi,1);
+                    String biografia = lerEValidarAtributo("bio",input,100);
                     
-                    
-                    Rubi.incluirPerfil(new Perfil(username, nome, email,biografia));
-
+                    Rubi.incluirPerfil(new Perfil(username, nome, email, biografia));
+                                        
+                    System.out.println(GREEN_BOLD_BRIGHT+"\nWelcome "+nome+"! :)\n"+RESET);
                     break;
 
                 case INCLUIR_POSTAGEM:
+
                     Postagem novaPostagem;
                     String usernamePost;
                     Optional <Perfil> perfilUser;
                     do {
+                        input.nextLine();
                         usernamePost= lerString("Digite seu username: ",input);
                         perfilUser = Rubi.consultarPerfilPorUsername(usernamePost);
                         if(perfilUser.isEmpty()){
@@ -167,10 +117,11 @@ public class App {
                         }else 
                             break;
                     }while(true);
+
                     String texto = lerString("Digite o conteúdo do texto: ",input);
                     novaPostagem = new Postagem(perfilUser.get().getId(),texto);
                     //Todo: <Wanrning> se der Enter, o programa quebra bem aqui
-                    if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
+                    if(lerHashtag("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
 
                         ArrayList<String> hashsProConstrutor = new ArrayList<>();
                         String hashtag = lerString("Digite uma hashtag: ",input);
@@ -179,8 +130,8 @@ public class App {
                         boolean querBotarMaisUmaHashtag;//Todo: colocar um nome melhor...
 
                         do{
-                            if(lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
-                                String hashDoLoop = lerString("Digite outra hashtag: ",input);
+                            if(lerHashtag("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
+                                String hashDoLoop = lerHashtag("Digite outra hashtag: ",input);
                                 hashsProConstrutor.add(hashDoLoop);
                                 querBotarMaisUmaHashtag = true;
                             }else{
@@ -236,7 +187,7 @@ public class App {
                 case EXIBIR_POST_PERFIL:
 
                     ArrayList<Postagem> postagensEncontradas;
-                    username = lerString("Digite o username do perfil buscado: ", input);
+                    username = JOptionPane.showInputDialog(null,"Digite o username do perfil buscado: ");
                     postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
                     exibirFeed(postagensEncontradas, Rubi);
                     break;
@@ -244,7 +195,7 @@ public class App {
 
                 case EXIBIR_POST_HASHTAG:
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
-                    String hashtagBuscada = lerString("Digite a hashtag buscada: ", input).split("#")[0];
+                    String hashtagBuscada = lerString("Digite a hashtag buscada: ", input);
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtagBuscada);
                     if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent() && postagensAvancadasEncontradas.size()>0){
                         for(int i  = 0; i < postagensAvancadasEncontradas.size(); i++){
@@ -406,7 +357,7 @@ public class App {
                 limparConsole();
                 postAtual =  postagens.get(i);
                 System.out.println(feedAtualizado + rede.exibirPostagem(postAtual));
-                System.out.print("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
+                System.out.print("Interagir?\nEnter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
                 resposta = input.nextLine();
                 if(resposta.equals(CURTIR_POSTAGEM)){
                     postAtual.curtir();
@@ -429,21 +380,63 @@ public class App {
         
                 
     }
-    public static double validarValor(String entrada) throws NullAtributesException, NumberFormatException, SizeLimitExceededException{
-        
-        validarString(entrada,0);        
-        return Double.parseDouble(entrada);
+
+    public static String lerValidarEBuscarAtributo(String nomeAtributo,Scanner input, int lenMax, RedeSocial rede, int tipoAtributo){
+
+        final int USERNAME = 0;
+        final int EMAIL = 1;
+        String atributo;
+        while(true){
+
+            atributo = lerEValidarAtributo(nomeAtributo, input, lenMax);
+            
+            if((tipoAtributo == USERNAME && rede.usuarioJaExite(null, atributo, null))
+            || (tipoAtributo == EMAIL && rede.usuarioJaExite(null, null, atributo))){
+                    System.out.println(nomeAtributo+" já está em uso, por favor tente novamente!");
+                    continue;
+            }
+            break;
+        }
+        return atributo;
     }
+
+    public static String lerEValidarAtributo(String nomeAtributo,Scanner input, int lenMax){
+       
+        String atributo;
+
+        while(true){
+            
+            atributo = lerString("Type your "+nomeAtributo+": ",input);
+
+            if(Optional.ofNullable(atributo).isEmpty() ||  atributo.isEmpty() || atributo.isBlank()){
+                System.out.println("Don't be so shy!");
+                continue;
+            }
+
+            if(lenMax != 0 && atributo.length() > lenMax){//O 0 aqui serve apenas para indicar q não se deseja usar o len
+                System.out.printf("O limite de caracteres para %s é %d!\n",nomeAtributo,lenMax);
+                continue;
+            }
+
+            break;
+        }
+        return atributo;
+    }
+
     
-    public static String validarString(String entrada, int lenMax) throws NullAtributesException, SizeLimitExceededException{
+
+
+    public static String validarString(String entrada) throws NullAtributesException{
         
         if(Optional.ofNullable(entrada).isEmpty() ||  entrada.trim().isBlank())
             throw new NullAtributesException();
 
         String saida = entrada.trim();
-        if(lenMax != 0 && saida.length() > lenMax)//O 0 aqui serve apenas para indicar q não se deseja usar o len
-            throw new SizeLimitExceededException("O limite de caracteres é "+lenMax+"!");
-        
         return saida;
+    }
+    public static double validarValor(String entrada) throws NullAtributesException, NumberFormatException, SizeLimitExceededException{
+        
+        //validarString(entrada,0);        
+        return Double.parseDouble(entrada);
     }
 }
