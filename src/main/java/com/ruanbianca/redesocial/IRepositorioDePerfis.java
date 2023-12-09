@@ -15,4 +15,6 @@ public interface IRepositorioDePerfis {
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException;
     
     public void removerPerfil(String username);
+
+    //Todo: adicionar um atualizar
 } 

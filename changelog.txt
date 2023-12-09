@@ -1,11 +1,10 @@
 Não afetam a lógica:
 
-- Adicionados Setters em Perfil no lugar dos set manuais
-- Corpo das exceçoes atualizado para usar construtores
-- Ordem dos atributos de Postagem atualizada para casar com a ordem do BD
-- exibirPerfil e limitarBio migradas para RedeSocial (estão como static)
+- plantuml levemente atualizado
+- removida dependencia do ImageJ (nao tá sendo usada)
 
-Todo:
+Afetam um tiquinho: 
 
-OK - exibirPostagensPorPerfil nao ta funcionando tanto no SQL quanto no File, mas exibirPostagensPopulares está...
-\-> o erro era um bendito == no lugar de um equals
+- add lerString2, lerValidarEBuscarAtributo e lerValidarEBuscarAtributo, usadas principalmente no case INCLUIR_PERFIL
+\-> Agr há limite de caracteres. Esses métodos usam loops em while true para ler enquanto não atender aos requisitos.
+\-> OBS: talvez seja um pouco deselegante não permitir o usuário cancelar a operação de leitura...

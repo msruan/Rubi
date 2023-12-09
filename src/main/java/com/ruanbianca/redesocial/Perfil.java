@@ -25,7 +25,6 @@ public class Perfil{
         this.biografia = biografia;
     }
 
-
     public Perfil(UUID id, String username, String nome, String email, String biografia) throws NullAtributesException{
         
         this(username, nome, email, biografia);

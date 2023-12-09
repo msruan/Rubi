@@ -61,6 +61,7 @@ public class MenuUtils {
             }numero = input.nextDouble();
         }return numero;
     }
+
     public static String lerString(String mensagem, Scanner input){
         System.out.print(mensagem);
         String saida = input.nextLine();
@@ -70,6 +71,13 @@ public class MenuUtils {
             return saida.substring(1).trim();
         return saida;
     }
+
+    public static String lerString2(String message){
+
+        System.out.println(message);
+        return new Scanner(System.in).nextLine().trim();
+    }
+
     public static int lerInt(String string, Scanner input){
         System.out.print(string);
         Integer saida = input.nextInt();

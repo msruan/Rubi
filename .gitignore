@@ -1,4 +1,5 @@
 # Ignorar a pasta .vscode
+db/
 .vscode/
 .history/
 

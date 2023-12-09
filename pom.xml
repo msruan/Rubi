@@ -45,10 +45,5 @@
       <version>1.18.30</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>net.imagej</groupId>
-      <artifactId>ij</artifactId>
-      <version>1.54g</version>
-  </dependency>
   </dependencies>
 </project>

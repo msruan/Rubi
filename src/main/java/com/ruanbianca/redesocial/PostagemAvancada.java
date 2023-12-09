@@ -27,8 +27,8 @@ public class PostagemAvancada extends Postagem {
     }
 
     public PostagemAvancada(UUID id, UUID perfilId, LocalDateTime data, String texto, int curtidas, int descurtidas,
-            Integer visualizacoesRestantes, ArrayList<String> hashtags) {
-
+        
+        Integer visualizacoesRestantes, ArrayList<String> hashtags) {
         super(id, perfilId, data, texto, curtidas, descurtidas);
         this.visualizacoesRestantes = visualizacoesRestantes;
         this.hashtags = hashtags;

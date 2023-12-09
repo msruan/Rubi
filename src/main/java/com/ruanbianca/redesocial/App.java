@@ -28,6 +28,9 @@ public class App {
     final String REMOVER_POSTAGEM = "11";
     final String SAIR = "0";
 
+    final static int USERNAME = 0;
+    final static int EMAIL = 1;
+
     Scanner input = new Scanner(System.in);
 
     public static void main( String[] args ){
@@ -66,7 +69,7 @@ public class App {
     public void pausar() {
 
         String enter = GREEN_BOLD_BRIGHT +"<Enter>"+RESET;
-        System.out.println(YELLOW_BOLD_BRIGHT+ "\n\nPressione " + enter + YELLOW_BOLD_BRIGHT + " para continuar..."+ RESET);
+        System.out.print(YELLOW_BOLD_BRIGHT+ "\n\nPressione " + enter + YELLOW_BOLD_BRIGHT + " para continuar..."+ RESET);
         input.nextLine();
         limparConsole();
     }
@@ -88,72 +91,35 @@ public class App {
             switch (opcao) {
 
                 case INCLUIR_PERFIL:
-                    String nome = lerString("Qual o seu nome? ", input);
-                    String username;
-                    String email;
-                    String biografia;
 
-                    while (true) {//Todo: fazer validação da entrada de dados
-                        username = lerString("Digite um username: ", input);
-                        if (Rubi.usuarioJaExite(null, username, null)) {
-                            System.out.println("Username já está em uso!");
-                            if (lerString("Deseja tentar outro? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            System.out.println(GREEN_BOLD_BRIGHT+"\nSeja bem vindo "+nome+"! :)\n"+RESET);
-                            break;
-                    }
-                    }
-                    while (true) {
-                        //se der enter quebra...
-                        email = lerString("Digite um endereço de email: ", input);
-                        if (Rubi.usuarioJaExite(null, null, email)) {
-                            System.out.println("Email já está em uso!");
-                            if (lerString("Deseja tentar outro? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                    while (true) {
-                        biografia = lerString("Digite a sua bio: ", input);
-                        if (Optional.ofNullable(biografia).isEmpty()) {
-                            System.out.println("Por favor, digite uma bio, deixe nos conhece-lo!");
-                            if (lerString("Deseja tentar novamente? ",input).equals("sim")) {
-                                limparConsole();
-                                continue menuprincipal;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
                     
-                    
+                    String nome = lerEValidarAtributo("Digite seu nome: ", 80);
+                    String username = lerValidarEBuscarAtributo("Digite seu username: ", 30, Rubi, USERNAME);
+                    String email = lerValidarEBuscarAtributo("Digite seu email: ", 320, Rubi, EMAIL);
+                    String biografia = lerEValidarAtributo("Digite sua bio: ", 100);
+
                     Rubi.incluirPerfil(new Perfil(username, nome, email,biografia));
 
+                    System.out.println(GREEN_BOLD_BRIGHT+"\nSeja bem vindo "+nome+"! :)\n"+RESET);
                     break;
 
                 case INCLUIR_POSTAGEM:
-                    Postagem novaPostagem;
+
                     String usernamePost;
                     Optional <Perfil> perfilUser;
                     do {
-                        usernamePost= lerString("Digite seu username: ",input);
+                        usernamePost= lerEValidarAtributo("Digite seu username: ",30);
                         perfilUser = Rubi.consultarPerfilPorUsername(usernamePost);
                         if(perfilUser.isEmpty()){
-                            if(lerString("Usuário não encontrado! Tentar novamente? ",input).equals("nao")){
+                            if(lerString2("Usuário não encontrado! Tentar novamente? ").equals("nao")){
                                 limparConsole();
                                 continue menuprincipal;
                             }
                         }else 
                             break;
                     }while(true);
-                    String texto = lerString("Digite o conteúdo do texto: ",input);
-                    novaPostagem = new Postagem(perfilUser.get().getId(),texto);
+                    String texto = lerEValidarAtributo("Digite o conteúdo do texto: ",400);
+                    Postagem novaPostagem = new Postagem(perfilUser.get().getId(),texto);
                     //Todo: <Wanrning> se der Enter, o programa quebra bem aqui
                     if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
 
@@ -333,8 +299,11 @@ public class App {
 
 
                 case REMOVER_PERFIL:
-                    username = lerString("Digite o username do perfil buscado: ",input);
-                    try{Rubi.removerPerfil(username);}
+
+                    username = lerEValidarAtributo("Digite o username do perfil buscado: ",30);
+                    try{
+                        Rubi.removerPerfil(username);
+                    }
                     catch(UserNotFoundException e){
                         System.out.println("Usuário não encontrado!");
                     }
@@ -384,15 +353,13 @@ public class App {
         final String DESCURTIR_POSTAGEM = "2";
         String feedAtualizado = "";
         String resposta;
-        Scanner input = new Scanner(System.in);
         Postagem postAtual;
         if(Optional.ofNullable(postagens).isPresent() && postagens.size()>0){
             for(int i  = 0; i < postagens.size(); i++) {   
                 limparConsole();
                 postAtual =  postagens.get(i);
                 System.out.println(feedAtualizado + rede.exibirPostagem(postAtual));
-                System.out.print("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
-                resposta = input.nextLine();
+                resposta = lerString2("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
                 if(resposta.equals(CURTIR_POSTAGEM)){
                     postAtual.curtir();
                 }else if(resposta.equals(DESCURTIR_POSTAGEM)){
@@ -409,9 +376,49 @@ public class App {
                     System.out.println(feedAtualizado);
                 }
             }
-        }else{
+        }else
             System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
+                  
+    }
+
+
+    public static String lerEValidarAtributo(String message, int lenMax){
+
+        String label;
+        while(true){
+
+            label = lerString2(message);
+
+            if(Optional.ofNullable(label).isEmpty() ||  label.isEmpty() || label.isBlank()){
+                System.out.println("Pls type something!");
+                continue;
+            }
+
+            if(lenMax != 0 && label.length() > lenMax){//O zero aqui serve apenas para indicar q não se deseja usar o len
+                System.out.printf("O limite de caracteres é %d!\n",lenMax);
+                continue;
+            }
+            break;
         }
-                
+        return label;
+    }
+
+
+    public static String lerValidarEBuscarAtributo(String message, int lenMax, RedeSocial rede, int tipoAtributo){
+
+        String atributo;
+
+        while(true){
+
+            atributo = lerEValidarAtributo(message, lenMax);
+            
+            if((tipoAtributo == USERNAME && rede.usuarioJaExite(null, atributo, null))
+            || (tipoAtributo == EMAIL && rede.usuarioJaExite(null, null, atributo))){
+                    System.out.println((tipoAtributo == USERNAME ? "Username" : "Email")+" já está em uso, por favor tente novamente!");
+                    continue;
+            }
+            break;
+        }
+        return atributo;
     }
 }
