@@ -1,7 +1,9 @@
 Necessários:
 
 OK? - Terminar respositoriosSQL
+- Curtir/descurtir e decrementarViews nao funciona nos outros repos
 - RemoverPerfil deveria remover todos os posts do Perfil? 
+- Bios com aspa simples quebram o update
 
 OK - Apagar branch maven e usar a main como main
 OK - Fazer validaçao do numero de caracteres 

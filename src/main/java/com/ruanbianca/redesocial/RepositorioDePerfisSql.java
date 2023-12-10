@@ -171,6 +171,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         if(!usuarioJaExite(null, username, nomeAtributo))
             throw new UserNotFoundException();
 
+        String update_sql = String.format("UPDATE Perfil SET %s = ? WHERE username = ?",nomeAtributo);
         try {
 
             // String update_sql = "UPDATE Perfil SET ? = ? WHERE username = ?";
@@ -179,10 +180,11 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             // update.setString(2, novoAtributo);
             // update.setString(3, username);
 
-            String update_sql = String.format("UPDATE Perfil SET %s = '%s' WHERE username = '%s'",nomeAtributo,novoAtributo,username);
+           // String update_sql = String.format("UPDATE Perfil SET %s = '%s' WHERE username = '%s'",nomeAtributo,novoAtributo,username);
             PreparedStatement update = conexao.prepareStatement(update_sql);
+            update.setString(1, novoAtributo);
+            update.setString(2,username);
            
-
             int afetado = update.executeUpdate();
 
             if (afetado == 0) 

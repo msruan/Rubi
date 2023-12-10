@@ -194,6 +194,7 @@ public class App {
 
 
                 case EXIBIR_POST_HASHTAG:
+
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
                     String hashtagBuscada = lerString("Digite a hashtag buscada: ", input).split("#")[0];
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtagBuscada);
@@ -209,6 +210,7 @@ public class App {
 
 
                 case EXIBIR_POST_POPULARES:
+                
                     ArrayList<Postagem> postagensPopulares;
                     postagensPopulares = Rubi.exibirPostagensPopulares();
                     if(Optional.ofNullable(postagensPopulares).isPresent() && postagensPopulares.size()>0){
