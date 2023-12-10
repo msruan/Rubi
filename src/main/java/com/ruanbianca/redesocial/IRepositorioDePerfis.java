@@ -8,7 +8,7 @@ public interface IRepositorioDePerfis {
 
     public ArrayList<Perfil> getPerfis();
 
-    public Optional<Perfil> consultarPerfil(UUID id, String username, String email);
+    public Optional<Perfil> consultar(UUID id, String username, String email);
 
     boolean usuarioJaExite(UUID id, String username, String email);
 
@@ -16,5 +16,5 @@ public interface IRepositorioDePerfis {
     
     public void removerPerfil(String username);
 
-    //Todo: adicionar um atualizar
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException;
 } 

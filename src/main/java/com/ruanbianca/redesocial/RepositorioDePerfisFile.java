@@ -39,7 +39,7 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }
 
 
-    public Optional<Perfil> consultarPerfil(UUID id, String username, String email){
+    public Optional<Perfil> consultar(UUID id, String username, String email){
 
         Stream<Perfil> filtrados = getPerfis().stream();
         filtrados = filtrados.filter(perfil -> {
@@ -56,7 +56,7 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
 
     public boolean usuarioJaExite(UUID id, String username, String email){  
-        return consultarPerfil(id,username,email).isPresent();
+        return consultar(id,username,email).isPresent();
             
     }
 
@@ -161,4 +161,45 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         
     }
 
+
+    //Fazer validação do lado de fora?
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+        
+        if(!usuarioJaExite(null, username, nomeAtributo))
+            throw new UserNotFoundException();
+
+        Perfil perfil = consultar(null, username, null).get();
+
+        if(nomeAtributo.equals("nome"))
+            perfil.setNome(novoAtributo);
+
+        else if(nomeAtributo.equals("username"))
+            perfil.setUsername(novoAtributo);
+
+        else if(nomeAtributo.equals("email"))
+            perfil.setEmail(novoAtributo);
+
+        else if(nomeAtributo.equals("biografia") || nomeAtributo.equals("bio"))
+            perfil.setBiografia(novoAtributo);
+
+
+        String pathPerfis = getCaminhoDoBancoDeDados("Perfil");
+        ArrayList<String> perfis = ManipuladorDeArquivos.lerLinhas(pathPerfis);
+        StringBuilder novoConteudo = new StringBuilder();
+        
+        for(String perfilLinha: perfis){
+
+            if(! perfilLinha.split(";")[1].equals(username) )//Lembrete: caso a ordem do banco seja alterada tem q mudar isso
+
+                novoConteudo.append(perfilLinha+"\n");
+                
+            else
+                novoConteudo.append(salvarPerfil(perfil));
+        }
+        try{
+            ManipuladorDeArquivos.gravarArquivo(pathPerfis, novoConteudo.toString(), false);
+        }catch(IOException e){
+            System.err.println("Erro durante a remoção de perfil!");
+        }
+    }
 }

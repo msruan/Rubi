@@ -1,6 +1,5 @@
 package com.ruanbianca.redesocial;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.sql.Connection;
 import java.util.UUID;
+
 
 public class RepositorioDePerfisSql implements IRepositorioDePerfis {
 
@@ -27,7 +28,8 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         }
     }
 
-    public Optional<Perfil> consultarPerfil(UUID id, String username, String email) {
+    
+    public Optional<Perfil> consultar(UUID id, String username, String email) {
 
         try {
             ResultSet resultado = selectFromTabela("Perfil");
@@ -62,6 +64,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         }
     }
 
+
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException {
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
@@ -88,6 +91,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         }
     }
 
+
     ResultSet selectFromTabela(String nomeTabela) throws SQLException {
 
         try {
@@ -102,6 +106,7 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             throw e;
         }
     }
+
 
     public void removerPerfil(String username) {
         try {
@@ -122,10 +127,12 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
         }
     }
 
+
     public boolean usuarioJaExite(UUID id, String username, String email) {
 
-        return consultarPerfil(id, username, email).isPresent();
+        return consultar(id, username, email).isPresent();
     }
+
 
     public ArrayList<Perfil> getPerfis() {
 
@@ -155,6 +162,33 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             System.err.flush();
             System.exit(1);
             return null;
+        }
+    }
+
+    //Fazer validação do lado de fora?
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+        
+        if(!usuarioJaExite(null, username, nomeAtributo))
+            throw new UserNotFoundException();
+
+        try {
+
+            String update_sql = "UPDATE Perfil SET ?=? WHERE username=?";
+            PreparedStatement update = conexao.prepareStatement(update_sql);
+            update.setString(1, nomeAtributo);
+            update.setString(2, novoAtributo);
+            update.setString(3, username);
+
+            int afetado = update.executeUpdate();
+
+            if (afetado == 0) 
+                throw new UserNotFoundException();
+            
+        } catch (SQLException e) {
+            System.err.println("SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+ e.getMessage());
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
         }
     }
 }

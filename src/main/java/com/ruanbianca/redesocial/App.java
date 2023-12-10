@@ -236,57 +236,40 @@ public class App {
 
 
                 case ATUALIZAR_PERFIL:
+
                     username = lerString("Digite o username do perfil buscado: ",input);
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
                     if(perfilBuscado.isPresent()){
-                        do{//:O
+                        do{
                             String atributo = lerString("Digite o atributo que deseja atualizar: ",input);
                             switch(atributo){
+
                                 case "nome":
-                                    String nomeAtualizado = lerString("Digite o novo nome: ",input);
-                                    perfilBuscado.get().setNome(nomeAtualizado);
+                                
+                                    String nomeAtualizado = lerEValidarAtributo("Digite o seu novo nome: ",80);
+                                    Rubi.atualizarPerfil(username, nomeAtualizado, atributo);
                                     break;
-                                case "email":
-                                    String emailAtualizado;
-                                    while (true) {
-                                        emailAtualizado = lerString("Digite o novo email: ", input);
-                                        if (Rubi.usuarioJaExite(null, null, emailAtualizado)) {
-                                            System.out.println("Email já está em uso!");
-                                            if (lerString("Deseja tentar outro? ", input).equals("sim")) {
-                                                continue;
-                                            } else {
-                                                break; 
-                                            }
-                                        } else {
-                                            perfilBuscado.get().setUsername(emailAtualizado);
-                                            break; 
-                                        }
-                                    }
-                                    
-                                    break;
-                                case "biografia":
-                                    String biografiaAtualizada = lerString("Digite a nova biografia: ",input);
-                                    perfilBuscado.get().setBiografia(biografiaAtualizada);
-                                    break;
+
                                 case "username":
-                                    String usernameAtualizado;
-                                    while (true) {
-                                        usernameAtualizado = lerString("Digite o novo username: ", input);
-                                        if (Rubi.usuarioJaExite(null, usernameAtualizado, null)) {
-                                            System.out.println("Username já está em uso!");
-                                            if (lerString("Deseja tentar outro? ", input).equals("sim")) {
-                                                continue;
-                                            } else {
-                                                break; 
-                                            }
-                                        } else {
-                                            perfilBuscado.get().setUsername(usernameAtualizado);
-                                            break; 
-                                        }
-                                    }
+
+                                    String usernameAtualizado = lerValidarEBuscarAtributo("Digite seu novo username: ", 30, Rubi, USERNAME);
+                                    Rubi.atualizarPerfil(username, usernameAtualizado, atributo);
+                                    break;
+
+                                case "email":
+
+                                    String emailAtualizado = lerValidarEBuscarAtributo("Digite seu novo email: ", 320, Rubi, EMAIL);
+                                    Rubi.atualizarPerfil(username, emailAtualizado, atributo);
+                                    break;
+
+                                case "biografia":
+
+                                    String biografiaAtualizada = lerEValidarAtributo("Digite a nova biografia: ",100);
+                                    Rubi.atualizarPerfil(username, biografiaAtualizada, atributo);
                                     break;
                                 
                                 default:
+
                                     System.out.println(RED_BOLD_BRIGHT+"Atributo inválido"+RESET);
                                     break;
                             }

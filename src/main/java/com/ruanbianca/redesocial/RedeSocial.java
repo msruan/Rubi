@@ -35,13 +35,13 @@ public class RedeSocial {
 
     public Optional<Perfil> consultarPerfil(UUID id){
         
-        return _perfis.consultarPerfil(id, null, null);
+        return _perfis.consultar(id, null, null);
     }
 
 
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
-        return _perfis.consultarPerfil(null, username, null);
+        return _perfis.consultar(null, username, null);
     }
 
 
@@ -109,6 +109,7 @@ public class RedeSocial {
         result.append("├───────────────────────────────────┤\n");
         result.append("  " + YELLOW + "Username:" + RESET + " " + perfil.getUsername() + "\n");
         result.append("  " + YELLOW + "Nome:" + RESET + " " + perfil.getNome() + "\n");
+        result.append("  " + YELLOW + "Email:" + RESET + " " + perfil.getEmail() + "\n");
         result.append("  " + YELLOW + "Biografia:" + RESET + " " + limitarBio(perfil.getBiografia()) + "\n");
         result.append("╰───────────────────────────────────╯");
 
@@ -240,6 +241,12 @@ public class RedeSocial {
         Stream <Hashtag> streamHashs = asMaisHypadas.stream().sorted((h1,h2) -> h2.getContadorDeUsos().compareTo(h1.getContadorDeUsos()));
         return new ArrayList<>(streamHashs.toList());
     }     
+
+
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+
+        _perfis.atualizarPerfil(username, novoAtributo, nomeAtributo);
+    }
        
         
     //Extra: fazer essa função acontecer

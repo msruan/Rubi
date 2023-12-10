@@ -1,9 +1,11 @@
 Necessários:
 
+- RemoverPerfil deveria remover todos os posts do Perfil?
 - Terminar respositoriosSQL
 - Fazer validaçao do numero de caracteres 
 - Fazer validação da entrada de dados
 
+OK - Atualizar as funcoes de remover e atualizar perfil
 OK - exibirPostagensPorPerfil nao ta funcionando tanto no SQL quanto no File, mas exibirPostagensPopulares está...
 OK - Ajeitar RedeSocial
 OK - Ajeitar os metodos Remover de RPostagensFile
@@ -28,11 +30,11 @@ OK - Terminar RepositoriosPostagensFile
 
 Extras:
 
+- O "Oi 'nome' seja bem vindo" vai pegar só o primeiro nome da pessoa...
 - Mudar nome usuarioJaExiste
 - Remover postagens?
 - Implementar consulta por mais de uma hashtag
 - Refazer a lógica de exibirHastagsPopulares
-- Atualizar as funcoes de remover e atualizar perfil
 - Apagar branch maven e usar a main como main
 - Atualizar o .plantuml
 
