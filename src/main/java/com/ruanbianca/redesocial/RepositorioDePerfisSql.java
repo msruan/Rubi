@@ -1,5 +1,5 @@
 package com.ruanbianca.redesocial;
-
+//oi, 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -173,11 +173,15 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
 
         try {
 
-            String update_sql = "UPDATE Perfil SET ?=? WHERE username=?";
+            // String update_sql = "UPDATE Perfil SET ? = ? WHERE username = ?";
+            // PreparedStatement update = conexao.prepareStatement(update_sql);
+            // update.setString(1, nomeAtributo);
+            // update.setString(2, novoAtributo);
+            // update.setString(3, username);
+
+            String update_sql = String.format("UPDATE Perfil SET %s = '%s' WHERE username = '%s'",nomeAtributo,novoAtributo,username);
             PreparedStatement update = conexao.prepareStatement(update_sql);
-            update.setString(1, nomeAtributo);
-            update.setString(2, novoAtributo);
-            update.setString(3, username);
+           
 
             int afetado = update.executeUpdate();
 

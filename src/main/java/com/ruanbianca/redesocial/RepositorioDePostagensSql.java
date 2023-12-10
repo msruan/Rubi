@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class RepositorioDePostagensSql implements IRepositorioDePostagens {
 
@@ -129,16 +130,91 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
         }
     }
 
-    public Optional<Postagem> consultarPostagem(UUID id) {
-        return Optional.empty();
+    ResultSet selectFromTabelaWhere(String nomeTabela, String condicao) throws SQLException {
+
+        try {
+            ResultSet resultado = null;
+            Statement statement = conexao.createStatement();
+
+            String querySelect = String.format("SELECT * FROM %s WHERE %s", nomeTabela, condicao);
+            resultado = statement.executeQuery(querySelect);
+            return resultado;
+
+        } catch (SQLException e) {
+            throw e;
+        }
     }
 
+    public Optional<Postagem> consultarPostagem(UUID id) {
+
+        try {
+            ResultSet resultado = selectFromTabelaWhere("Postagem",String.format("id='%s'",id.toString()));
+
+            Optional<Postagem> postagemOptional = Optional.empty();
+
+            Postagem postagem;//kapoio
+//to b-> a gente testa logo ou vamo pro resto? :) 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            if (resultado.next()) {
+                //ai é só pra saber se eh avancada amg
+                if (resultado.getString("visualizacoes_restantes") == null) {
+
+                    postagem = new Postagem(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"));
+
+                } else {
+                    postagem = new PostagemAvancada(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"),
+                            resultado.getInt("visualizacoes_restantes"),
+                            new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
+                }
+                postagemOptional = Optional.ofNullable(postagem);
+            }
+            return postagemOptional;
+        } catch (SQLException e) {
+
+            System.err.println(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+            return null;
+        }
+    }
+    //consultar postagens faz o q mesmo?
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) {
-        return null;
+
+        Stream <Postagem> filtrados = getPostagens().stream();
+
+        if(Optional.ofNullable(perfil).isPresent()){
+            filtrados = filtrados.filter(
+                post -> post.getPerfilId().equals(perfil.getId()));
+        }
+
+        if(Optional.ofNullable(hashtag).isPresent()) {
+            filtrados = filtrados.filter(
+                post -> post instanceof PostagemAvancada && (
+                    (PostagemAvancada)post).existeHashtag(hashtag));
+        }
+
+        if(Optional.ofNullable(texto).isPresent()) {
+            filtrados = filtrados.filter(post -> post.getTexto().contains(texto));
+        }
+
+        return new ArrayList<Postagem>(filtrados.toList());
     }
 
     public boolean postagemJaExiste(UUID id) {
-        return false;
-    }
-
+        return consultarPostagem(id).isPresent();
+    }//olha o zap
 }

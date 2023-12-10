@@ -83,7 +83,6 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
         return saida;
     }
 
-    // Todo: ajeitar a lógica dessa função
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) {
 
         Stream<Postagem> filtrados = getPostagens().stream();
