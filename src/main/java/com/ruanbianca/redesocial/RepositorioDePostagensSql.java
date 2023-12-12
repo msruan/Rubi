@@ -93,7 +93,41 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
     }
 
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
-        return null;
+        
+        try {
+            ResultSet resultado = selectFromTabela("Postagem");
+
+            ArrayList<PostagemAvancada> postagens = new ArrayList<>();
+            PostagemAvancada postagem;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            while (resultado.next()) {
+
+                if (resultado.getString("visualizacoes_restantes") != null) {
+
+                    
+                    postagem = new PostagemAvancada(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"),
+                            resultado.getInt("visualizacoes_restantes"),
+                            new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
+                    postagens.add(postagem);
+                }
+            }
+            return postagens;
+
+        } catch (SQLException e) {
+
+            System.err.println(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+            return null;
+        }
     }
 
     public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException {

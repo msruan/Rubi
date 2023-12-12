@@ -36,10 +36,25 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
 
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
         ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
-        Stream<Postagem> postagens = getPostagens().stream();
-        postagens = postagens.filter(post -> post instanceof PostagemAvancada);
-        postagens.forEach(post -> avancadas.add((PostagemAvancada) post));
+
+        if (ManipuladorDeArquivos.arquivoExiste(pathPosts)) {
+
+            try {
+                ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
+
+                for (String linha : conteudo){
+                    if(linha.split(";")[0].equals("1")){
+                        avancadas.add((PostagemAvancada)resgatarPostagem(linha));
+                    }
+
+                }
+
+            } catch (RuntimeException e) {
+                System.out.println("O erro ocorreu em resgatar postagens+" + e.getMessage());
+            }
+        }
         return avancadas;
     }
 
@@ -73,7 +88,6 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
         for (Postagem post : getPostagens()) {
             if (post.getId().equals(id)) {
-                System.out.println("achou");
                 postagem = Optional.ofNullable(post);
                 break;
             }
