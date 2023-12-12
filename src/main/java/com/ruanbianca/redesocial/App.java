@@ -195,7 +195,7 @@ public class App {
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
                     }
                     break;
-//oii, posso dar push?
+
 
                 case EXIBIR_POST_HASHTAG:
 
@@ -337,10 +337,7 @@ public class App {
     }
 
     public static void exibirFeed(ArrayList<Postagem> postagens, RedeSocial rede){
-        //amg... tudo bem?
-        //eh q o autocomplete morreu, achei q tinha caido a live
-        //q foi? amg eh comum ele morrer... kkkkkk posso reabrir o live
-        //Todo: remover quando funcionar -> eu tanko, rlx
+
         if(postagens.isEmpty())
             System.out.println("Oxi, não foi nenhuma postagem para o exibir");
         final String CURTIR_POSTAGEM = "1";
@@ -363,7 +360,7 @@ public class App {
                 }
                 if(postAtual instanceof PostagemAvancada){
 
-                    ((PostagemAvancada)postAtual).incrementarVisualizacoes();
+                    rede.decrementarVisualizacoes(((PostagemAvancada)postAtual));
                 }
                 feedAtualizado += rede.exibirPostagem(postAtual);
 
@@ -390,7 +387,7 @@ public class App {
                 continue;
             }
 
-            if(lenMax != 0 && label.length() > lenMax){//O zero aqui serve apenas para indicar q não se deseja usar o len
+            if(lenMax != 0 && label.length() > lenMax){
                 System.out.printf("O limite de caracteres é %d!\n",lenMax);
                 continue;
             }

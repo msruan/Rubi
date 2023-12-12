@@ -38,7 +38,7 @@ public class RedeSocial {
         return _perfis.consultar(id, null, null);
     }
 
-//quer deixar pra tomorrow?
+
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
         return _perfis.consultar(null, username, null);
@@ -65,20 +65,20 @@ public class RedeSocial {
 
     public void curtir(UUID id) throws PostNotFoundException{
 
-        Optional <Postagem> post = _postagens.consultarPostagem(id);//consultarPostagem ta com pau?
+        Optional <Postagem> post = _postagens.consultarPostagem(id);
         if(post.isEmpty())
             throw new PostNotFoundException("Ocorreu na linha 70 de Rede Social!");
-        post.get().curtir();//oxi - pior q eh - calma ai
-        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
-    }//testar? abre ai 
+        post.get().curtir();
+        _postagens.atualizarPostagem(post.get());
+    }
 
-//yes honey
+
     public void descurtir(UUID id) throws PostNotFoundException{
         
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
-        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
+        _postagens.atualizarPostagem(post.get()); 
     }
 
 
@@ -86,6 +86,7 @@ public class RedeSocial {
         
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
         postagem.decrementarVisualizacoes();
+        _postagens.atualizarPostagem(postagem);
     }
 
 
@@ -253,6 +254,7 @@ public class RedeSocial {
 
         _perfis.atualizarPerfil(username, novoAtributo, nomeAtributo);
     }
+
        
         
     //Extra: fazer essa função acontecer

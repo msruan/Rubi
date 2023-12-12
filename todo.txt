@@ -30,6 +30,7 @@ OK - tirar os construtores que so recebm uma string do perfil e de psotagens, de
 OK - colocar o atributo idPerfil dentro de postagem...
 OK - Terminar RepositoriosPostagensFile
 OK - Adicionar um removerPostsPorPerfil em cada RepositoriosPostagens
+OK - Adicionar persistência sob as views restantes da postagem avançada
 
 Extras:
 

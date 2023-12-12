@@ -152,11 +152,11 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
 
             Optional<Postagem> postagemOptional = Optional.empty();
 
-            Postagem postagem;//kapoio
-//to b-> a gente testa logo ou vamo pro resto? :) 
+            Postagem postagem;
+ 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             if (resultado.next()) {
-                //ai é só pra saber se eh avancada amg
+                
                 if (resultado.getString("visualizacoes_restantes") == null) {
 
                     postagem = new Postagem(UUID.fromString(
@@ -216,7 +216,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
 
     public boolean postagemJaExiste(UUID id) {//ta viva? autocomplete mro
         return consultarPostagem(id).isPresent();
-    }//olha o zap
+    }
 
     public void removerPostPorPerfil(Perfil perfil) throws NullObjectAsArgumentException {
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
@@ -264,9 +264,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
             e.printStackTrace();
             System.err.flush();
             System.exit(1);
-            ///ei, mas a gente tbm nao vai usar esse metodo pra
-            //tirar views?  hi...como q ta escrito la?
-            //you right assim
-        }//acho q e so isso aq.. em tese
-    }//how are u doing? acho q o de files ta feito...
+         
+        }
+    }
 }

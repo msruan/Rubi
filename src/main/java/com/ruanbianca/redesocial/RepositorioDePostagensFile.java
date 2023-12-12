@@ -45,10 +45,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
     public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException {
 
-        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);// lanca uma excecao se postagem
-                                                                                      // for nunla
-        if (postagemJaExiste(postagem.getId()))
-            throw new PostAlreadyExistsException();
+        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
 
         String pathPosts = getCaminhoDoBancoDeDados("Postagem");
         String pathDb = getCaminhoDoBancoDeDados("DB");
@@ -79,8 +76,8 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
                 System.out.println("achou");
                 postagem = Optional.ofNullable(post);
                 break;
-            }//ok
-        }//vou so fazer o teste no meu pc q eu tinha falado
+            }
+        }
         return postagem;
     }
 
@@ -211,7 +208,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
         String pathPosts = getCaminhoDoBancoDeDados("Postagem");
 
         if(! ManipuladorDeArquivos.arquivoExiste(pathDb) || ! ManipuladorDeArquivos.arquivoExiste(pathPosts))
-            throw new PostNotFoundException("O erro ocorreu na linha 214 de RepoPostsFile!");//sera q quebrou aqui?
+            throw new PostNotFoundException("O erro ocorreu na linha 214 de RepoPostsFile!");
         
         ArrayList<String> posts = ManipuladorDeArquivos.lerLinhas(pathPosts);
         StringBuilder novoConteudo = new StringBuilder();
