@@ -87,6 +87,8 @@ public class RedeSocial {
 
 
      public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
+        Perfil per_fil = consultarPerfilPorUsername(username).orElseThrow(UserNotFoundException::new);
+        _postagens.removerPostPorPerfil(per_fil);
         _perfis.removerPerfil(username);
     }
 

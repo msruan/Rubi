@@ -217,4 +217,23 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
     public boolean postagemJaExiste(UUID id) {
         return consultarPostagem(id).isPresent();
     }//olha o zap
+
+    public void removerPostPorPerfil(Perfil perfil) throws NullObjectAsArgumentException {
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+
+        try {
+            String delete_sql = "DELETE FROM Postagem WHERE perfil_id=?";
+            PreparedStatement delete = conexao.prepareStatement(delete_sql);
+            delete.setString(1, perfil.getId().toString());
+            delete.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."
+                            + e.getMessage());
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
+    }
 }

@@ -181,4 +181,25 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             throw new BadChoiceOfEntityForDB();
 
     }
+
+    public void removerPostPorPerfil(Perfil perfil) {
+
+        ArrayList<Postagem> postagens = getPostagens();
+        postagens.removeIf(post -> post.getPerfilId().equals(perfil.getId()));
+
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
+        try {
+            ManipuladorDeArquivos.gravarArquivo(pathPosts, "", false);
+            for (Postagem post : postagens)
+                ManipuladorDeArquivos.gravarArquivo(pathPosts, salvarPostagem(post), true);
+
+        } catch (IOException e) {
+            System.err.println(
+                    "Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+        }
+    }
+
 }

@@ -98,4 +98,14 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
 
         return consultarPostagem(id).isPresent();
     }
+
+    public void removerPostPorPerfil(Perfil perfil){
+            
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+    
+        Stream<Postagem> filtrados = getPostagens().stream();
+        filtrados = filtrados.filter(post -> post.getPerfilId().equals(perfil.getId()));
+        filtrados.forEach(post -> _postagens.remove(post));
+    }
+
 }
