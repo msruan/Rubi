@@ -38,7 +38,7 @@ public class RedeSocial {
         return _perfis.consultar(id, null, null);
     }
 
-
+//quer deixar pra tomorrow?
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
         return _perfis.consultar(null, username, null);
@@ -134,15 +134,16 @@ public class RedeSocial {
 
             if(postagem instanceof PostagemAvancada){
 
-                PostagemAvancada postagemAv = (PostagemAvancada) postagem;
-
-                postagemAv.decrementarVisualizacoes();//Todo: tirar isso
+                PostagemAvancada postagemAv = (PostagemAvancada) postagem;//
+                //primeiro tem q tirar isso neh? -> any problem?
+                //postagemAv.decrementarVisualizacoes();
+                //cha
                 StringBuilder strHashtags = new StringBuilder();
                 for(String hash:  postagemAv.getHashtags()){
                     strHashtags.append("#"+hash+" ");
                 }
                 return PURPLE_BOLD+"╔══════════════════════════════════════════════════════\n"+
-                "║    "+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+ perfil.getUsername() + RESET+"\n║\n║    "+
+                "║    "+postagem.getId()+""+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+ perfil.getUsername() + RESET+"\n║\n║    "+
                     postagem.getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
                     +RED_BOLD_BRIGHT+postagem.getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() +" 👎   "
                     +RESET+BLUE_BOLD_BRIGHT +postagemAv.getVisualizacoesRestantes()+ " 👀      "+RESET+"•" +postagem.mostrarData() + BLUE_BOLD+
@@ -151,7 +152,7 @@ public class RedeSocial {
 
             else{
                 return PURPLE_BOLD_BRIGHT+"╔══════════════════════════════════════════════════════\n"+
-            "║    "+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+perfil.getUsername()+RESET+"\n║\n║    "+  
+            "║    "+perfil.getId()+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+perfil.getUsername()+RESET+"\n║\n║    "+  
                 postagem.getTexto()+"\n║\n║    "
                 +RED_BOLD_BRIGHT+postagem.getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() + " 👎"+RESET+"            •" +postagem.mostrarData() + YELLOW_BOLD
                 + "\n╚══════════════════════════════════════════════════════\n"+RESET;

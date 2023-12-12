@@ -1,11 +1,10 @@
 Necessários:
 
+- Decrementar views no getPosts de RepoPostsSql
+
+OK - Bios com aspa simples quebram o update
 OK? - Terminar respositoriosSQL
-
-- Curtir/descurtir e decrementarViews nao funciona nos outros repos
-- RemoverPerfil deveria remover todos os posts do Perfil? 
-- Bios com aspa simples quebram o update
-
+OK - Curtir/descurtir e decrementarViews nao funciona nos outros repos
 OK - Apagar branch maven e usar a main como main
 OK - Fazer validaçao do numero de caracteres 
 OK - Fazer validação da entrada de dados
@@ -31,8 +30,6 @@ OK - tirar os construtores que so recebm uma string do perfil e de psotagens, de
 OK - colocar o atributo idPerfil dentro de postagem...
 OK - Terminar RepositoriosPostagensFile
 OK - Adicionar um removerPostsPorPerfil em cada RepositoriosPostagens
-OK - Alterar método removerPerfil de RedeSocial para remover primeiros os posts do perfil e depois o perfil em si
-
 
 Extras:
 

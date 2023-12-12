@@ -214,7 +214,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
         return new ArrayList<Postagem>(filtrados.toList());
     }
 
-    public boolean postagemJaExiste(UUID id) {
+    public boolean postagemJaExiste(UUID id) {//ta viva? autocomplete mro
         return consultarPostagem(id).isPresent();
     }//olha o zap
 

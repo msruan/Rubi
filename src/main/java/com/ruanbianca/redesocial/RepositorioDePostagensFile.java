@@ -72,15 +72,16 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
     public Optional<Postagem> consultarPostagem(UUID id) {
 
-        Optional<Postagem> saida = Optional.empty();
+        Optional<Postagem> postagem = Optional.empty();
 
         for (Postagem post : getPostagens()) {
-            if (post.getId() == id) {
-                saida = Optional.of(post);
+            if (post.getId().equals(id)) {
+                System.out.println("achou");
+                postagem = Optional.ofNullable(post);
                 break;
-            }
-        }
-        return saida;
+            }//ok
+        }//vou so fazer o teste no meu pc q eu tinha falado
+        return postagem;
     }
 
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) {
@@ -204,38 +205,32 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
     public void atualizarPostagem(Postagem postagem) throws NullObjectAsArgumentException, PostNotFoundException{
 
-        
         Optional.ofNullable(postagem).orElseThrow(NullAtributesException::new);
 
         String pathDb = getCaminhoDoBancoDeDados("DB");
         String pathPosts = getCaminhoDoBancoDeDados("Postagem");
 
         if(! ManipuladorDeArquivos.arquivoExiste(pathDb) || ! ManipuladorDeArquivos.arquivoExiste(pathPosts))
-            throw new PostNotFoundException("");//sera q quebrou aqui?
+            throw new PostNotFoundException("O erro ocorreu na linha 214 de RepoPostsFile!");//sera q quebrou aqui?
         
         ArrayList<String> posts = ManipuladorDeArquivos.lerLinhas(pathPosts);
         StringBuilder novoConteudo = new StringBuilder();
-        boolean achou = false;
+     
         UUID id = postagem.getId();
-
-
+    
         for(String post: posts){
-
-            if(! post.split(";")[0].equals(id.toString()) ){//Lembrete: caso a ordem do banco seja alterada tem q mudar isso
+         
+            if(! post.split(";")[1].equals(id.toString())){
                 novoConteudo.append(post+"\n");
-            }else
-                novoConteudo.append(salvarPostagem(postagem)+"\n");
+                
+            }else{
+                novoConteudo.append(salvarPostagem(postagem));
+            } 
         }
-        
-        if(! achou){
-            throw new PostNotFoundException();//ou foi aqui?
-        }else{//oi
-            try{//sho olhar o erro foi em rede social 
+            try{
             ManipuladorDeArquivos.gravarArquivo(pathPosts, novoConteudo.toString(), false);
             }catch(IOException e){
                 System.err.println("Erro durante a atualização de postagem!");
             }
-        }
-        
     }
 }

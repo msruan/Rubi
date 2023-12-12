@@ -189,9 +189,13 @@ public class App {
                     ArrayList<Postagem> postagensEncontradas;
                     username = lerString("Digite o username do perfil buscado: ", input);
                     postagensEncontradas = Rubi.exibirPostagensPorPerfil(username);
-                    exibirFeed(postagensEncontradas, Rubi);
+                    if(Optional.ofNullable(postagensEncontradas).isPresent() && postagensEncontradas.size()>0){
+                        exibirFeed(postagensEncontradas,Rubi);
+                    }else{
+                        System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
+                    }
                     break;
-
+//oii, posso dar push?
 
                 case EXIBIR_POST_HASHTAG:
 
@@ -333,7 +337,12 @@ public class App {
     }
 
     public static void exibirFeed(ArrayList<Postagem> postagens, RedeSocial rede){
-
+        //amg... tudo bem?
+        //eh q o autocomplete morreu, achei q tinha caido a live
+        //q foi? amg eh comum ele morrer... kkkkkk posso reabrir o live
+        //Todo: remover quando funcionar -> eu tanko, rlx
+        if(postagens.isEmpty())
+            System.out.println("Oxi, não foi nenhuma postagem para o exibir");
         final String CURTIR_POSTAGEM = "1";
         final String DESCURTIR_POSTAGEM = "2";
         String feedAtualizado = "";

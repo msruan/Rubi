@@ -33,10 +33,14 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
 
 
     public ArrayList<Postagem> getPostagens() {
+        for(Postagem post: _postagens){
+            if(post instanceof PostagemAvancada){
+                ((PostagemAvancada)post).decrementarVisualizacoes();
+            }
+        }
         return _postagens;
     }
 
-    
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
 
         ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
