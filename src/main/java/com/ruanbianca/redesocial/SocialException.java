@@ -40,6 +40,9 @@ class PostNotFoundException extends SocialException {
     public PostNotFoundException(){
         super( "Post não encontrado!");
     }
+    public PostNotFoundException(String message){
+        super( "Post não encontrado! "+message);
+    }
 }
 
 class NullObjectAsArgumentException extends SocialException {

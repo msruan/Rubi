@@ -65,17 +65,20 @@ public class RedeSocial {
 
     public void curtir(UUID id) throws PostNotFoundException{
 
-        Optional <Postagem> post = _postagens.consultarPostagem(id);
-        post.orElseThrow(PostNotFoundException::new);//aqui ele lanca uma excecao se tiver vazio
-        post.get().curtir();
-    }
+        Optional <Postagem> post = _postagens.consultarPostagem(id);//consultarPostagem ta com pau?
+        if(post.isEmpty())
+            throw new PostNotFoundException("Ocorreu na linha 70 de Rede Social!");
+        post.get().curtir();//oxi - pior q eh - calma ai
+        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
+    }//testar? abre ai 
 
-
+//yes honey
     public void descurtir(UUID id) throws PostNotFoundException{
         
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
+        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
     }
 
 

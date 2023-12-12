@@ -236,4 +236,37 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
             System.exit(1);
         }
     }
+
+    public void atualizarPostagem(Postagem post){
+        Optional.ofNullable(post).orElseThrow(NullObjectAsArgumentException::new);
+
+        try {
+            if(post instanceof PostagemAvancada){
+
+                String update_sql2 = "UPDATE Postagem SET visualizacoes_restantes = ? WHERE id = ?";
+                PreparedStatement update2 = conexao.prepareStatement(update_sql2);
+                update2.setInt(1, ((PostagemAvancada)post).getVisualizacoesRestantes());
+                update2.setString(2, post.getId().toString());
+                update2.executeUpdate();
+            }
+
+            String update_sql = "UPDATE Postagem SET curtidas = ?, descurtidas = ? WHERE id = ?";
+            PreparedStatement update = conexao.prepareStatement(update_sql);
+            update.setInt(1,post.getCurtidas());
+            update.setInt(2, post.getDescurtidas());
+            update.setString(3, post.getId().toString());
+            update.executeUpdate();//pera, por logo em Irepositoriobianca ... onde tu ta passand o id? acho q foi agrits good
+
+        } catch (SQLException e) {// pera
+            System.err.println(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."
+                            + e.getMessage());
+            e.printStackTrace();
+            System.err.flush();
+            System.exit(1);
+            ///ei, mas a gente tbm nao vai usar esse metodo pra
+            //tirar views?  hi...como q ta escrito la?
+            //you right assim
+        }//acho q e so isso aq.. em tese
+    }//how are u doing? acho q o de files ta feito...
 }

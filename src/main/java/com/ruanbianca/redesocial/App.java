@@ -345,10 +345,12 @@ public class App {
                 postAtual =  postagens.get(i);
                 System.out.println(feedAtualizado + rede.exibirPostagem(postAtual));
                 resposta = lerString2("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
+
                 if(resposta.equals(CURTIR_POSTAGEM)){
-                    postAtual.curtir();
+                    rede.curtir(postAtual.getId());
+
                 }else if(resposta.equals(DESCURTIR_POSTAGEM)){
-                    postAtual.descurtir();
+                    rede.descurtir(postAtual.getId());
                 }
                 if(postAtual instanceof PostagemAvancada){
 

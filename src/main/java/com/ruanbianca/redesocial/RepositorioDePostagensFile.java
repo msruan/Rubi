@@ -202,4 +202,40 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
         }
     }
 
+    public void atualizarPostagem(Postagem postagem) throws NullObjectAsArgumentException, PostNotFoundException{
+
+        
+        Optional.ofNullable(postagem).orElseThrow(NullAtributesException::new);
+
+        String pathDb = getCaminhoDoBancoDeDados("DB");
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
+
+        if(! ManipuladorDeArquivos.arquivoExiste(pathDb) || ! ManipuladorDeArquivos.arquivoExiste(pathPosts))
+            throw new PostNotFoundException("");//sera q quebrou aqui?
+        
+        ArrayList<String> posts = ManipuladorDeArquivos.lerLinhas(pathPosts);
+        StringBuilder novoConteudo = new StringBuilder();
+        boolean achou = false;
+        UUID id = postagem.getId();
+
+
+        for(String post: posts){
+
+            if(! post.split(";")[0].equals(id.toString()) ){//Lembrete: caso a ordem do banco seja alterada tem q mudar isso
+                novoConteudo.append(post+"\n");
+            }else
+                novoConteudo.append(salvarPostagem(postagem)+"\n");
+        }
+        
+        if(! achou){
+            throw new PostNotFoundException();//ou foi aqui?
+        }else{//oi
+            try{//sho olhar o erro foi em rede social 
+            ManipuladorDeArquivos.gravarArquivo(pathPosts, novoConteudo.toString(), false);
+            }catch(IOException e){
+                System.err.println("Erro durante a atualização de postagem!");
+            }
+        }
+        
+    }
 }
