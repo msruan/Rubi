@@ -30,9 +30,15 @@ class NullAtributesException extends SocialException {
     }
 }
 
-class BadChoiceOfEntityForDB extends SocialException {
-    public BadChoiceOfEntityForDB(){
-        super( "Você tentou conseguir o caminho do banco de dados, mas digitou o nome da entidade errado! Tente usar <Perfil> ou <Postagem>");
+class NullObjectAsArgumentException extends SocialException {
+    public NullObjectAsArgumentException(){
+        super( "O argumento deveria ser um objeto (String, Integer, Perfil, Postagem...), mas você passou null!");
+    }
+}
+
+class UserNotFoundException extends SocialException {
+    public UserNotFoundException(){
+        super("Usuário não encontrado!");
     }
 }
 
@@ -45,14 +51,8 @@ class PostNotFoundException extends SocialException {
     }
 }
 
-class NullObjectAsArgumentException extends SocialException {
-    public NullObjectAsArgumentException(){
-        super( "O argumento deveria ser um objeto (String, Integer, Perfil, Postagem...), mas você passou null!");
-    }
-}
-
-class UserNotFoundException extends SocialException {
-    public UserNotFoundException(){
-        super("Usuário não encontrado!");
+class BadChoiceOfEntityForDB extends SocialException {
+    public BadChoiceOfEntityForDB(){
+        super( "Você tentou conseguir o caminho do banco de dados, mas digitou o nome da entidade errado! Tente usar <Perfil> ou <Postagem>");
     }
 }

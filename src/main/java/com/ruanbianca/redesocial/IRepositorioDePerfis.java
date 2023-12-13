@@ -19,7 +19,7 @@ public interface IRepositorioDePerfis {
     public void incluir(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException, Exception;
     
 
-    public void removerPerfil(String username) throws Exception;
+    public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException, Exception;
 
 
     public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException, Exception;

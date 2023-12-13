@@ -19,22 +19,11 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
         if(ManipuladorDeArquivos.arquivoExiste(pathPerfis)){    
 
-            try {
-                ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(pathPerfis);
-                for(String linha: linhas){
-                    try{
-                        perfis.add(resgatarPerfil(linha));
-
-                    }catch(RuntimeException e){
-                        System.out.println("O erro tá na linha\n"+linha+"de resgatar perfis!"+e.getMessage());
-                    }
-                }
-            }catch(SocialException e){
-                System.err.println("O erro está em SocialException !"+e.getMessage());
-
-            }catch(RuntimeException e){
-                System.err.println("O erro tá na funcao resgatarPerfis no geral! "+e.getMessage());
+            ArrayList<String> linhas = ManipuladorDeArquivos.lerLinhas(pathPerfis);
+            for(String linha: linhas){
+                perfis.add(resgatarPerfil(linha));
             }
+            
         }return perfis;
     }
 
@@ -59,9 +48,8 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         
         return consultar(id,username,email).isPresent();    
     }
-
-
-    public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException{
+    
+    public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException, IOException{
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
         
@@ -75,31 +63,20 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
             File myDir = new File(pathDb);
             if(!myDir.mkdir())
-                System.err.println("Erro durante a criação do diretório DB!");
+                throw new IOException("Erro durante a criação do diretório DB!");
         }
         
         try{
             ManipuladorDeArquivos.gravarArquivo(pathPerfis, salvarPerfil(perfil), true);
 
         }catch(IOException e){
-            System.err.println("Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
+            throw new IOException("Erro durante a adição do perfil!");
         }
     }
 
 
-    public String salvarPerfil(Perfil perfil) throws NullObjectAsArgumentException{
-
-        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
-
-        return perfil.getId().toString()+";"+perfil.getUsername()+";"+perfil.getNome()+";"+perfil.getEmail()+";"+perfil.getBiografia()+"\n";
-    }  
-
-
     //Todo: apagar perfis.txt se nao houverem mais nenhum perfil
-    public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
+    public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException, IOException{
         
         Optional.ofNullable(username).orElseThrow(NullAtributesException::new);
 
@@ -125,14 +102,14 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             try{
             ManipuladorDeArquivos.gravarArquivo(pathPerfis, novoConteudo.toString(), false);
             }catch(IOException e){
-                System.err.println("Erro durante a remoção de perfil!");
+                throw new IOException("Erro durante a remoção de perfil!");
             }
         }
         
     }
 
 
-    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException, IOException{
         
         if(!usuarioJaExite(null, username, nomeAtributo))
             throw new UserNotFoundException();
@@ -168,9 +145,17 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
         try{
             ManipuladorDeArquivos.gravarArquivo(pathPerfis, novoConteudo.toString(), false);
         }catch(IOException e){
-            System.err.println("Erro durante a remoção de perfil!");
+            throw new IOException("Erro durante a atualização do perfil!");
         }
     }
+
+
+    public String salvarPerfil(Perfil perfil) throws NullObjectAsArgumentException{
+
+        Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
+
+        return perfil.getId().toString()+";"+perfil.getUsername()+";"+perfil.getNome()+";"+perfil.getEmail()+";"+perfil.getBiografia()+"\n";
+    }  
 
 
     public Perfil resgatarPerfil(String linha){

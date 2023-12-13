@@ -46,6 +46,20 @@ Férias:
 - Melhorar interface (Web ou tlvz JavaFx)
 
 
+Apendice:
+
+- Tratamento para exceções SQL:
+
+} catch (SQLException e) {
+    System.err.println(
+            "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."
+                    + e.getMessage());
+    e.printStackTrace();
+    System.err.flush();
+    System.exit(1);
+    }
+
+
 Falecidas:
 
 // case REMOVER_POSTAGEM:

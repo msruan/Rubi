@@ -1,5 +1,6 @@
 package com.ruanbianca.redesocial;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,7 +29,7 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
             String senha = "123456";
             conexao = DriverManager.getConnection(url, usuario, senha);
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            throw new IOException("Erro durante a instanciação do Repositorio de Postagens SQL!\nPor favor, tente outra forma de persistência.");
         }
     }
     
@@ -75,46 +76,35 @@ public class RepositorioDePostagensSql implements IRepositorioDePostagens {
 
 
     public ArrayList<PostagemAvancada> getPostagensAvancadas() throws Exception{
-
-         ArrayList<PostagemAvancada> postagens = new ArrayList<>();
+         
+        ArrayList<PostagemAvancada> postagens = new ArrayList<>();
         PostagemAvancada postagem;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        
         try{
-        ResultSet resultado = selectFromTabela("Postagem");
+            ResultSet resultado = selectFromTabela("Postagem");       
 
-       
+            while (resultado.next()) {
 
-        while (resultado.next()) {
-
-            if (resultado.getString("visualizacoes_restantes") != null) {
-                
-                postagem = new PostagemAvancada(UUID.fromString(
-                        resultado.getString("id")),
-                        UUID.fromString(resultado.getString("perfil_id")),
-                        LocalDateTime.parse(resultado.getString("data"), formatter),
-                        resultado.getString("texto"),
-                        resultado.getInt("curtidas"),
-                        resultado.getInt("descurtidas"),
-                        resultado.getInt("visualizacoes_restantes"),
-                        new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
-                postagens.add(postagem);
+                if (resultado.getString("visualizacoes_restantes") != null) {
+                    
+                    postagem = new PostagemAvancada(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"),
+                            resultado.getInt("visualizacoes_restantes"),
+                            new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
+                    postagens.add(postagem);
+                }
             }
-        }
-        return postagens;
+            return postagens;
         } catch (SQLException e) {
             throw new SQLException(
                     "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
-            
-        // } catch (SQLException e) {
-
-        //     System.err.println(
-        //             "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-        //     e.printStackTrace();
-        //     System.err.flush();
-        //     System.exit(1);
-        //     return null;
-        // }
     }
 
 
@@ -126,48 +116,37 @@ Optional<Postagem> postagemOptional = Optional.empty();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try{
             ResultSet resultado = selectFromTabelaWhere("Postagem",String.format("id='%s'",id.toString()));
-
         
-        
-        if (resultado.next()) {
+            if (resultado.next()) {
 
-            if (resultado.getString("visualizacoes_restantes") == null) {
+                if (resultado.getString("visualizacoes_restantes") == null) {
 
-                postagem = new Postagem(UUID.fromString(
-                        resultado.getString("id")),
-                        UUID.fromString(resultado.getString("perfil_id")),
-                        LocalDateTime.parse(resultado.getString("data"), formatter),
-                        resultado.getString("texto"),
-                        resultado.getInt("curtidas"),
-                        resultado.getInt("descurtidas"));
+                    postagem = new Postagem(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"));
 
-            } else {
-                postagem = new PostagemAvancada(UUID.fromString(
-                        resultado.getString("id")),
-                        UUID.fromString(resultado.getString("perfil_id")),
-                        LocalDateTime.parse(resultado.getString("data"), formatter),
-                        resultado.getString("texto"),
-                        resultado.getInt("curtidas"),
-                        resultado.getInt("descurtidas"),
-                        resultado.getInt("visualizacoes_restantes"),
-                        new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
+                } else {
+                    postagem = new PostagemAvancada(UUID.fromString(
+                            resultado.getString("id")),
+                            UUID.fromString(resultado.getString("perfil_id")),
+                            LocalDateTime.parse(resultado.getString("data"), formatter),
+                            resultado.getString("texto"),
+                            resultado.getInt("curtidas"),
+                            resultado.getInt("descurtidas"),
+                            resultado.getInt("visualizacoes_restantes"),
+                            new ArrayList<>(Arrays.asList(resultado.getString("hashtags").split("#"))));
+                }
+                postagemOptional = Optional.ofNullable(postagem);
             }
-            postagemOptional = Optional.ofNullable(postagem);
-        }
-        return postagemOptional;
+            return postagemOptional;
         } catch (SQLException e) {
             throw new SQLException(
                     "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
-        // } catch (SQLException e) {
-
-        //     System.err.println(
-        //             "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-        //     e.printStackTrace();
-        //     System.err.flush();
-        //     System.exit(1);
-        //     return null;
-        // }
     }
 
 
@@ -204,25 +183,28 @@ Optional<Postagem> postagemOptional = Optional.empty();
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
 
         String insert_sql = "INSERT INTO Postagem() VALUES (?,?,?,?,?,?,?,?)";
+        
         try{
-        PreparedStatement insert = conexao.prepareStatement(insert_sql);
-        insert.setString(1, postagem.getId().toString());
-        insert.setString(2, postagem.getPerfilId().toString());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = postagem.getData().format(formatter);
-        insert.setString(3, formattedDateTime);
-        insert.setString(4, postagem.getTexto());
-        insert.setInt(5, postagem.getCurtidas());
-        insert.setInt(6, postagem.getDescurtidas());
-        if (postagem instanceof PostagemAvancada) {
-            PostagemAvancada postagemAv = (PostagemAvancada) postagem;
-            insert.setInt(7, postagemAv.getVisualizacoesRestantes());
-            insert.setString(8, postagemAv.getHashtagsParaDb());
-        } else {
-            insert.setNull(7, Types.INTEGER);
-            insert.setNull(8, Types.VARCHAR);
-        }
-        insert.executeUpdate();
+
+            PreparedStatement insert = conexao.prepareStatement(insert_sql);
+            insert.setString(1, postagem.getId().toString());
+            insert.setString(2, postagem.getPerfilId().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = postagem.getData().format(formatter);
+            insert.setString(3, formattedDateTime);
+            insert.setString(4, postagem.getTexto());
+            insert.setInt(5, postagem.getCurtidas());
+            insert.setInt(6, postagem.getDescurtidas());
+            
+            if (postagem instanceof PostagemAvancada) {
+                PostagemAvancada postagemAv = (PostagemAvancada) postagem;
+                insert.setInt(7, postagemAv.getVisualizacoesRestantes());
+                insert.setString(8, postagemAv.getHashtagsParaDb());
+            } else {
+                insert.setNull(7, Types.INTEGER);
+                insert.setNull(8, Types.VARCHAR);
+            }
+            insert.executeUpdate();
 
         } catch (SQLException e) {
             throw new SQLException(
@@ -237,9 +219,9 @@ Optional<Postagem> postagemOptional = Optional.empty();
 
         String delete_sql = "DELETE FROM Postagem WHERE perfil_id=?";
         try{
-        PreparedStatement delete = conexao.prepareStatement(delete_sql);
-        delete.setString(1, perfil.getId().toString());
-        delete.executeUpdate();
+            PreparedStatement delete = conexao.prepareStatement(delete_sql);
+            delete.setString(1, perfil.getId().toString());
+            delete.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(
                     "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");

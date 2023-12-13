@@ -99,6 +99,7 @@ public class RedeSocial {
 
 
      public void removerPerfil(String username) throws Exception{
+        
         Perfil per_fil = consultarPerfilPorUsername(username).orElseThrow(UserNotFoundException::new);
         _postagens.removerPostPorPerfil(per_fil);
         _perfis.removerPerfil(username);
@@ -174,11 +175,7 @@ public class RedeSocial {
     
         Optional <Perfil> perfil = consultarPerfilPorUsername(username);
         if(perfil.isEmpty()){
-            //Todo: remover esse print
-            System.out.println("Username não encontrado!");
-            return null;
-        }else{
-            System.out.println("Perfil encontrado");
+            throw new UserNotFoundException();
         }
         
         Stream <Postagem> filtrados = _postagens.getPostagens().stream();

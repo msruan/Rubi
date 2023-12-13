@@ -127,7 +127,7 @@ public class App {
                             String hashtag = lerString("Digite uma hashtag: ",input);
                             hashsProConstrutor.add(hashtag);
 
-                            boolean querBotarMaisUmaHashtag;//Todo: colocar um nome melhor...
+                            boolean querBotarMaisUmaHashtag;
 
                             do{
                                 if (lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
@@ -309,11 +309,7 @@ public class App {
                     pausar();
             
             }while(!opcao.equals(SAIR));
-            
-        } catch (NullAtributesException e) {
-            e.getMessage();
-        } catch (UserNotFoundException e) {
-            e.getMessage();
+
         } catch (Exception e) {
             e.getMessage();
         }

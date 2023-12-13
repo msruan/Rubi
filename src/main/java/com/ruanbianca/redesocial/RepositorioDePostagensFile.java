@@ -21,15 +21,10 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
         if (ManipuladorDeArquivos.arquivoExiste(pathPosts)) {
 
-            try {
-                ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
+            ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
 
-                for (String linha : conteudo)
-                    postagens.add(resgatarPostagem(linha));
-
-            } catch (RuntimeException e) {
-                System.out.println("O erro ocorreu em resgatar postagens+" + e.getMessage());
-            }
+            for (String linha : conteudo)
+                postagens.add(resgatarPostagem(linha));
         }
         return postagens;
     }
@@ -41,24 +36,15 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
         if (ManipuladorDeArquivos.arquivoExiste(pathPosts)) {
 
-            try {
-                ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
+            ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
 
-                for (String linha : conteudo){
+            for (String linha : conteudo){
 
-                    if(linha.split(";")[0].equals("1")){
+                if(linha.split(";")[0].equals("1"))
 
-                        postagens.add((PostagemAvancada)resgatarPostagem(linha));
-                    }
-
-                }
-
-            } catch (RuntimeException e) {
-
-                System.out.println("O erro ocorreu em resgatar postagens+" + e.getMessage());
+                    postagens.add((PostagemAvancada)resgatarPostagem(linha));
             }
-        }
-        return postagens;
+        }return postagens;
     }
     
 
@@ -67,13 +53,13 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
         Optional<Postagem> postagem = Optional.empty();
 
         for (Postagem post : getPostagens()) {
+
             if (post.getId().equals(id)) {
                 System.out.println("achou");
                 postagem = Optional.ofNullable(post);
                 break;
             }
-        }
-        return postagem;
+        }return postagem;
     }
 
 
@@ -105,10 +91,10 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
     }
 
 
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException {
+    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException, IOException {
 
-        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);// lanca uma excecao se postagem
-                                                                                      // for nunla
+        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
+
         if (postagemJaExiste(postagem.getId()))
             throw new PostAlreadyExistsException();
 
@@ -124,16 +110,12 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             ManipuladorDeArquivos.gravarArquivo(pathPosts, salvarPostagem(postagem), true);
 
         } catch (IOException e) {
-            System.err.println(
-                    "Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
+            throw new IOException("Erro durante inclusão do perfil");
         }
     }
     
 
-    public void removerPostPorPerfil(Perfil perfil) {
+    public void removerPostPorPerfil(Perfil perfil) throws IOException{
 
         ArrayList<Postagem> postagens = getPostagens();
         postagens.removeIf(post -> post.getPerfilId().equals(perfil.getId()));
@@ -145,15 +127,12 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
                 ManipuladorDeArquivos.gravarArquivo(pathPosts, salvarPostagem(post), true);
 
         } catch (IOException e) {
-            System.err.println(
-                    "Os arquivos não estão funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
+            throw new IOException(
+                    "Erro durante a remoção das postagens do perfil!");
         }
     }
 
-    public void atualizarPostagem(Postagem postagem) throws NullObjectAsArgumentException, PostNotFoundException{
+    public void atualizarPostagem(Postagem postagem) throws NullObjectAsArgumentException, PostNotFoundException, IOException{
 
         Optional.ofNullable(postagem).orElseThrow(NullAtributesException::new);
 
@@ -180,7 +159,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             try{
             ManipuladorDeArquivos.gravarArquivo(pathPosts, novoConteudo.toString(), false);
             }catch(IOException e){
-                System.err.println("Erro durante a atualização de postagem!");
+                throw new IOException("Erro durante a atualização de postagem!");
             }
     }
 
