@@ -14,20 +14,22 @@ No Ubuntu e derivados, você pode obter o Maven via terminal assim:
 
 ## Documentação
 
-Inicialmente os atributos privados estavam sendo nomeados com o padrão Python (__atribute_), mas após utilizar a biblioteca Lombok para gerar os getters automaticamente, essa nomenclatura se tornou inviável, pois atributos como__id,_ tinham métodos _get_id()_, enquanto esperava-se um _getId()_.
+Inicialmente os atributos privados estavam sendo nomeados com o padrão Python (__atribute_), mas após utilizar a biblioteca Lombok para gerar os getters automaticamente, essa nomenclatura se tornou inviável, pois atributos como __id,_ tinham métodos _get_id()_, enquanto esperava-se um _getId()_.
 
 ## Banco De Dados
 
-Para persistência dos dados, foram utilizados arquivos de texto, que estão no  formato abaixo, separados por ponto e vírgula(;).
+### + Arquivos
 
-### _PERFIL_
+Na persistência com arquivos de texto, os daddos são salvos no formato abaixo, separados por ponto e vírgula(;).
+
+#### _PERFIL_
 
 |    IdPerfil    |    Username   |        Nome    |        Email        |     Biografia    |
 | :--------------: | :-------------: | :--------------: | :-------------------: | :-------------: |
 | 140a3dd2-2c... |   bbianca     | Bianca Bezerra | bianca-bz@gmail.com | I'm Bia |
 | 4ffd42c0-33... |   msruan      | Ruan Macedo    | ruan.macs@gmail.com | I'm Ruan |
 
-### _POSTAGEM_
+#### _POSTAGEM_
 
 | Tipo |    IdPost      |    IdPerfil    |        Data          | Texto     | Likes | Deslikes | ViewsRestantes | Hashtags<> |
 | :----: | :--------------: | :--------------: | :--------------------: | :---------: | :-----: | :--------: | :---------------: | :-----------: |
@@ -35,3 +37,8 @@ Para persistência dos dados, foram utilizados arquivos de texto, que estão no 
 |   0  | b70566f9-62... | 4ffd42c0-33... | 2021-05-28T21:00:45Z | quer ler? |  12   |    2     |                 |             |
 
 _**0 = Postagem**_, _**1 = PostagemAvancada**_.
+
+### + SQL
+
+Utilizamos MySQL para conexão com o BD. Antes, é necessário criar o BD, cujo script de criação está nos arquivos do projeto no foramto .sql.
+Única diferença para as tabelas do modelo de arquivos, é que não há coluna para guardar o tipo de Postagem.
