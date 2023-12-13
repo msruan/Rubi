@@ -7,26 +7,26 @@ import java.util.UUID;
 public interface IRepositorioDePostagens {
    
 
-    public ArrayList<Postagem> getPostagens();
+    public ArrayList<Postagem> getPostagens() throws Exception;
 
 
-    public ArrayList<PostagemAvancada> getPostagensAvancadas();
+    public ArrayList<PostagemAvancada> getPostagensAvancadas() throws Exception;
 
 
-    public Optional<Postagem> consultarPostagem(UUID id);
+    public Optional<Postagem> consultarPostagem(UUID id) throws Exception;
 
     
-    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag);
+    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) throws Exception;
 
 
-    public boolean postagemJaExiste(UUID id);
+    public boolean postagemJaExiste(UUID id) throws Exception;
 
 
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException;
+    public void incluir(Postagem postagem) throws Exception;
 
 
-    public void removerPostPorPerfil(Perfil perfil);
+    public void removerPostPorPerfil(Perfil perfil) throws Exception;
     
     
-    public void atualizarPostagem(Postagem post);
+    public void atualizarPostagem(Postagem post) throws Exception;
 }

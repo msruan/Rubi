@@ -27,42 +27,42 @@ public class RedeSocial {
     }
 
 
-    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag){//a gente deveria poder passar várias hashtags
+    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag) throws Exception{//a gente deveria poder passar várias hashtags
 
         return _postagens.consultarPostagens(texto,perfil,hashtag);
     }
 
 
-    public Optional<Perfil> consultarPerfil(UUID id){
+    public Optional<Perfil> consultarPerfil(UUID id) throws Exception{
         
         return _perfis.consultar(id, null, null);
     }
 
-    public Optional<Perfil> consultarPerfilPorUsername(String username){
+    public Optional<Perfil> consultarPerfilPorUsername(String username) throws Exception{
         
         return _perfis.consultar(null, username, null);
     }
 
 
-    public boolean usuarioJaExite(UUID id, String username, String email){  
+    public boolean usuarioJaExite(UUID id, String username, String email) throws Exception{  
         
         return _perfis.usuarioJaExite(id, username, email);     
     }
 
 
-    public void incluirPerfil(Perfil perfil) throws NullObjectAsArgumentException, NullAtributesException, UserAlreadyExistsException{
+    public void incluirPerfil(Perfil perfil) throws Exception{
         
         _perfis.incluir(perfil);
     }
     
 
-    public void incluirPostagem(Postagem postagem) throws NullAtributesException{
+    public void incluirPostagem(Postagem postagem) throws Exception{
         
         _postagens.incluir(postagem);
     }
 
 
-    public void decrementarVisualizacoes(UUID id) throws PostNotFoundException{
+    public void decrementarVisualizacoes(UUID id) throws Exception{
 
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         if(post.isEmpty())
@@ -72,7 +72,7 @@ public class RedeSocial {
     }
 
 
-    public void curtir(UUID id) throws PostNotFoundException{
+    public void curtir(UUID id) throws Exception{
 
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         if(post.isEmpty())
@@ -82,7 +82,7 @@ public class RedeSocial {
     }    
 
 
-    public void descurtir(UUID id) throws PostNotFoundException{
+    public void descurtir(UUID id) throws Exception{
         
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);
@@ -98,7 +98,7 @@ public class RedeSocial {
     }
 
 
-     public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
+     public void removerPerfil(String username) throws Exception{
         Perfil per_fil = consultarPerfilPorUsername(username).orElseThrow(UserNotFoundException::new);
         _postagens.removerPostPorPerfil(per_fil);
         _perfis.removerPerfil(username);
@@ -131,7 +131,7 @@ public class RedeSocial {
     }
     
 
-    public String exibirPostagem(Postagem postagem) throws NullObjectAsArgumentException, NullAtributesException{
+    public String exibirPostagem(Postagem postagem) throws Exception{
         
         Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);
 
@@ -170,7 +170,7 @@ public class RedeSocial {
     }
     
 
-    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
+    public ArrayList<Postagem> exibirPostagensPorPerfil(String username) throws Exception { 
     
         Optional <Perfil> perfil = consultarPerfilPorUsername(username);
         if(perfil.isEmpty()){
@@ -198,7 +198,7 @@ public class RedeSocial {
     }
  
 
-    public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(String hashtag){
+    public ArrayList<PostagemAvancada> exibirPostagensPorHashtag(String hashtag) throws Exception{
         
         Stream <PostagemAvancada> filtrados = _postagens.getPostagensAvancadas().stream();
         filtrados = filtrados.filter(post -> {
@@ -212,7 +212,7 @@ public class RedeSocial {
     }
 
 
-    public ArrayList<Postagem> exibirPostagensPopulares(){
+    public ArrayList<Postagem> exibirPostagensPopulares() throws Exception{
         
         Stream <Postagem> filtrados = _postagens.getPostagens().stream();
         filtrados = filtrados.filter(post ->  {
@@ -225,7 +225,7 @@ public class RedeSocial {
     }
 
 
-    public ArrayList<Hashtag> exibirHashtagsPopulares(){
+    public ArrayList<Hashtag> exibirHashtagsPopulares() throws Exception{
 
         Map<String,Integer> mapaHashtags = new HashMap<>();
         Stream <PostagemAvancada> postagens = _postagens.getPostagensAvancadas().stream();
@@ -254,7 +254,7 @@ public class RedeSocial {
     }     
 
 
-    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws Exception{
 
         _perfis.atualizarPerfil(username, novoAtributo, nomeAtributo);
     }

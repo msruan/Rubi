@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class PostagemAvancada extends Postagem {
 
-    private final Integer numeroPadraoVisualizacoesRestantes = 3;
+    private final Integer numeroPadraoVisualizacoesRestantes = 10;
     private @Getter Integer visualizacoesRestantes;
     private @Getter ArrayList<String> hashtags;
 

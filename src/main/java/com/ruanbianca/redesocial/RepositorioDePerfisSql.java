@@ -29,9 +29,9 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
     }
 
     
-    public Optional<Perfil> consultar(UUID id, String username, String email) {
+    public Optional<Perfil> consultar(UUID id, String username, String email) throws SQLException{
 
-        try {
+        try{
             ResultSet resultado = selectFromTabela("Perfil");
 
             while (resultado.next()) {
@@ -54,25 +54,20 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             return Optional.empty();
 
         } catch (SQLException e) {
-
-            System.err.println(
-                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+e.getMessage());
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
-            return Optional.empty();
+            throw new SQLException(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
     }
 
 
-    public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException {
+    public void incluir(Perfil perfil) throws NullObjectAsArgumentException, UserAlreadyExistsException, SQLException {
 
         Optional.ofNullable(perfil).orElseThrow(NullObjectAsArgumentException::new);
-
+        
         if (usuarioJaExite(perfil.getId(), perfil.getUsername(), perfil.getEmail())) {
             throw new UserAlreadyExistsException();
         }
-        try {
+        try{
             String insert_sql = "INSERT INTO Perfil(id, username, nome, email, biografia) VALUES (?,?,?,?,?)";
             PreparedStatement insert = conexao.prepareStatement(insert_sql);
             insert.setString(1, perfil.getId().toString());
@@ -81,42 +76,38 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             insert.setString(4, perfil.getEmail());
             insert.setString(5, perfil.getBiografia());
             insert.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println(
-                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."
-                            + e.getMessage());
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
+      } catch (SQLException e) {
+            throw new SQLException(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
     }
 
 
     ResultSet selectFromTabela(String nomeTabela) throws SQLException {
+        try{
+        ResultSet resultado = null;
+        Statement statement = conexao.createStatement();
 
-        try {
-            ResultSet resultado = null;
-            Statement statement = conexao.createStatement();
-
-            String querySelect = String.format("SELECT * FROM %s", nomeTabela);
-            resultado = statement.executeQuery(querySelect);
-            return resultado;
-
+        String querySelect = String.format("SELECT * FROM %s", nomeTabela);
+        resultado = statement.executeQuery(querySelect);
+        return resultado;
         } catch (SQLException e) {
-            throw e;
+            throw new SQLException(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
     }
 
 
-    public void removerPerfil(String username) {
-        try {
-            String delete_sql = "DELETE FROM Perfil WHERE username = ?";
-            PreparedStatement delete = conexao.prepareStatement(delete_sql);
-            delete.setString(1, username);
-            int afetado = delete.executeUpdate();
-            if (afetado == 0) {
-                throw new UserNotFoundException();
-            }
+    public void removerPerfil(String username) throws UserNotFoundException, SQLException{
+
+        String delete_sql = "DELETE FROM Perfil WHERE username = ?";
+        try{
+        PreparedStatement delete = conexao.prepareStatement(delete_sql);
+        delete.setString(1, username);
+        int afetado = delete.executeUpdate();
+        if (afetado == 0) {
+            throw new UserNotFoundException();
+        }
         } catch (SQLException e) {
             System.err.println(
                     "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."
@@ -124,55 +115,55 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             e.printStackTrace();
             System.err.flush();
             System.exit(1);
+        
         }
     }
 
 
-    public boolean usuarioJaExite(UUID id, String username, String email) {
+    public boolean usuarioJaExite(UUID id, String username, String email) throws SQLException{
 
         return consultar(id, username, email).isPresent();
     }
 
 
-    public ArrayList<Perfil> getPerfis() {
+    public ArrayList<Perfil> getPerfis() throws SQLException{
 
-        try {
-            ResultSet resultado = selectFromTabela("Perfil");
+        ResultSet resultado = selectFromTabela("Perfil");
 
-            ArrayList<Perfil> perfis = new ArrayList<>();
-            Perfil perfil;
+        ArrayList<Perfil> perfis = new ArrayList<>();
+        Perfil perfil;
 
-            while (resultado.next()) {
+        while (resultado.next()) {
 
-                perfil = new Perfil(UUID.fromString(
-                        resultado.getString("id")),
-                        resultado.getString("username"),
-                        resultado.getString("nome"),
-                        resultado.getString("email"),
-                        resultado.getString("biografia"));
-                perfis.add(perfil);
-            }
-            return perfis;
-
-        } catch (SQLException e) {
-
-            System.err.println(
-                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
-            return null;
+            perfil = new Perfil(UUID.fromString(
+                    resultado.getString("id")),
+                    resultado.getString("username"),
+                    resultado.getString("nome"),
+                    resultado.getString("email"),
+                    resultado.getString("biografia"));
+            perfis.add(perfil);
         }
+        return perfis;
+
+        // } catch (SQLException e) {
+
+        //     System.err.println(
+        //             "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
+        //     e.printStackTrace();
+        //     System.err.flush();
+        //     System.exit(1);
+        //     return null;
+        // }
     }
 
     //Fazer validação do lado de fora?
-    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
+    public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException, SQLException{
         
+        try{
         if(!usuarioJaExite(null, username, nomeAtributo))
             throw new UserNotFoundException();
 
         String update_sql = String.format("UPDATE Perfil SET %s = ? WHERE username = ?",nomeAtributo);
-        try {
 
             // String update_sql = "UPDATE Perfil SET ? = ? WHERE username = ?";
             // PreparedStatement update = conexao.prepareStatement(update_sql);
@@ -181,20 +172,18 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
             // update.setString(3, username);
 
            // String update_sql = String.format("UPDATE Perfil SET %s = '%s' WHERE username = '%s'",nomeAtributo,novoAtributo,username);
-            PreparedStatement update = conexao.prepareStatement(update_sql);
-            update.setString(1, novoAtributo);
-            update.setString(2,username);
-           
-            int afetado = update.executeUpdate();
+        PreparedStatement update = conexao.prepareStatement(update_sql);
+        update.setString(1, novoAtributo);
+        update.setString(2,username);
+        
+        int afetado = update.executeUpdate();
 
-            if (afetado == 0) 
-                throw new UserNotFoundException();
+        if (afetado == 0) 
+            throw new UserNotFoundException();
             
         } catch (SQLException e) {
-            System.err.println("SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência..."+ e.getMessage());
-            e.printStackTrace();
-            System.err.flush();
-            System.exit(1);
+            throw new SQLException(
+                    "SQL não está funcionando no momento, por favor tente novamente com outro tipo de persistência...");
         }
     }
 }
