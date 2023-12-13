@@ -1,8 +1,1 @@
-Todo:
-
-OK - Curtir/descurtir e decrementarViews nao funciona nos outros repos
-OK - Alterar método removerPerfil de RedeSocial para remover primeiros os posts do perfil e depois o perfil em si 
-
-Outras:
-
-Decrementar views começada em Array e em File
+decrementarViews - OK

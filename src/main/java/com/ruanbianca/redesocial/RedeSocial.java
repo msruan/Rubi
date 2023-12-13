@@ -63,22 +63,32 @@ public class RedeSocial {
     }
 
 
-    public void curtir(UUID id) throws PostNotFoundException{
+    public void decrementarVisualizacoes(UUID id) throws PostNotFoundException{
 
-        Optional <Postagem> post = _postagens.consultarPostagem(id);//consultarPostagem ta com pau?
+        Optional <Postagem> post = _postagens.consultarPostagem(id);
         if(post.isEmpty())
             throw new PostNotFoundException("Ocorreu na linha 70 de Rede Social!");
-        post.get().curtir();//oxi - pior q eh - calma ai
-        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
-    }//testar? abre ai 
+        ((PostagemAvancada)post.get()).decrementarVisualizacoes();
+        _postagens.atualizarPostagem(post.get()); 
+    }
 
-//yes honey
+
+    public void curtir(UUID id) throws PostNotFoundException{
+
+        Optional <Postagem> post = _postagens.consultarPostagem(id);
+        if(post.isEmpty())
+            throw new PostNotFoundException("Ocorreu na linha 70 de Rede Social!");
+        post.get().curtir();
+        _postagens.atualizarPostagem(post.get()); 
+    }    
+
+
     public void descurtir(UUID id) throws PostNotFoundException{
         
         Optional <Postagem> post = _postagens.consultarPostagem(id);
         post.orElseThrow(PostNotFoundException::new);
         post.get().descurtir();
-        _postagens.atualizarPostagem(post.get()); //acho q eh esse o esqueleto. a gente começa por array q deve ser o mais simples
+        _postagens.atualizarPostagem(post.get());
     }
 
 

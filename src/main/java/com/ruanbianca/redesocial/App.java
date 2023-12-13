@@ -343,29 +343,40 @@ public class App {
         //Todo: remover quando funcionar -> eu tanko, rlx
         if(postagens.isEmpty())
             System.out.println("Oxi, não foi nenhuma postagem para o exibir");
+
         final String CURTIR_POSTAGEM = "1";
         final String DESCURTIR_POSTAGEM = "2";
-        String feedAtualizado = "";
-        String resposta;
+
+        String feedAtualizado = "", resposta;
         Postagem postAtual;
+
         if(Optional.ofNullable(postagens).isPresent() && postagens.size()>0){
             for(int i  = 0; i < postagens.size(); i++) {   
                 limparConsole();
                 postAtual =  postagens.get(i);
+
+                if(postAtual instanceof PostagemAvancada){
+
+                    rede.decrementarVisualizacoes(postAtual.getId());
+                }
+
                 System.out.println(feedAtualizado + rede.exibirPostagem(postAtual));
                 resposta = lerString2("Interagir?\n(Enter - Não, 1 - Curtir, 2 - Descurtir)\n>>> ");
 
-                if(resposta.equals(CURTIR_POSTAGEM)){
+                
+                if(resposta.equals(CURTIR_POSTAGEM))
+
                     rede.curtir(postAtual.getId());
 
-                }else if(resposta.equals(DESCURTIR_POSTAGEM)){
-                    rede.descurtir(postAtual.getId());
-                }
-                if(postAtual instanceof PostagemAvancada){
+                else if(resposta.equals(DESCURTIR_POSTAGEM))
 
-                    ((PostagemAvancada)postAtual).incrementarVisualizacoes();
-                }
-                feedAtualizado += rede.exibirPostagem(postAtual);
+                    rede.descurtir(postAtual.getId());
+
+                
+                
+                feedAtualizado += rede.exibirPostagem(rede.consultarPostagens(postAtual.getTexto(), null, null).get(0));
+
+                
 
                 if(i+1==postagens.size()){
                     limparConsole();
@@ -390,7 +401,7 @@ public class App {
                 continue;
             }
 
-            if(lenMax != 0 && label.length() > lenMax){//O zero aqui serve apenas para indicar q não se deseja usar o len
+            if(lenMax != 0 && label.length() > lenMax){
                 System.out.printf("O limite de caracteres é %d!\n",lenMax);
                 continue;
             }
