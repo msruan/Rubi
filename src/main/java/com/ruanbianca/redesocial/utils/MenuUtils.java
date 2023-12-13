@@ -65,9 +65,7 @@ public class MenuUtils {
     public static String lerString(String mensagem, Scanner input){
         System.out.print(mensagem);
         String saida = input.nextLine();
-        while(Optional.ofNullable(saida).isEmpty())
-            saida = input.nextLine();
-        if(saida.charAt(0) == '#' && saida.length()>1)
+        if(Optional.ofNullable(mensagem).isPresent() && !mensagem.isEmpty() && saida.charAt(0) == '#' && saida.length()>1)
             return saida.substring(1).trim();
         return saida;
     }

@@ -56,8 +56,8 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
 
 
     public boolean usuarioJaExite(UUID id, String username, String email){  
-        return consultar(id,username,email).isPresent();
-            
+        
+        return consultar(id,username,email).isPresent();    
     }
 
 
@@ -98,36 +98,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }  
 
 
-    public Perfil resgatarPerfil(String linha){
-        // *  IdPerfil  |    Username |  Nome  |    Email        | Bio
-        String []atributos = linha.split(";");
-        return new Perfil(
-            UUID.fromString(atributos[0]),
-            atributos[1],
-            atributos[2],
-            atributos[3],
-            atributos[4]
-        );
-    } 
-   
-
-    public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{
-        
-        if(entidade.equals("Perfil"))
-            return System.getProperty("user.dir")+"/db/perfis.txt";
-
-        else if(entidade.equals("Postagem"))
-            return System.getProperty("user.dir")+"/db/postagens.txt";
-
-        else if(entidade.equals("DB")){
-            return System.getProperty("user.dir")+"/db";   
-        }
-        else {
-            throw new BadChoiceOfEntityForDB();
-        }
-    }
-
-
     //Todo: apagar perfis.txt se nao houverem mais nenhum perfil
     public void removerPerfil(String username) throws NullAtributesException, UserNotFoundException{
         
@@ -162,7 +132,6 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
     }
 
 
-    //Fazer validação do lado de fora?
     public void atualizarPerfil(String username, String novoAtributo, String nomeAtributo) throws UserNotFoundException{
         
         if(!usuarioJaExite(null, username, nomeAtributo))
@@ -200,6 +169,36 @@ public class RepositorioDePerfisFile implements IRepositorioDePerfis {
             ManipuladorDeArquivos.gravarArquivo(pathPerfis, novoConteudo.toString(), false);
         }catch(IOException e){
             System.err.println("Erro durante a remoção de perfil!");
+        }
+    }
+
+
+    public Perfil resgatarPerfil(String linha){
+        // *  IdPerfil  |    Username |  Nome  |    Email        | Bio
+        String []atributos = linha.split(";");
+        return new Perfil(
+            UUID.fromString(atributos[0]),
+            atributos[1],
+            atributos[2],
+            atributos[3],
+            atributos[4]
+        );
+    } 
+   
+
+    public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB{
+        
+        if(entidade.equals("Perfil"))
+            return System.getProperty("user.dir")+"/db/perfis.txt";
+
+        else if(entidade.equals("Postagem"))
+            return System.getProperty("user.dir")+"/db/postagens.txt";
+
+        else if(entidade.equals("DB")){
+            return System.getProperty("user.dir")+"/db";   
+        }
+        else {
+            throw new BadChoiceOfEntityForDB();
         }
     }
 }

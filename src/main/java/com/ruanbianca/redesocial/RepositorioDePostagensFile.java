@@ -36,12 +36,74 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
 
     public ArrayList<PostagemAvancada> getPostagensAvancadas() {
 
-        ArrayList<PostagemAvancada> avancadas = new ArrayList<>();
-        Stream<Postagem> postagens = getPostagens().stream();
-        postagens = postagens.filter(post -> post instanceof PostagemAvancada);
-        postagens.forEach(post -> avancadas.add((PostagemAvancada) post));
-        return avancadas;
+        String pathPosts = getCaminhoDoBancoDeDados("Postagem");
+        ArrayList<PostagemAvancada> postagens = new ArrayList<>();
+
+        if (ManipuladorDeArquivos.arquivoExiste(pathPosts)) {
+
+            try {
+                ArrayList<String> conteudo = ManipuladorDeArquivos.lerLinhas(pathPosts);
+
+                for (String linha : conteudo){
+
+                    if(linha.split(";")[0].equals("1")){
+
+                        postagens.add((PostagemAvancada)resgatarPostagem(linha));
+                    }
+
+                }
+
+            } catch (RuntimeException e) {
+
+                System.out.println("O erro ocorreu em resgatar postagens+" + e.getMessage());
+            }
+        }
+        return postagens;
     }
+    
+
+    public Optional<Postagem> consultarPostagem(UUID id) {
+
+        Optional<Postagem> postagem = Optional.empty();
+
+        for (Postagem post : getPostagens()) {
+            if (post.getId().equals(id)) {
+                System.out.println("achou");
+                postagem = Optional.ofNullable(post);
+                break;
+            }
+        }
+        return postagem;
+    }
+
+
+    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) {
+
+        Stream<Postagem> filtrados = getPostagens().stream();
+
+        if (Optional.ofNullable(perfil).isPresent()) {
+            filtrados = filtrados.filter(
+                    post -> post.getPerfilId().equals(perfil.getId()));
+        }
+
+        if (Optional.ofNullable(hashtag).isPresent()) {
+            filtrados = filtrados.filter(
+                    post -> post instanceof PostagemAvancada && ((PostagemAvancada) post).existeHashtag(hashtag));
+        }
+
+        if (Optional.ofNullable(texto).isPresent()) {
+            filtrados = filtrados.filter(post -> post.getTexto().contains(texto));
+        }
+
+        return new ArrayList<Postagem>(filtrados.toList());
+    }
+
+    
+    public boolean postagemJaExiste(UUID id) {
+
+        return consultarPostagem(id).isPresent();
+    }
+
 
     public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException {
 
@@ -69,119 +131,7 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             System.exit(1);
         }
     }
-
-    public Optional<Postagem> consultarPostagem(UUID id) {
-
-        Optional<Postagem> postagem = Optional.empty();
-
-        for (Postagem post : getPostagens()) {
-            if (post.getId().equals(id)) {
-                System.out.println("achou");
-                postagem = Optional.ofNullable(post);
-                break;
-            }//ok
-        }//vou so fazer o teste no meu pc q eu tinha falado
-        return postagem;
-    }
-
-    public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag) {
-
-        Stream<Postagem> filtrados = getPostagens().stream();
-
-        if (Optional.ofNullable(perfil).isPresent()) {
-            filtrados = filtrados.filter(
-                    post -> post.getPerfilId().equals(perfil.getId()));
-        }
-
-        if (Optional.ofNullable(hashtag).isPresent()) {
-            filtrados = filtrados.filter(
-                    post -> post instanceof PostagemAvancada && ((PostagemAvancada) post).existeHashtag(hashtag));
-        }
-
-        if (Optional.ofNullable(texto).isPresent()) {
-            filtrados = filtrados.filter(post -> post.getTexto().contains(texto));
-        }
-
-        return new ArrayList<Postagem>(filtrados.toList());
-    }
-
-    public boolean postagemJaExiste(UUID id) {
-
-        return consultarPostagem(id).isPresent();
-    }
-
-    public String salvarPostagem(Postagem postagem) throws NullAtributesException {
-
-        if (Optional.ofNullable(postagem).isEmpty()) {
-            throw new NullAtributesException();
-
-        } else if (postagem instanceof PostagemAvancada) {
-
-            PostagemAvancada postagemAv = (PostagemAvancada) postagem;
-
-            return 1 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" +
-                    postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" +
-                    String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";" +
-                    String.valueOf(postagemAv.getVisualizacoesRestantes()) + ";" +
-                    (Optional.ofNullable(postagemAv.getHashtagsParaDb()).isPresent() ? postagemAv.getHashtagsParaDb()
-                            : null)
-                    + ";" + '\n';
-        } else {
-
-            return 0 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" +
-                    postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" +
-                    String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";"
-                    + "\n";
-        }
-    }
-
-    public Postagem resgatarPostagem(String linha) {
-
-        String[] atributos = linha.split(";");
-        if (atributos[0].equals("0")) {
-            /*
-             * | Tipo | IdPost | IdPerfil | Data | Texto | Likes | Deslikes | ViewsRestantes
-             * | Hashtags<> |
-             */
-
-            return (new Postagem(
-
-                    UUID.fromString(atributos[1]),
-                    UUID.fromString(atributos[2]),
-                    LocalDateTime.parse(atributos[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                    atributos[4],
-                    Integer.parseInt(atributos[5]),
-                    Integer.parseInt(atributos[6])));
-
-        } else {
-
-            return (new PostagemAvancada(
-                    UUID.fromString(atributos[1]),
-                    UUID.fromString(atributos[2]),
-                    LocalDateTime.parse(atributos[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                    atributos[4],
-                    Integer.parseInt(atributos[5]),
-                    Integer.parseInt(atributos[6]),
-                    Integer.valueOf(atributos[7]),
-                    new ArrayList<>(Arrays.asList(atributos[8].split("#")))));
-        }
-    }
-
-    public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB {
-
-        if (entidade.equals("Perfil"))
-            return System.getProperty("user.dir") + "/db/perfis.txt";
-
-        else if (entidade.equals("Postagem"))
-            return System.getProperty("user.dir") + "/db/postagens.txt";
-
-        else if (entidade.equals("DB"))
-            return System.getProperty("user.dir") + "/db";
-
-        else
-            throw new BadChoiceOfEntityForDB();
-
-    }
+    
 
     public void removerPostPorPerfil(Perfil perfil) {
 
@@ -232,5 +182,82 @@ public class RepositorioDePostagensFile implements IRepositorioDePostagens {
             }catch(IOException e){
                 System.err.println("Erro durante a atualização de postagem!");
             }
+    }
+
+
+    public String salvarPostagem(Postagem postagem) throws NullAtributesException {
+
+        if (Optional.ofNullable(postagem).isEmpty()) 
+            throw new NullAtributesException();
+
+        else if (postagem instanceof PostagemAvancada) {
+
+            PostagemAvancada postagemAv = (PostagemAvancada) postagem;
+
+            return 1 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" +
+                    postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" +
+                    String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";" +
+                    String.valueOf(postagemAv.getVisualizacoesRestantes()) + ";" +
+                    (Optional.ofNullable(postagemAv.getHashtagsParaDb()).isPresent() ? postagemAv.getHashtagsParaDb()
+                            : null)
+                    + ";" + '\n';
+        }
+        else {
+
+            return 0 + ";" + postagem.getId().toString() + ";" + postagem.getPerfilId().toString() + ";" +
+                    postagem.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ";" + postagem.getTexto() + ";" +
+                    String.valueOf(postagem.getCurtidas()) + ";" + String.valueOf(postagem.getDescurtidas()) + ";"
+                    + "\n";
+        }
+    }
+
+
+    public Postagem resgatarPostagem(String linha) {
+
+        String[] atributos = linha.split(";");
+        if (atributos[0].equals("0")) {
+            /*
+             * | Tipo | IdPost | IdPerfil | Data | Texto | Likes | Deslikes | ViewsRestantes
+             * | Hashtags<> |
+             */
+
+            return (new Postagem(
+
+                    UUID.fromString(atributos[1]),
+                    UUID.fromString(atributos[2]),
+                    LocalDateTime.parse(atributos[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    atributos[4],
+                    Integer.parseInt(atributos[5]),
+                    Integer.parseInt(atributos[6])));
+
+        } else {
+
+            return (new PostagemAvancada(
+                    UUID.fromString(atributos[1]),
+                    UUID.fromString(atributos[2]),
+                    LocalDateTime.parse(atributos[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    atributos[4],
+                    Integer.parseInt(atributos[5]),
+                    Integer.parseInt(atributos[6]),
+                    Integer.valueOf(atributos[7]),
+                    new ArrayList<>(Arrays.asList(atributos[8].split("#")))));
+        }
+    }
+
+
+    public String getCaminhoDoBancoDeDados(String entidade) throws BadChoiceOfEntityForDB {
+
+        if (entidade.equals("Perfil"))
+            return System.getProperty("user.dir") + "/db/perfis.txt";
+
+        else if (entidade.equals("Postagem"))
+            return System.getProperty("user.dir") + "/db/postagens.txt";
+
+        else if (entidade.equals("DB"))
+            return System.getProperty("user.dir") + "/db";
+
+        else
+            throw new BadChoiceOfEntityForDB();
+
     }
 }

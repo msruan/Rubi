@@ -1,7 +1,6 @@
 Necessários:
 
-- Decrementar views no getPosts de RepoPostsSql
-
+OK - Decrementar views
 OK - Bios com aspa simples quebram o update
 OK? - Terminar respositoriosSQL
 OK - Curtir/descurtir e decrementarViews nao funciona nos outros repos
@@ -42,26 +41,130 @@ Extras:
 
 Férias:
 
-- Substituir constantes de app por um enum
 - Sistema de seguir/bloquear
 - Adicionar imagens (JFileChooser+IJ?)
 - Melhorar interface (Web ou tlvz JavaFx)
 
-WE NEED TO DO:
 
-Utilizar um mecanismo de persistência independente:
+Falecidas:
 
-i. Ter interfaces chamadas IRepositorioPerfis e IRepositorioPostagens
-com métodos de consulta e inclusão relacionada à persistência de 
-dados;
+// case REMOVER_POSTAGEM:
 
-ii. Usar um mecanismo de persistência alternativo que implemente as
-interfaces. Sugestão: banco de dados SQL;
+//     username = lerString("Digite o username do perfil buscado: ", input);
+//     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
+//     String hashtagParaORemoverPostagem =  null;
+//     if(perfilBuscado.isPresent()){
+//         texto = lerString("Digite o texto da postagem buscada: ", input);
+//         if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
+//             hashtagParaORemoverPostagem = lerString("Digite uma hashtag: ",input);
+//         }
+//         Rubi.removerPostagem(texto,perfilBuscado.get(), hashtagParaORemoverPostagem);
+//         System.out.println("Postagem removida com sucesso!");
+//     }else{
+//         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
+//     }
+//     break;
 
-iii. Na hora de inicializar o App, você deve escolher o mecanismo de 
-persistência e instanciar as implementações das interfaces (array, 
-banco de dados, arquivo);
+// public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
+    
+//     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
+//     ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
+//     Stream <PostagemAvancada> filtrados = _postagens.getPostagensAvancadas().stream();
+//     filtrados = filtrados.filter(post -> {
+//         if(post.ehExibivel()){
+//             for(int i = 0; i< listaHashtags.size(); i++){
+//                 if(post.existeHashtag(listaHashtags.get(i))){
+//                     post.decrementarVisualizacoes();
+//                     return true;
+//                 }
+//             }
+//         }return false;
+//     }); 
+//     List <PostagemAvancada> saida = new ArrayList<>();
+//     filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
+//     return new ArrayList<>(saida);
+// }
 
-iv. A classe rede social deve ter, em vez de repositórios comuns, 
-interfaces e funcionar sem alterações independente da 
-implementação.
+package com.ruanbianca.redesocial;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Conexao {
+    public static void main(String[] args) {
+        Connection conexao = null;  
+        //Statement statement = null;
+
+        try {
+            // Carregando o driver JDBC
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Configurando a URL do banco de dados
+            String url = "jdbc:mysql://localhost:3306/rubi";
+            String usuario = "root";
+            String senha = "123456";
+
+            // Estabelecendo a conexão
+            conexao = DriverManager.getConnection(url, usuario, senha);
+           
+            // Faça o que precisa ser feito com a conexão aqui
+
+            System.out.println("Conexão bem-sucedida!");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conexao != null && !conexao.isClosed()) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+// public class Conexao {
+
+//     public static Connection getConnection(){
+//         Connection conexao = null;
+
+//         try {
+//             String driver = "com.mysql.jdbc.Driver";
+//             Class.forName(driver);
+
+//             String url = "jdbc:mysql://localhost:3306/rubi";
+//             String username = "root";
+//             String password = "123456";
+
+//             conexao = DriverManager.getConnection(url,username,password);
+
+//             System.out.println("Conexõa bem-sucedida :D");
+
+//             //faz os babados aqui
+//             return conexao;
+
+//         }catch(ClassNotFoundException e){
+//             System.out.println("Driver do banco de dados não encontrado :P");
+//             return null;
+
+//         }catch(SQLException e){
+//             System.out.println("Erro ao acessar o banco: " + e.getMessage());
+//             return null;
+
+//         }finally { 
+//             try {
+//                 if(conexao != null && !conexao.isClosed()){
+//                     conexao.close();
+//                 }
+//             } catch(SQLException e){
+//                 System.out.println("Erro ao fechar a conexão...");
+//             }
+//         }
+        
+//     }
+
+//     public static void main(String[] args) {
+//         getConnection();
+//     }
+// }

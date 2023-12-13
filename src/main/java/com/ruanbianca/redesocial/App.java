@@ -12,7 +12,6 @@ import static com.ruanbianca.redesocial.utils.ConsoleColors.*;
 
 public class App {
 
-    //Todo: substituir por um enum
     final String INCLUIR_PERFIL = "1";
     final String INCLUIR_POSTAGEM = "2";
     final String CONSULTAR_PERFIL = "3";
@@ -120,8 +119,8 @@ public class App {
                     }while(true);
                     String texto = lerEValidarAtributo("Digite o conteúdo do texto: ",400);
                     Postagem novaPostagem = new Postagem(perfilUser.get().getId(),texto);
-                    //Todo: <Wanrning> se der Enter, o programa quebra bem aqui
-                    if(lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
+
+                    if (lerString("Deseja por hashtags? (0-Enter, 1-Sim)",input).equals("1")){
 
                         ArrayList<String> hashsProConstrutor = new ArrayList<>();
                         String hashtag = lerString("Digite uma hashtag: ",input);
@@ -130,20 +129,22 @@ public class App {
                         boolean querBotarMaisUmaHashtag;//Todo: colocar um nome melhor...
 
                         do{
-                            if(lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
+                            if (lerString("Deseja por mais uma hashtag? (0-Enter, 1-Sim)",input).equals("1")){
+
                                 String hashDoLoop = lerString("Digite outra hashtag: ",input);
                                 hashsProConstrutor.add(hashDoLoop);
                                 querBotarMaisUmaHashtag = true;
-                            }else{
+
+                            } else
                                 querBotarMaisUmaHashtag = false;
-                            }
+                            
                         }while(querBotarMaisUmaHashtag);
 
                         novaPostagem = new PostagemAvancada(perfilUser.get().getId(),texto,hashsProConstrutor);
                    
                     }else{
                         try{
-                        novaPostagem = new Postagem(perfilUser.get().getId(),texto);
+                            novaPostagem = new Postagem(perfilUser.get().getId(),texto);
                         }catch(com.ruanbianca.redesocial.NullAtributesException e){
                             System.out.println("Você deixou algum atributo nulo!!!");
                         }
@@ -155,12 +156,13 @@ public class App {
                     
                     username = lerString("Digite o username do perfil buscado: ", input);
                     Optional<Perfil> perfilBuscado = Rubi.consultarPerfilPorUsername(username);
-                    if(perfilBuscado.isPresent()){
+
+                    if(perfilBuscado.isPresent())
                         System.out.println(RedeSocial.exibirPerfil(perfilBuscado.get()));
                         
-                    }else{
+                    else
                         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
-                    }
+                    
                     break;
                     
                 
@@ -175,9 +177,7 @@ public class App {
                     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
                     ArrayList<Postagem> postagemBuscada = Rubi.consultarPostagens(texto, perfilBuscado.get(), hashtagParaOConsultarPostagem);
                     if(Optional.ofNullable(postagemBuscada).isPresent()){
-                        for(int i = 0; i < postagemBuscada.size(); i++){
-                            System.out.println(Rubi.exibirPostagem(postagemBuscada.get(i)));
-                        }
+                        exibirFeed(postagemBuscada, Rubi);
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Postagem não encontrada!"+RESET);
                     }
@@ -195,17 +195,16 @@ public class App {
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
                     }
                     break;
-//oii, posso dar push?
 
                 case EXIBIR_POST_HASHTAG:
 
                     ArrayList<PostagemAvancada> postagensAvancadasEncontradas;
                     String hashtagBuscada = lerString("Digite a hashtag buscada: ", input).split("#")[0];
                     postagensAvancadasEncontradas = Rubi.exibirPostagensPorHashtag(hashtagBuscada);
+                    ArrayList <Postagem> auxiliar = new ArrayList<>(postagensAvancadasEncontradas);
+
                     if(Optional.ofNullable(postagensAvancadasEncontradas).isPresent() && postagensAvancadasEncontradas.size()>0){
-                        for(int i  = 0; i < postagensAvancadasEncontradas.size(); i++){
-                            System.out.println(Rubi.exibirPostagem(postagensAvancadasEncontradas.get(i)));
-                        }
+                        exibirFeed(auxiliar, Rubi);
                     }else{
 
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada para essa hashtag!"+RESET);
@@ -218,9 +217,7 @@ public class App {
                     ArrayList<Postagem> postagensPopulares;
                     postagensPopulares = Rubi.exibirPostagensPopulares();
                     if(Optional.ofNullable(postagensPopulares).isPresent() && postagensPopulares.size()>0){
-                        for(int i  = 0; i < postagensPopulares.size(); i++){
-                            System.out.println(Rubi.exibirPostagem(postagensPopulares.get(i))); 
-                        }
+                        exibirFeed(postagensPopulares, Rubi);
                     }else{
                         System.out.println(RED_BOLD_BRIGHT+"Nenhuma postagem encontrada!"+RESET);
                     }
@@ -300,24 +297,6 @@ public class App {
                     break;
 
 
-                // case REMOVER_POSTAGEM:
-
-                //     username = lerString("Digite o username do perfil buscado: ", input);
-                //     perfilBuscado = Rubi.consultarPerfilPorUsername(username);
-                //     String hashtagParaORemoverPostagem =  null;
-                //     if(perfilBuscado.isPresent()){
-                //         texto = lerString("Digite o texto da postagem buscada: ", input);
-                //         if(lerString("Deseja buscar por hashtag tambem? (Enter - Nao, 1 - Sim)", input).equals("1")){
-                //             hashtagParaORemoverPostagem = lerString("Digite uma hashtag: ",input);
-                //         }
-                //         Rubi.removerPostagem(texto,perfilBuscado.get(), hashtagParaORemoverPostagem);
-                //         System.out.println("Postagem removida com sucesso!");
-                //     }else{
-                //         System.out.println(RED_BOLD_BRIGHT+"Perfil não encontrado!"+RESET);
-                //     }
-                //     break;
-
-
                 case SAIR:
                     break;
 
@@ -330,17 +309,12 @@ public class App {
             if(!opcao.equals(SAIR))
                 pausar();
            
-            //Rubi.salvarPerfis();
-            //Rubi.salvarPostagens();
         }while(!opcao.equals(SAIR));
         
     }
 
     public static void exibirFeed(ArrayList<Postagem> postagens, RedeSocial rede){
-        //amg... tudo bem?
-        //eh q o autocomplete morreu, achei q tinha caido a live
-        //q foi? amg eh comum ele morrer... kkkkkk posso reabrir o live
-        //Todo: remover quando funcionar -> eu tanko, rlx
+        
         if(postagens.isEmpty())
             System.out.println("Oxi, não foi nenhuma postagem para o exibir");
 

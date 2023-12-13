@@ -13,18 +13,20 @@ public interface IRepositorioDePostagens {
     public ArrayList<PostagemAvancada> getPostagensAvancadas();
 
 
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException;
-
-
     public Optional<Postagem> consultarPostagem(UUID id);
 
     
     public ArrayList<Postagem> consultarPostagens(String texto, Perfil perfil, String hashtag);
 
+
     public boolean postagemJaExiste(UUID id);
 
 
+    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException;
+
+
     public void removerPostPorPerfil(Perfil perfil);
+    
     
     public void atualizarPostagem(Postagem post);
 }

@@ -38,7 +38,6 @@ public class RedeSocial {
         return _perfis.consultar(id, null, null);
     }
 
-//quer deixar pra tomorrow?
     public Optional<Perfil> consultarPerfilPorUsername(String username){
         
         return _perfis.consultar(null, username, null);
@@ -145,9 +144,7 @@ public class RedeSocial {
             if(postagem instanceof PostagemAvancada){
 
                 PostagemAvancada postagemAv = (PostagemAvancada) postagem;//
-                //primeiro tem q tirar isso neh? -> any problem?
-                //postagemAv.decrementarVisualizacoes();
-                //cha
+                
                 StringBuilder strHashtags = new StringBuilder();
                 for(String hash:  postagemAv.getHashtags()){
                     strHashtags.append("#"+hash+" ");
@@ -175,7 +172,6 @@ public class RedeSocial {
 
     public ArrayList<Postagem> exibirPostagensPorPerfil(String username) { 
     
-        //Optional <Perfil> perfil = consultarPorUsername(username);
         Optional <Perfil> perfil = consultarPerfilPorUsername(username);
         if(perfil.isEmpty()){
             //Todo: remover esse print
@@ -194,7 +190,6 @@ public class RedeSocial {
             if(!(post instanceof PostagemAvancada))
                 return true;
             else if(((PostagemAvancada)post).ehExibivel()){
-                //((PostagemAvancada)post).decrementarVisualizacoes();
                 return true;
             }return false;
         });
@@ -263,26 +258,4 @@ public class RedeSocial {
 
         _perfis.atualizarPerfil(username, novoAtributo, nomeAtributo);
     }
-       
-        
-    //Extra: fazer essa função acontecer
-    // public ArrayList<PostagemAvancada> exibirPostagensPorHashtags(String hashtags){
-        
-    //     Stream <String> streamHashs = Arrays.asList(hashtags.split("#")).stream();
-    //     ArrayList<String> listaHashtags = new ArrayList<>(streamHashs.map(hash -> hash.trim()).toList());
-    //     Stream <PostagemAvancada> filtrados = _postagens.getPostagensAvancadas().stream();
-    //     filtrados = filtrados.filter(post -> {
-    //         if(post.ehExibivel()){
-    //             for(int i = 0; i< listaHashtags.size(); i++){
-    //                 if(post.existeHashtag(listaHashtags.get(i))){
-    //                     post.decrementarVisualizacoes();
-    //                     return true;
-    //                 }
-    //             }
-    //         }return false;
-    //     }); 
-    //     List <PostagemAvancada> saida = new ArrayList<>();
-    //     filtrados.sorted( (o1, o2)->o2.getData().compareTo(o1.getData()) ).forEach(p -> saida.add((PostagemAvancada)p));
-    //     return new ArrayList<>(saida);
-    // }
 }

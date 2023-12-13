@@ -33,11 +33,7 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
 
 
     public ArrayList<Postagem> getPostagens() {
-        for(Postagem post: _postagens){
-            if(post instanceof PostagemAvancada){
-                ((PostagemAvancada)post).decrementarVisualizacoes();
-            }
-        }
+
         return _postagens;
     }
 
@@ -48,6 +44,19 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
         postagens = postagens.filter(post -> post instanceof PostagemAvancada);
         postagens.forEach(post -> avancadas.add((PostagemAvancada)post));
         return avancadas;
+    }
+
+
+    public Optional<Postagem> consultarPostagem(UUID id) {
+
+        Optional<Postagem> saida = Optional.empty();
+
+        for(Postagem post : _postagens){
+            if(post.getId() == id){
+                saida = Optional.of(post);
+                break;
+            }
+        }return saida;
     }
 
 
@@ -74,34 +83,22 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
     }
 
 
-    public Optional<Postagem> consultarPostagem(UUID id) {
-
-        Optional<Postagem> saida = Optional.empty();
-
-        for(Postagem post : _postagens){
-            if(post.getId() == id){
-                saida = Optional.of(post);
-                break;
-            }
-        }return saida;
-    }
-
-
-    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, UserAlreadyExistsException{
-
-        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se postagem for nunla
-            
-        if(postagemJaExiste(postagem.getId()))
-           throw new UserAlreadyExistsException(); 
-        
-        _postagens.add(postagem);
-    }
-   
-
     public boolean postagemJaExiste(UUID id){
 
         return consultarPostagem(id).isPresent();
     }
+
+
+    public void incluir(Postagem postagem) throws NullObjectAsArgumentException, PostAlreadyExistsException{
+
+        Optional.ofNullable(postagem).orElseThrow(NullObjectAsArgumentException::new);//lanca uma excecao se postagem for nunla
+            
+        if(postagemJaExiste(postagem.getId()))
+           throw new PostAlreadyExistsException(); 
+        
+        _postagens.add(postagem);
+    }
+
 
     public void removerPostPorPerfil(Perfil perfil){
             
@@ -111,10 +108,9 @@ public class RepositorioDePostagensArray implements IRepositorioDePostagens{
         filtrados = filtrados.filter(post -> post.getPerfilId().equals(perfil.getId()));
         filtrados.forEach(post -> _postagens.remove(post));
     }
-    //acho q incluisve, ele na vdd so nao vai ter copro. pq a gente ja altera direatmente. so deixa vaizo mesmo
+
+
     public void atualizarPostagem(Postagem post){
         return;
-        //eh q como a gente ta trablahanod a nivel de array, so de fazer um crutir no objeto post, ja afeta
-        //d
     }
 }

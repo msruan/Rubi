@@ -43,6 +43,7 @@ public class PostagemAvancada extends Postagem {
 
         return visualizacoesRestantes > 0;
     }
+    
 
     public boolean existeHashtag(String hashtag) {
 
@@ -50,15 +51,13 @@ public class PostagemAvancada extends Postagem {
         return hashs.anyMatch(h -> h.equals(hashtag));
     }
 
+
     public void decrementarVisualizacoes() {
 
         if (ehExibivel())
             visualizacoesRestantes--;
     }
 
-    public void incrementarVisualizacoes() {
-        visualizacoesRestantes++;
-    }
 
     public String getHashtagsParaDb() {
         StringBuilder strHashtags = new StringBuilder();
