@@ -25,11 +25,12 @@ public class MenuUtils {
         return input.nextInt();
     }
     public static boolean lerSimOuNao(String pergunta){
-        Scanner input = new Scanner(System.in);
-        System.out.println(pergunta);
-        System.out.println("(0 - Nao, 1 - Sim)\n>>> ");
-        boolean resposta = input.nextBoolean();
-        return resposta;
+        try (Scanner input = new Scanner(System.in)) {
+            System.out.println(pergunta);
+            System.out.println("(0 - Nao, 1 - Sim)\n>>> ");
+            boolean resposta = input.nextBoolean();
+            return resposta;
+        }
     }
     // public static boolean ehSim(String resposta){
     //     return resposta.equalsIgnoreCase("Sim") || resposta.equalsIgnoreCase("S") ||

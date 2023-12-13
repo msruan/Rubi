@@ -165,13 +165,6 @@ public class RepositorioDePerfisSql implements IRepositorioDePerfis {
 
         String update_sql = String.format("UPDATE Perfil SET %s = ? WHERE username = ?",nomeAtributo);
 
-            // String update_sql = "UPDATE Perfil SET ? = ? WHERE username = ?";
-            // PreparedStatement update = conexao.prepareStatement(update_sql);
-            // update.setString(1, nomeAtributo);
-            // update.setString(2, novoAtributo);
-            // update.setString(3, username);
-
-           // String update_sql = String.format("UPDATE Perfil SET %s = '%s' WHERE username = '%s'",nomeAtributo,novoAtributo,username);
         PreparedStatement update = conexao.prepareStatement(update_sql);
         update.setString(1, novoAtributo);
         update.setString(2,username);

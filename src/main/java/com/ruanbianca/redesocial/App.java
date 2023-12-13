@@ -1,6 +1,6 @@
 package com.ruanbianca.redesocial;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -289,12 +289,9 @@ public class App {
                     case REMOVER_PERFIL:
 
                         username = lerEValidarAtributo("Digite o username do perfil buscado: ",30);
-                        try{
-                            Rubi.removerPerfil(username);
-                        }
-                        catch(UserNotFoundException e){
-                            System.out.println("Usuário não encontrado!");
-                        }
+                        
+                        Rubi.removerPerfil(username);
+                        
                         System.out.println("Perfil removido com sucesso!");
                         break;
 

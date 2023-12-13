@@ -27,7 +27,7 @@ public class RedeSocial {
     }
 
 
-    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag) throws Exception{//a gente deveria poder passar várias hashtags
+    public ArrayList<Postagem> consultarPostagens(String texto,Perfil perfil, String hashtag) throws Exception{
 
         return _postagens.consultarPostagens(texto,perfil,hashtag);
     }
@@ -150,10 +150,10 @@ public class RedeSocial {
                     strHashtags.append("#"+hash+" ");
                 }
                 return PURPLE_BOLD+"╔══════════════════════════════════════════════════════\n"+
-                "║    "+postagem.getId()+""+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+ perfil.getUsername() + RESET+"\n║\n║    "+
+                "║    "+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+ perfil.getUsername() + RESET+"\n║\n║    "+
                     postagem.getTexto()+"\n║    "+GREEN_BOLD_BRIGHT+strHashtags+RESET+"\n║\n║    "
-                    +RED_BOLD_BRIGHT+postagem.getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() +" 👎   "
-                    +RESET+BLUE_BOLD_BRIGHT +postagemAv.getVisualizacoesRestantes()+ " 👀      "+RESET+"•" +postagem.mostrarData() + BLUE_BOLD+
+                    +RED_BOLD_BRIGHT+postagem.getCurtidas()+" <3   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() +" </3   "
+                    +RESET+BLUE_BOLD_BRIGHT +postagemAv.getVisualizacoesRestantes()+ " views      "+RESET +postagem.mostrarData() + BLUE_BOLD+
                     "\n╚══════════════════════════════════════════════════════\n"+RESET;
             }
 
@@ -161,7 +161,7 @@ public class RedeSocial {
                 return PURPLE_BOLD_BRIGHT+"╔══════════════════════════════════════════════════════\n"+
             "║    "+perfil.getId()+perfil.getNome()+RESET+PURPLE_BRIGHT+" @"+perfil.getUsername()+RESET+"\n║\n║    "+  
                 postagem.getTexto()+"\n║\n║    "
-                +RED_BOLD_BRIGHT+postagem.getCurtidas()+" ❤️   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() + " 👎"+RESET+"            •" +postagem.mostrarData() + YELLOW_BOLD
+                +RED_BOLD_BRIGHT+postagem.getCurtidas()+" <3   " +RESET + YELLOW_BOLD_BRIGHT + postagem.getDescurtidas() + " </3"+RESET+"            •" +postagem.mostrarData() + YELLOW_BOLD
                 + "\n╚══════════════════════════════════════════════════════\n"+RESET;
 
             }
