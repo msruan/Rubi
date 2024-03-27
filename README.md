@@ -4,7 +4,7 @@ Projeto de rede social feito por Bianca Almeida de Oliveira Bezerra e Ruan Maced
 
 ## Uso
 
-As dependências do projeto são gerenciadas pelo Maven, então caso tenha certeza de que ele está instalado antes de tentar executar o código.
+As dependências do projeto são gerenciadas pelo Maven, então tenha certeza de que ele está instalado antes de tentar executar o código.
 
 No Ubuntu e derivados, você pode obter o Maven via terminal assim:
 
